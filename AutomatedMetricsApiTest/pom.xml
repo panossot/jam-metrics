@@ -7,7 +7,6 @@
   <packaging>pom</packaging>
   <name>AutomatedMetricsApiTest</name>
   <modules>
-    <module>AutomatedMetricsApiTest-ear</module>
     <module>AutomatedMetricsApiTest-web</module>
     <module>AutomatedMetricsApiTest-ejb</module>
   </modules>
