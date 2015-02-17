@@ -9,4 +9,4 @@ An example of use can be found under the folder AutomatedMetricsApiTest.
 Deploy the generated .war file at the server to see the metrics being printed.
 
 #License 
-GNU Lesser General Public License Version 2.1
+* [GNU Lesser General Public License Version 2.1](http://www.gnu.org/licenses/lgpl-2.1-standalone.html)
