@@ -3,3 +3,6 @@
 .project
 .settings
 nb-configuration.xml
+
+#dirs
+target
