@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<plugin name="JbossAutomatedMetrics"
+        displayName="JbossAutomatedMetrics plugin"
+        package="org.rhq.plugins.metrics"
+        version="2.0"
+        description="Monitoring of Jboss  Automated Metrics"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="urn:xmlns:rhq-plugin"
+        xmlns:c="urn:xmlns:rhq-configuration">
+        
+   <server name="MetricsServer"
+             discovery="MetricsDiscoveryComponent"
+             class="MetricsComponent"
+             description="Metrics Server" 
+             >
+    <metric property="count"
+            displayName="count metric"
+            measurementType="dynamic"
+            units="milliseconds"
+            displayType="summary"/>
+            
+    <metric property="count2"
+            displayName="count2 metric"
+            measurementType="dynamic"
+            units="milliseconds"
+            displayType="summary"/>
+   </server>
+        
+</plugin>        
