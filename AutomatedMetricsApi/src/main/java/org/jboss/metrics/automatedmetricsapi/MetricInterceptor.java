@@ -28,6 +28,7 @@ import java.util.Map;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import org.jboss.metrics.automatedmetrics.MonitoringRhq;
 import org.jboss.metrics.automatedmetrics.Store;
 
 
@@ -58,6 +59,8 @@ public class MetricInterceptor {
 
                 accessField(metricAnnotation, method, i);
                 Store.CacheStore(ctx.getTarget(), field);
+                if (Boolean.parseBoolean(System.getProperty("rhqMonitoring", "false")))
+                    MonitoringRhq.getRhq().rhqMonitoring(ctx.getTarget(), field);
             }
         }
 

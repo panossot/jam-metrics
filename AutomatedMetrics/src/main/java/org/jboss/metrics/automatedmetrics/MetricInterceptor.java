@@ -56,6 +56,8 @@ public class MetricInterceptor {
 
                 accessField(metricAnnotation, method, i);
                 Store.CacheStore(ctx.getTarget(), field);
+                if (Boolean.parseBoolean(System.getProperty("rhqMonitoring", "false")))
+                    MonitoringRhq.getRhq().rhqMonitoring(ctx.getTarget(), field);
             }
         }
 
