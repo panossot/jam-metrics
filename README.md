@@ -4,7 +4,7 @@ This library is created to facilitate the creation and record of metrics for any
 # How to use
 Just annotate the method of your ejb with the annotation @Metric(fieldName = {"field name of first metric","field name of second metric", etc})
 
-# Example of use
+# Example of usage
 An example of use can be found under the folder AutomatedMetricsApiTest.
 Deploy the generated .war file at the server to see the metrics being printed.
 
