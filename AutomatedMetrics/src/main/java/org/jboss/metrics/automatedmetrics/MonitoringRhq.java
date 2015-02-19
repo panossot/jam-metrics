@@ -21,19 +21,15 @@
  */
 package org.jboss.metrics.automatedmetrics;
 
-import com.jayway.restassured.RestAssured;
-import static com.jayway.restassured.RestAssured.basic;
-import static com.jayway.restassured.RestAssured.given;
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.response.Header;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
+import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
 /**
  *
@@ -44,24 +40,25 @@ public class MonitoringRhq {
     private static final MonitoringRhq mrhq = new MonitoringRhq();
 
     private final String APPLICATION_JSON;
-    private final Header acceptJson;
-    private static int REST_SERVER_PORT;
-    private static InetAddress REST_SERVER_ADDRESS;
+    private final int REST_SERVER_PORT;
+    private final String REST_SERVER_ADDRESS;
+    private final String REST_SERVER_USERNAME;
+    private final String REST_SERVER_PASSWORD;
+    private final PostDataRhq postRhq;
 
     private MonitoringRhq() {
+
         APPLICATION_JSON = "application/json";
         REST_SERVER_PORT = Integer.parseInt(System.getProperty("rest.port", "7080"));
-        try {
-            REST_SERVER_ADDRESS = InetAddress.getByName(System.getProperty("rest.server", "localhost"));
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(MonitoringRhq.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        RestAssured.baseURI = "http://" + System.getProperty("rest.server", "localhost");
-        RestAssured.port = REST_SERVER_PORT;
-        RestAssured.basePath = "/rest/";
-        RestAssured.authentication = basic(System.getProperty("rhqUsername", "rhqadmin"), System.getProperty("rhqPassword", "rhqadmin"));
+        REST_SERVER_USERNAME = System.getProperty("rhqUsername", "rhqadmin");
+        REST_SERVER_PASSWORD = System.getProperty("rhqPassword", "rhqadmin");
+        REST_SERVER_ADDRESS = System.getProperty("rest.server", "localhost");
 
-        acceptJson = new Header("Accept", APPLICATION_JSON);
+        ResteasyClient client = new ResteasyClientBuilder().build();
+        ResteasyWebTarget target = client.target("http://" + REST_SERVER_ADDRESS + ":" + REST_SERVER_PORT);
+        target.register(new BasicAuthentication(REST_SERVER_USERNAME, REST_SERVER_PASSWORD));
+        postRhq = target.proxy(PostDataRhq.class);
+
     }
 
     public static MonitoringRhq getRhq() {
@@ -73,33 +70,24 @@ public class MonitoringRhq {
 
         if (hostAvailabilityCheck()) {
             if (System.getProperty(field.getName()) != null) {
-                int numericScheduleId = Integer.parseInt(System.getProperty(field.getName()));//13701;
+                int numericScheduleId = Integer.parseInt(System.getProperty(field.getName()));
                 long now = System.currentTimeMillis();
 
                 DoubleValue dataPoint = new DoubleValue(Double.parseDouble(field.get(target).toString()));
-                given()
-                        .header(acceptJson)
-                        .contentType(ContentType.JSON)
-                        .pathParam("id", numericScheduleId)
-                        .pathParam("timestamp", now)
-                        .body(dataPoint)
-                        .expect()
-                        .statusCode(201)
-                        .log().ifError()
-                        .when()
-                        .put("/metric/data/{id}/raw/{timestamp}");
+                postRhq.postDataRhq(dataPoint, numericScheduleId, now, APPLICATION_JSON);
             }
         }
 
         return dataSent;
     }
 
-    public boolean hostAvailabilityCheck() {
+    private boolean hostAvailabilityCheck() {
         try {
-            Socket s = new Socket(REST_SERVER_ADDRESS, REST_SERVER_PORT);
+            Socket s = new Socket(InetAddress.getByName(REST_SERVER_ADDRESS), REST_SERVER_PORT);
             return true;
         } catch (IOException ex) {
             return false;
         }
     }
+
 }
