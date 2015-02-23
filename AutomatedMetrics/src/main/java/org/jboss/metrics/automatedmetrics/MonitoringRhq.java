@@ -21,10 +21,7 @@
  */
 package org.jboss.metrics.automatedmetrics;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.InetAddress;
-import java.net.Socket;
 import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
 import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
@@ -68,26 +65,15 @@ public class MonitoringRhq {
     public boolean rhqMonitoring(Object target, Field field) throws IllegalArgumentException, IllegalAccessException {
         boolean dataSent = false;
 
-        if (hostAvailabilityCheck()) {
-            if (System.getProperty(field.getName()) != null) {
-                int numericScheduleId = Integer.parseInt(System.getProperty(field.getName()));
-                long now = System.currentTimeMillis();
+        if (System.getProperty(field.getName()) != null) {
+            int numericScheduleId = Integer.parseInt(System.getProperty(field.getName()));//13701;
+            long now = System.currentTimeMillis();
 
-                DoubleValue dataPoint = new DoubleValue(Double.parseDouble(field.get(target).toString()));
-                postRhq.postDataRhq(dataPoint, numericScheduleId, now, APPLICATION_JSON);
-            }
+            DoubleValue dataPoint = new DoubleValue(Double.parseDouble(field.get(target).toString()));
+            postRhq.postDataRhq(dataPoint, numericScheduleId, now, APPLICATION_JSON);
         }
 
         return dataSent;
-    }
-
-    private boolean hostAvailabilityCheck() {
-        try {
-            Socket s = new Socket(InetAddress.getByName(REST_SERVER_ADDRESS), REST_SERVER_PORT);
-            return true;
-        } catch (IOException ex) {
-            return false;
-        }
     }
 
 }
