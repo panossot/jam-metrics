@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metrics>
+	<metric id="1">
+		<name>count</name>
+		<rhqScheduleId>11649</rhqScheduleId>
+	</metric>
+	<metric id="2">
+		<name>count2</name>
+		<rhqScheduleId>11650</rhqScheduleId>
+	</metric>
+</metrics>

@@ -23,6 +23,7 @@ package org.jboss.metrics.automatedmetrics;
 
 import java.lang.reflect.Field;
 import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
+import org.jboss.metrics.automatedmetrics.utils.RhqScheduleIds;
 import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -42,6 +43,7 @@ public class MonitoringRhq {
     private final String REST_SERVER_USERNAME;
     private final String REST_SERVER_PASSWORD;
     private final PostDataRhq postRhq;
+    private final TestDataRhq testRhq;
 
     private MonitoringRhq() {
 
@@ -55,6 +57,7 @@ public class MonitoringRhq {
         ResteasyWebTarget target = client.target("http://" + REST_SERVER_ADDRESS + ":" + REST_SERVER_PORT);
         target.register(new BasicAuthentication(REST_SERVER_USERNAME, REST_SERVER_PASSWORD));
         postRhq = target.proxy(PostDataRhq.class);
+        testRhq = target.proxy(TestDataRhq.class);
 
     }
 
@@ -64,9 +67,13 @@ public class MonitoringRhq {
 
     public boolean rhqMonitoring(Object target, Field field) throws IllegalArgumentException, IllegalAccessException {
         boolean dataSent = false;
+        String isMetricIdLoaded = System.getProperty(field.getName());
 
-        if (System.getProperty(field.getName()) != null) {
-            int numericScheduleId = Integer.parseInt(System.getProperty(field.getName()));//13701;
+        if (isMetricIdLoaded == null) {
+            RhqScheduleIds.loadScheduleIds();
+        }
+        if (isMetricIdLoaded != null) {
+            int numericScheduleId = Integer.parseInt(System.getProperty(field.getName()));
             long now = System.currentTimeMillis();
 
             DoubleValue dataPoint = new DoubleValue(Double.parseDouble(field.get(target).toString()));
