@@ -43,7 +43,6 @@ public class MonitoringRhq {
     private final String REST_SERVER_USERNAME;
     private final String REST_SERVER_PASSWORD;
     private final PostDataRhq postRhq;
-    private final TestDataRhq testRhq;
 
     private MonitoringRhq() {
 
@@ -57,7 +56,6 @@ public class MonitoringRhq {
         ResteasyWebTarget target = client.target("http://" + REST_SERVER_ADDRESS + ":" + REST_SERVER_PORT);
         target.register(new BasicAuthentication(REST_SERVER_USERNAME, REST_SERVER_PASSWORD));
         postRhq = target.proxy(PostDataRhq.class);
-        testRhq = target.proxy(TestDataRhq.class);
 
     }
 
