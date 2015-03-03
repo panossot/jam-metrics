@@ -69,6 +69,7 @@ public class MonitoringRhq {
 
         if (isMetricIdLoaded == null) {
             RhqScheduleIds.loadScheduleIds();
+            isMetricIdLoaded = System.getProperty(field.getName());
         }
         if (isMetricIdLoaded != null) {
             int numericScheduleId = Integer.parseInt(System.getProperty(field.getName()));
