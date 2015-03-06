@@ -21,16 +21,20 @@
  */
 package org.rhq.plugins.metrics;
 
+import java.util.Set;
 import org.rhq.core.domain.measurement.AvailabilityType;
+import org.rhq.core.domain.measurement.MeasurementReport;
+import org.rhq.core.domain.measurement.MeasurementScheduleRequest;
 import org.rhq.core.pluginapi.inventory.InvalidPluginConfigurationException;
 import org.rhq.core.pluginapi.inventory.ResourceComponent;
 import org.rhq.core.pluginapi.inventory.ResourceContext;
+import org.rhq.core.pluginapi.measurement.MeasurementFacet;
 
 /**
  * @author hrupp
  *
  */
-public class MetricsComponent implements ResourceComponent {
+public class MetricsComponent implements ResourceComponent, MeasurementFacet {
 
     /* (non-Javadoc)
      * @see org.rhq.core.pluginapi.inventory.ResourceComponent#getAvailability()
@@ -50,5 +54,8 @@ public class MetricsComponent implements ResourceComponent {
      */
     public void stop() {
         // TODO Auto-generated method stub
+    }
+
+    public void getValues(MeasurementReport mr, Set<MeasurementScheduleRequest> set) throws Exception {
     }
 }
