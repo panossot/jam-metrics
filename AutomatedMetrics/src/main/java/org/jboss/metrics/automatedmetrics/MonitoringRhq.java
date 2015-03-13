@@ -76,7 +76,12 @@ public class MonitoringRhq {
             long now = System.currentTimeMillis();
 
             DoubleValue dataPoint = new DoubleValue(Double.parseDouble(field.get(target).toString()));
-            postRhq.postDataRhq(dataPoint, numericScheduleId, now, APPLICATION_JSON);
+            try {
+                postRhq.postDataRhq(dataPoint, numericScheduleId, now, APPLICATION_JSON);
+            } catch (Exception e) {
+                // Schedule id does not exist. Should be removed from System properties.
+               System.clearProperty(field.getName());
+            }
         }
 
         return dataSent;
