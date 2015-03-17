@@ -22,6 +22,7 @@
 package org.jboss.metrics.automatedmetrics;
 
 import java.lang.reflect.Field;
+import org.jboss.logging.Logger;
 import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
 import org.jboss.metrics.automatedmetrics.utils.RhqScheduleIds;
 import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
@@ -43,6 +44,8 @@ public class MonitoringRhq {
     private final String REST_SERVER_USERNAME;
     private final String REST_SERVER_PASSWORD;
     private final PostDataRhq postRhq;
+
+    private Logger logger = Logger.getLogger(MonitoringRhq.class);
 
     private MonitoringRhq() {
 
@@ -79,8 +82,14 @@ public class MonitoringRhq {
             try {
                 postRhq.postDataRhq(dataPoint, numericScheduleId, now, APPLICATION_JSON);
             } catch (Exception e) {
-                // Schedule id does not exist. Should be removed from System properties.
-               System.clearProperty(field.getName());
+               try {
+                    postRhq.getScheduleId(numericScheduleId, APPLICATION_JSON);
+                    throw e;
+                } catch(Exception e1) {
+                    // Schedule id does not exist
+                    logger.info("Rhq Schedule Id is not existent on the server, thus it is removed from System Properties.");
+                    System.clearProperty(field.getName());
+                }
             }
         }
 
