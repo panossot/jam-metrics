@@ -1,5 +1,5 @@
 # Jboss-Automated-Metrics
-This library is created to facilitate the creation and record of metrics for any deployment.
+This library is created to facilitate the creation, record and monitoring of metrics for any deployment.
 
 # How to use
 Just annotate the method of your ejb with the annotation @Metric(fieldName = {"field name of first metric","field name of second metric", etc})
