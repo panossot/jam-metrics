@@ -50,4 +50,11 @@ public class MetricsCache {
         
         return metricList;
     }
+    
+    public static void cleanMetricsCache()
+    {
+        Map<String,ArrayList<Object>> metricList = new HashMap<>();
+        HashSet<MetricObject> metricsCache = MetricsCacheSingleton.getCache().getMetricCache();
+        metricsCache.clear();
+    }
 }
