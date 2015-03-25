@@ -85,6 +85,8 @@ public class PrintMetrics extends HttpServlet {
                     }
                 }
             }
+            
+            metricsApiGetCache.cleanCache();
             metricsApiSessionBean.countClass();
             cache = metricsApiGetCache.getCache();
             metricNames = cache.keySet();

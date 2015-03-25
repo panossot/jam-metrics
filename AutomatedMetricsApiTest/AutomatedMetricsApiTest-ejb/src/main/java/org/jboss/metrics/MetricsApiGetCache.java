@@ -44,5 +44,9 @@ public class MetricsApiGetCache {
 
         return cache;
     }
+    
+    public void cleanCache() {
+        MetricsCache.cleanMetricsCache();
+    }
 
 }
