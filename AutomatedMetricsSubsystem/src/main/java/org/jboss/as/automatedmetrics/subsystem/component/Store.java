@@ -19,31 +19,27 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.as.automatedmetrics.subsystem;
+package org.jboss.as.automatedmetrics.subsystem.component;
 
-import static org.jboss.as.controller.PersistentResourceXMLDescription.builder;
-import org.jboss.as.controller.PersistentResourceXMLDescription;
-import org.jboss.as.controller.PersistentResourceXMLParser;
-
+import java.lang.reflect.Field;
 
 /**
- * @author <a href="mailto:psotirop@redhat.com">Panagiotis Sotiropoulos</a> (c) 2015 Red Hat Inc.
+ *
+ * @author panos
  */
-class AutomatedMetricsSubsystemParser_1_0 extends PersistentResourceXMLParser {
+public class Store {
 
-    static final AutomatedMetricsSubsystemParser_1_0 INSTANCE = new AutomatedMetricsSubsystemParser_1_0();
-
-    private final PersistentResourceXMLDescription xmlDescription;
-
-    private AutomatedMetricsSubsystemParser_1_0() {
-        xmlDescription = builder(AutomatedMetricsRootDefinition.INSTANCE, Namespace.METRICS_1_0.getUriString())
-                .addAttributes(
-                        AutomatedMetricsRootDefinition.RHQ_MONITORING_ATTRIBUTE
-                ).build();
+    public static void CacheStore(Object target, Field field) throws IllegalArgumentException, IllegalAccessException {
+        String name = field.getName() + "_" + target;
+        MetricObject mo = MetricsCacheSingleton.getCache().searchMetricObject(name);
+        if (mo != null) {
+            mo.metric.add(field.get(target));
+        } else {
+            MetricObject newMo = new MetricObject();
+            newMo.metric.add(field.get(target));
+            newMo.name = name;
+            MetricsCacheSingleton.getCache().addMetricCacheObject(newMo);
+        }
     }
 
-    @Override
-    public PersistentResourceXMLDescription getParserDescription() {
-        return xmlDescription;
-    }
 }

@@ -21,27 +21,38 @@
  *  02110-1301 USA, or see the FSF site: http://www.fsf.org.
  * /
  */
-
 package org.jboss.as.automatedmetrics.subsystem;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.jboss.as.controller.AttributeDefinition;
 import org.jboss.as.controller.PersistentResourceDefinition;
 import org.jboss.as.controller.ReloadRequiredRemoveStepHandler;
+import org.jboss.as.controller.SimpleAttributeDefinition;
+import org.jboss.as.controller.SimpleAttributeDefinitionBuilder;
+import org.jboss.as.controller.registry.AttributeAccess;
+import org.jboss.dmr.ModelNode;
+import org.jboss.dmr.ModelType;
 
 /**
  * @author <a href="mailto:psotirop@redhat.com">Panagiotis Sotiropoulos</a> (c) 2015 Red Hat Inc.
  */
 class AutomatedMetricsRootDefinition extends PersistentResourceDefinition {
+
     static final AutomatedMetricsRootDefinition INSTANCE = new AutomatedMetricsRootDefinition();
 
-    static final PersistentResourceDefinition[] CHILDREN = {
-            AutomatedMetricsApiResourceDefinition.INSTANCE
-        };
+    protected static final SimpleAttributeDefinition RHQ_MONITORING_ATTRIBUTE
+            = new SimpleAttributeDefinitionBuilder(Constants.RHQ_MONITORING, ModelType.BOOLEAN, true)
+            .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES)
+            .setDefaultValue(new ModelNode(true))
+            .build();
+
+    static final PersistentResourceDefinition[] CHILDREN = { //       AutomatedMetricsApiResourceDefinition.INSTANCE
+    };
+
+    static final AttributeDefinition[] ATTRIBUTES = {RHQ_MONITORING_ATTRIBUTE};
 
     private AutomatedMetricsRootDefinition() {
         super(AutomatedMetricsExtension.SUBSYSTEM_PATH,
@@ -52,7 +63,7 @@ class AutomatedMetricsRootDefinition extends PersistentResourceDefinition {
 
     @Override
     public Collection<AttributeDefinition> getAttributes() {
-        return Collections.emptySet();
+        return Arrays.asList(ATTRIBUTES);
     }
 
     @Override

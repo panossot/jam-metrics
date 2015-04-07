@@ -27,6 +27,7 @@
 <config>
     <extension-module>org.jboss.as.automatedmetrics</extension-module>
     <subsystem xmlns="urn:jboss:domain:AutomatedMetrics:1.0">
+            <!--rhqMonitoring>true</rhqMonitoring-->
     </subsystem>
 </config>
 

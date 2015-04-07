@@ -19,31 +19,33 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.as.automatedmetrics.subsystem;
+package org.jboss.as.automatedmetrics.subsystem.component.utils;
 
-import static org.jboss.as.controller.PersistentResourceXMLDescription.builder;
-import org.jboss.as.controller.PersistentResourceXMLDescription;
-import org.jboss.as.controller.PersistentResourceXMLParser;
-
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * @author <a href="mailto:psotirop@redhat.com">Panagiotis Sotiropoulos</a> (c) 2015 Red Hat Inc.
+ *
+ * @author panos
  */
-class AutomatedMetricsSubsystemParser_1_0 extends PersistentResourceXMLParser {
+@XmlRootElement(name =  "value")
+public class DoubleValue {
 
-    static final AutomatedMetricsSubsystemParser_1_0 INSTANCE = new AutomatedMetricsSubsystemParser_1_0();
+    Double value;
 
-    private final PersistentResourceXMLDescription xmlDescription;
-
-    private AutomatedMetricsSubsystemParser_1_0() {
-        xmlDescription = builder(AutomatedMetricsRootDefinition.INSTANCE, Namespace.METRICS_1_0.getUriString())
-                .addAttributes(
-                        AutomatedMetricsRootDefinition.RHQ_MONITORING_ATTRIBUTE
-                ).build();
+    public DoubleValue() {
     }
 
-    @Override
-    public PersistentResourceXMLDescription getParserDescription() {
-        return xmlDescription;
+    public DoubleValue(Double value) {
+        this.value = value;
+    }
+
+    @XmlAttribute
+    public Double getValue() {
+        return value;
+    }
+
+    public void setValue(Double value) {
+        this.value = value;
     }
 }

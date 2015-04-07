@@ -42,9 +42,7 @@ public class AutomatedMetricsExtension implements Extension {
 
     public static final String SUBSYSTEM_NAME = "metrics";
     protected static final PathElement SUBSYSTEM_PATH = PathElement.pathElement(SUBSYSTEM, SUBSYSTEM_NAME);
-    protected static final PathElement AUTOMATED_METRICS_API_PATH = PathElement.pathElement(Constants.AUTOMATED_METRICS);
-//    protected static final PathElement SERVER_PATH = PathElement.pathElement(Constants.SERVER);
-//    protected static final PathElement PATH_ACCESS_LOG = PathElement.pathElement(Constants.SETTING, Constants.ACCESS_LOG);
+    protected static final PathElement RHQ_MONITORING_PATH = PathElement.pathElement(Constants.CONFIGURATION, Constants.RHQ_MONITORING);
     private static final String RESOURCE_NAME = AutomatedMetricsExtension.class.getPackage().getName() + ".LocalDescriptions";
     private static final ModelVersion CURRENT_MODEL_VERSION = ModelVersion.create(1, 1, 0);
 
@@ -66,8 +64,6 @@ public class AutomatedMetricsExtension implements Extension {
         final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, CURRENT_MODEL_VERSION);
         final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(AutomatedMetricsRootDefinition.INSTANCE);
         registration.registerOperationHandler(GenericSubsystemDescribeHandler.DEFINITION, GenericSubsystemDescribeHandler.INSTANCE, false);
-     //   final ManagementResourceRegistration deployments = subsystem.registerDeploymentModel(DeploymentDefinition.INSTANCE);
-     //   deployments.registerSubModel(DeploymentServletDefinition.INSTANCE);
         subsystem.registerXMLElementWriter(AutomatedMetricsSubsystemParser_1_0.INSTANCE);
     }
 

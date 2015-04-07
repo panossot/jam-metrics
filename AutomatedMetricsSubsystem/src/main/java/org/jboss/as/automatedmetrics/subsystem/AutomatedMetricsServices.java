@@ -40,14 +40,6 @@ public final class AutomatedMetricsServices implements Service<AutomatedMetricsS
     protected AutomatedMetricsServices() {
     }
 
-    public static ServiceName virtualHostName(final String server, final String virtualHost) {
-        return AUTOMATED_METRICS.append(server).append(virtualHost);
-    }
-
-    public static ServiceName accessAutomatedMetricsApi(final String server, final String virtualHost) {
-        return virtualHostName(server, virtualHost).append(Constants.AUTOMATED_METRICS_RECORD);
-    }
-
     @Override
     public void start(StartContext sc) throws StartException {
         AutomatedMetricsLogger.ROOT_LOGGER.startedAutomatedMetricsSubsystem();
