@@ -33,6 +33,7 @@ import org.jboss.as.server.deployment.module.ModuleSpecification;
 import org.jboss.modules.Module;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.modules.ModuleLoader;
+import org.jboss.modules.filter.PathFilters;
 
 /**
  * Deployment processor which adds a module dependencies for modules needed for metrics deployments.
@@ -57,7 +58,10 @@ public class AutomatedMetricsDependencyProcessor implements DeploymentUnitProces
             return; // Skip if there are no beans.xml files in the deployment
         }
 
-        addDependency(moduleSpecification, moduleLoader, ORG_JBOSS_METRICS);
+        ModuleDependency dep = new ModuleDependency(moduleLoader, ORG_JBOSS_METRICS, false, false, true, false);
+        dep.addImportFilter(PathFilters.getMetaInfFilter(), true);
+        dep.addExportFilter(PathFilters.getMetaInfFilter(), true);
+        moduleSpecification.addSystemDependency(dep);
     }
 
     private void addDependency(ModuleSpecification moduleSpecification, ModuleLoader moduleLoader,
