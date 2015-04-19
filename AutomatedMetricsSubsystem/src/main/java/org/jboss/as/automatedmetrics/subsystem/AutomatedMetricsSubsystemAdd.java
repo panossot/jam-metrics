@@ -24,7 +24,6 @@
 package org.jboss.as.automatedmetrics.subsystem;
 
 import org.jboss.as.automatedmetrics.subsystem.deployment.AutomatedMetricsBeanValidationFactoryProcessor;
-//import org.jboss.as.automatedmetrics.subsystem.deployment.AutomatedMetricsInterceptorProcessor;
 import org.jboss.as.automatedmetrics.subsystem.deployment.AutomatedMetricsDependencyProcessor;
 import org.jboss.as.controller.AbstractBoottimeAddStepHandler;
 import org.jboss.as.controller.OperationContext;
@@ -56,7 +55,6 @@ class AutomatedMetricsSubsystemAdd extends AbstractBoottimeAddStepHandler {
             @Override
             protected void execute(DeploymentProcessorTarget processorTarget) {
                 processorTarget.addDeploymentProcessor(AutomatedMetricsExtension.SUBSYSTEM_NAME, Phase.DEPENDENCIES, Phase.DEPENDENCIES_METRIC, new AutomatedMetricsDependencyProcessor());
-                //    processorTarget.addDeploymentProcessor(AutomatedMetricsExtension.SUBSYSTEM_NAME, Phase.DEPENDENCIES, Phase.DEPENDENCIES_METRIC, new AutomatedMetricsInterceptorProcessor());
                 processorTarget.addDeploymentProcessor(AutomatedMetricsExtension.SUBSYSTEM_NAME, Phase.INSTALL, Phase.INSTALL_METRIC_VALIDATOR_FACTORY, new AutomatedMetricsBeanValidationFactoryProcessor());
             }
         }, OperationContext.Stage.RUNTIME);

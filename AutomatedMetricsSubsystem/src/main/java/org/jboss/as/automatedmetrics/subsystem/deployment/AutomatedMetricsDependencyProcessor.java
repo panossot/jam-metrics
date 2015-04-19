@@ -43,6 +43,7 @@ import org.jboss.modules.filter.PathFilters;
 public class AutomatedMetricsDependencyProcessor implements DeploymentUnitProcessor {
 
     private static final ModuleIdentifier ORG_JBOSS_METRICS = ModuleIdentifier.create("org.jboss.metrics.AutomatedMetrics");
+    private static final ModuleIdentifier ORG_JBOSS_METRICS_API = ModuleIdentifier.create("org.jboss.metrics.AutomatedMetricsApi");
 
     /**
      * Add dependencies for modules required for metric deployments
@@ -62,6 +63,11 @@ public class AutomatedMetricsDependencyProcessor implements DeploymentUnitProces
         dep.addImportFilter(PathFilters.getMetaInfFilter(), true);
         dep.addExportFilter(PathFilters.getMetaInfFilter(), true);
         moduleSpecification.addSystemDependency(dep);
+
+        ModuleDependency dep2 = new ModuleDependency(moduleLoader, ORG_JBOSS_METRICS_API, false, false, true, false);
+        dep2.addImportFilter(PathFilters.getMetaInfFilter(), true);
+        dep2.addExportFilter(PathFilters.getMetaInfFilter(), true);
+        moduleSpecification.addSystemDependency(dep2);
     }
 
     private void addDependency(ModuleSpecification moduleSpecification, ModuleLoader moduleLoader,
