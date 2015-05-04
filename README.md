@@ -6,6 +6,7 @@ Just annotate the method of your ejb with the annotation @Metric(fieldName = {"f
 
 # Example of usage
 An example of usage can be found under the folder AutomatedMetricsApiTest.
+
 Deploy the generated .war file on Wildfly server to see the metrics being printed.
 
 #License 
