@@ -25,10 +25,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Priority;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import org.jboss.metrics.automatedmetricsapi.utils.MetricProperties;
 import org.jboss.metrics.automatedmetricsapi.Metric;
 
 
@@ -37,7 +37,6 @@ import org.jboss.metrics.automatedmetricsapi.Metric;
  * @author panos
  */
 @Metric
-@Priority(Interceptor.Priority.APPLICATION+10)
 @Interceptor
 public class MetricInterceptor {
 
@@ -45,13 +44,14 @@ public class MetricInterceptor {
     private Field field;
 
     @AroundInvoke
-    public Object logMethodEntry(InvocationContext ctx) throws Exception {
+    public Object metricsInterceptor(InvocationContext ctx) throws Exception {
 
         Object result = ctx.proceed();
 
         Method method = ctx.getMethod();
 
         System.out.println("Interceptor .......ole.........");
+        MetricsXml.parseMetricsXml();
         Metric metricAnnotation = method.getAnnotation(Metric.class);
         if (metricAnnotation != null) {
             int fieldNameSize = metricAnnotation.fieldName().length;
@@ -59,9 +59,13 @@ public class MetricInterceptor {
             for (int i = 0; i < fieldNameSize; i++) {
 
                 accessField(metricAnnotation, method, i);
-                Store.CacheStore(ctx.getTarget(), field);
-            //    if (Boolean.parseBoolean(System.getProperty("rhqMonitoring", "false")))
-            //        MonitoringRhq.getRhq().rhqMonitoring(ctx.getTarget(), field);
+                String cacheStore = MetricProperties.getMetricProperties().getCacheStore();
+                String rhqMonitoring = MetricProperties.getMetricProperties().getRhqMonitoring();
+
+                if (cacheStore != null && Boolean.parseBoolean(cacheStore))
+                    Store.CacheStore(ctx.getTarget(), field);
+                if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring))
+                    MonitoringRhq.getRhq().rhqMonitoring(ctx.getTarget(), field);
             }
         }
 

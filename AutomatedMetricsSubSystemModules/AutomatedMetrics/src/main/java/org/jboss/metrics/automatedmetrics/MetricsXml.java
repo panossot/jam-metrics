@@ -19,11 +19,12 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.metrics.automatedmetrics.utils;
+package org.jboss.metrics.automatedmetrics;
 
 import java.io.File;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.jboss.metrics.automatedmetricsapi.utils.MetricProperties;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -33,9 +34,8 @@ import org.w3c.dom.NodeList;
  *
  * @author panos
  */
-public class RhqScheduleIds {
-
-    public static void loadScheduleIds() {
+public class MetricsXml {
+    public static void parseMetricsXml() {
         String xmlFilePath = System.getProperty("metricsXmlPath");
         if (xmlFilePath != null) {
             File fXmlFile = new File(xmlFilePath + "/jboss-automated-metrics.xml");
@@ -59,12 +59,25 @@ public class RhqScheduleIds {
                         Element eElement = (Element) nNode;
 
                         String name = eElement.getElementsByTagName("name").item(0).getTextContent();
-                        if (System.getProperty("name") == null) {
-                            System.setProperty(name,  eElement.getElementsByTagName("rhqScheduleId").item(0).getTextContent());
-                        }
-
+                        MetricProperties.getMetricProperties().addRhqScheduleId(name, eElement.getElementsByTagName("rhqScheduleId").item(0).getTextContent());
                     }
                 }
+                
+                nList = doc.getElementsByTagName("metric-system-properties");
+
+                for (int temp = 0; temp < nList.getLength(); temp++) {
+
+                    Node nNode = nList.item(temp);
+
+                    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+                        Element eElement = (Element) nNode;
+
+                        MetricProperties.getMetricProperties().setRhqMonitoring(eElement.getElementsByTagName("rhqMonitoring").item(0).getTextContent());
+                        MetricProperties.getMetricProperties().setCacheStore(eElement.getElementsByTagName("cacheStore").item(0).getTextContent());
+                    }
+                }
+                
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -72,5 +85,4 @@ public class RhqScheduleIds {
             }
         }
     }
-
 }

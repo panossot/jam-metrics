@@ -24,7 +24,7 @@ package org.jboss.metrics.automatedmetrics;
 import java.lang.reflect.Field;
 import org.jboss.logging.Logger;
 import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
-import org.jboss.metrics.automatedmetrics.utils.RhqScheduleIds;
+import org.jboss.metrics.automatedmetricsapi.utils.MetricProperties;
 import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -53,9 +53,9 @@ public class MonitoringRhq {
         REST_SERVER_PORT = Integer.parseInt(System.getProperty("rest.port", "7080"));
         REST_SERVER_USERNAME = System.getProperty("rhqUsername", "rhqadmin");
         REST_SERVER_PASSWORD = System.getProperty("rhqPassword", "rhqadmin");
-        REST_SERVER_ADDRESS = System.getProperty("rest.server", "lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
+        REST_SERVER_ADDRESS = System.getProperty("rest.server", "localhost");
 
-        ResteasyClient client = new ResteasyClientBuilder().build();
+        ResteasyClient client = new ResteasyClientBuilder().connectionPoolSize(10).maxPooledPerRoute(5).build();
         ResteasyWebTarget target = client.target("http://" + REST_SERVER_ADDRESS + ":" + REST_SERVER_PORT);
         target.register(new BasicAuthentication(REST_SERVER_USERNAME, REST_SERVER_PASSWORD));
         postRhq = target.proxy(PostDataRhq.class);
@@ -68,28 +68,17 @@ public class MonitoringRhq {
 
     public boolean rhqMonitoring(Object target, Field field) throws IllegalArgumentException, IllegalAccessException {
         boolean dataSent = false;
-        String isMetricIdLoaded = System.getProperty(field.getName());
+        String metricIdLoaded = MetricProperties.getMetricProperties().getRhqScheduleId(field.getName());
 
-        if (isMetricIdLoaded == null) {
-            RhqScheduleIds.loadScheduleIds();
-            isMetricIdLoaded = System.getProperty(field.getName());
-        }
-        if (isMetricIdLoaded != null) {
-            int numericScheduleId = Integer.parseInt(System.getProperty(field.getName()));
+        if (metricIdLoaded != null) {
+            int numericScheduleId = Integer.parseInt(metricIdLoaded);
             long now = System.currentTimeMillis();
 
             DoubleValue dataPoint = new DoubleValue(Double.parseDouble(field.get(target).toString()));
             try {
                 postRhq.postDataRhq(dataPoint, numericScheduleId, now, APPLICATION_JSON);
             } catch (Exception e) {
-               try {
-                    postRhq.getScheduleId(numericScheduleId, APPLICATION_JSON);
-                    throw e;
-                } catch(Exception e1) {
-                    // Schedule id does not exist
-                    logger.info("Rhq Schedule Id is not existent on the server, thus it is removed from System Properties.");
-                    System.clearProperty(field.getName());
-                }
+               e.printStackTrace();
             }
         }
 

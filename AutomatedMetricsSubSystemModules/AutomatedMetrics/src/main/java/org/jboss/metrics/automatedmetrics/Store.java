@@ -21,6 +21,8 @@
  */
 package org.jboss.metrics.automatedmetrics;
 
+import org.jboss.metrics.automatedmetricsapi.MetricsCacheSingleton;
+import org.jboss.metrics.automatedmetricsapi.MetricObject;
 import java.lang.reflect.Field;
 
 /**
