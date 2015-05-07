@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.metrics.automatedmetricsapi.utils;
+package org.jboss.metrics.automatedmetricsapi;
 
 import java.util.HashMap;
 
@@ -28,18 +28,13 @@ import java.util.HashMap;
  * @author panos
  */
 public class MetricProperties {
-    private static final MetricProperties metricProperties = new MetricProperties();
-    
+ 
     private String rhqMonitoring = "false";
     private String cacheStore = "false";
     private HashMap<String,String> rhqScheduleIds;
 
-    private MetricProperties() {
+    public MetricProperties() {
         rhqScheduleIds = new HashMap<String, String>();
-    }
-    
-    public static MetricProperties getMetricProperties() {
-        return metricProperties;
     }
     
     public String getRhqMonitoring() {

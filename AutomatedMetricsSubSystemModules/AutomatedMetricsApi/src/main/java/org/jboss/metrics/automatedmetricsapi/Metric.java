@@ -41,4 +41,6 @@ import javax.interceptor.InterceptorBinding;
 public @interface Metric {
     @Nonbinding
     String[] fieldName() default {};
+    @Nonbinding
+    String deploymentName() default "testDeployment";
 }

@@ -21,6 +21,8 @@
  */
 package org.jboss.metrics.automatedmetricsapi;
 
+import org.jboss.metrics.automatedmetricsapi.utils.MetricsCacheSingleton;
+import org.jboss.metrics.automatedmetricsapi.utils.MetricObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

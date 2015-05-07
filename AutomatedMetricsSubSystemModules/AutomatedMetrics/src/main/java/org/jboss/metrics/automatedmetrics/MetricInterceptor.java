@@ -28,7 +28,7 @@ import java.util.Map;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import org.jboss.metrics.automatedmetricsapi.utils.MetricProperties;
+import org.jboss.metrics.automatedmetricsapi.DeploymentMetricProperties;
 import org.jboss.metrics.automatedmetricsapi.Metric;
 
 
@@ -50,22 +50,21 @@ public class MetricInterceptor {
 
         Method method = ctx.getMethod();
 
-        System.out.println("Interceptor .......ole.........");
-        MetricsXml.parseMetricsXml();
         Metric metricAnnotation = method.getAnnotation(Metric.class);
         if (metricAnnotation != null) {
             int fieldNameSize = metricAnnotation.fieldName().length;
+            String deployment = metricAnnotation.deploymentName();
 
             for (int i = 0; i < fieldNameSize; i++) {
 
                 accessField(metricAnnotation, method, i);
-                String cacheStore = MetricProperties.getMetricProperties().getCacheStore();
-                String rhqMonitoring = MetricProperties.getMetricProperties().getRhqMonitoring();
+                String cacheStore =  DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentProperties().get(deployment).getCacheStore();
+                String rhqMonitoring = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentProperties().get(deployment).getRhqMonitoring();
 
                 if (cacheStore != null && Boolean.parseBoolean(cacheStore))
                     Store.CacheStore(ctx.getTarget(), field);
                 if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring))
-                    MonitoringRhq.getRhq().rhqMonitoring(ctx.getTarget(), field);
+                    MonitoringRhq.getRhq().rhqMonitoring(ctx.getTarget(), field, deployment);
             }
         }
 
