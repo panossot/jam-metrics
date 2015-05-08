@@ -22,19 +22,24 @@
 package org.jboss.metrics.automatedmetricsapi;
 
 import java.util.HashMap;
+import org.jboss.metrics.automatedmetricsapi.utils.DeploymentMetricProperties;
 
 /**
  *
  * @author panos
  */
-public class MetricProperties {
+public class MetricPropertiesApi {
  
     private String rhqMonitoring = "false";
     private String cacheStore = "false";
+    private String rhqServerUrl = "localhost";
+    private String rhqServerPort = "7080";
+    private String rhqServerUsername = "rhqadmin";
+    private String rhqServerPassword = "rhqadmin";
     private HashMap<String,String> rhqScheduleIds;
 
-    public MetricProperties() {
-        rhqScheduleIds = new HashMap<String, String>();
+    public MetricPropertiesApi() {
+        rhqScheduleIds = new HashMap<>();
     }
     
     public String getRhqMonitoring() {
@@ -64,6 +69,38 @@ public class MetricProperties {
     public String getRhqScheduleId(String name) {
         return(this.rhqScheduleIds.get(name));
     }
+
+    public String getRhqServerUrl() {
+        return rhqServerUrl;
+    }
+
+    public void setRhqServerUrl(String rhqServerUrl) {
+        this.rhqServerUrl = rhqServerUrl;
+    }
+
+    public String getRhqServerPort() {
+        return rhqServerPort;
+    }
+
+    public void setRhqServerPort(String rhqServerPort) {
+        this.rhqServerPort = rhqServerPort;
+    }
+
+    public String getRhqServerUsername() {
+        return rhqServerUsername;
+    }
+
+    public void setRhqServerUsername(String rhqServerUsername) {
+        this.rhqServerUsername = rhqServerUsername;
+    }
+
+    public String getRhqServerPassword() {
+        return rhqServerPassword;
+    }
+
+    public void setRhqServerPassword(String rhqServerPassword) {
+        this.rhqServerPassword = rhqServerPassword;
+    }
     
     public void addRhqScheduleId(String name, String id) {
         this.rhqScheduleIds.put(name, id);
@@ -73,4 +110,7 @@ public class MetricProperties {
         this.rhqScheduleIds.remove(name);
     }
     
+    public void storeProperties(String deployment){
+        DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentProperties(deployment, this);
+    }
 }

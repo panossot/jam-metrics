@@ -30,19 +30,13 @@ import org.jboss.logging.Logger;
  *
  * @author panos
  */
-public class MetricsCacheSingleton {
-
-    private static MetricsCacheSingleton cache = new MetricsCacheSingleton();
+public class MetricsCache {
 
     private HashSet<MetricObject> metricCache;
-    private static final Logger logger = Logger.getLogger(MetricsCacheSingleton.class);
+    private static final Logger logger = Logger.getLogger(MetricsCache.class);
 
-    private MetricsCacheSingleton() {
+    public MetricsCache() {
         metricCache = new HashSet();
-    }
-
-    public static MetricsCacheSingleton getCache() {
-        return cache;
     }
 
     /**

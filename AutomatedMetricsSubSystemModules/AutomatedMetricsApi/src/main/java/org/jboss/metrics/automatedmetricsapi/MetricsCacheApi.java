@@ -21,8 +21,6 @@
  */
 package org.jboss.metrics.automatedmetricsapi;
 
-import org.jboss.metrics.automatedmetricsapi.utils.MetricsCacheSingleton;
-import org.jboss.metrics.automatedmetricsapi.utils.MetricObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,16 +28,18 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import org.jboss.metrics.automatedmetricsapi.utils.MetricObject;
+import org.jboss.metrics.automatedmetricsapi.utils.MetricsCacheCollection;
 
 /**
  *
  * @author panos
  */
-public class MetricsCache {
-    public static Map<String,ArrayList<Object>> getMetricsCache()
+public class MetricsCacheApi {
+    public static Map<String,ArrayList<Object>> getMetricsCache(String deployment)
     {
         Map<String,ArrayList<Object>> metricList = new HashMap<>();
-        HashSet<MetricObject> metricsCache = MetricsCacheSingleton.getCache().getMetricCache();
+        HashSet<MetricObject> metricsCache = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment).getMetricCache();
         
         for (MetricObject mObject : metricsCache) {
             Iterator<Object> iob = mObject.metric.iterator();
@@ -53,12 +53,12 @@ public class MetricsCache {
         return metricList;
     }
     
-    public static String printMetricsCache() {
+    public static String printMetricsCache(String deployment) {
         String output = "";
         Map<String, ArrayList<Object>> cache;
         Set<String> metricNames;
         Collection<ArrayList<Object>> metricValues;
-        cache = getMetricsCache();
+        cache = getMetricsCache(deployment);
         metricNames = cache.keySet();
         metricValues = cache.values();
 
@@ -77,10 +77,8 @@ public class MetricsCache {
         return output;
     }
     
-    public static void cleanMetricsCache()
+    public static void cleanMetricsCache(String deployment)
     {
-        Map<String,ArrayList<Object>> metricList = new HashMap<>();
-        HashSet<MetricObject> metricsCache = MetricsCacheSingleton.getCache().getMetricCache();
-        metricsCache.clear();
+        MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment).getMetricCache().clear();
     }
 }

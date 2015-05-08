@@ -28,9 +28,10 @@ import java.util.Map;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import org.jboss.metrics.automatedmetricsapi.DeploymentMetricProperties;
 import org.jboss.metrics.automatedmetricsapi.Metric;
-
+import org.jboss.metrics.automatedmetricsapi.utils.DeploymentMetricProperties;
+import org.jboss.metrics.automatedmetricsapi.utils.MetricsCache;
+import org.jboss.metrics.automatedmetricsapi.utils.MetricsCacheCollection;
 
 /**
  *
@@ -58,13 +59,26 @@ public class MetricInterceptor {
             for (int i = 0; i < fieldNameSize; i++) {
 
                 accessField(metricAnnotation, method, i);
-                String cacheStore =  DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentProperties().get(deployment).getCacheStore();
-                String rhqMonitoring = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentProperties().get(deployment).getRhqMonitoring();
+                String cacheStore = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment).getCacheStore();
+                String rhqMonitoring = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment).getRhqMonitoring();
 
-                if (cacheStore != null && Boolean.parseBoolean(cacheStore))
-                    Store.CacheStore(ctx.getTarget(), field);
-                if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring))
-                    MonitoringRhq.getRhq().rhqMonitoring(ctx.getTarget(), field, deployment);
+                if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
+                    MetricsCache metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment);
+                    if (metricsCacheInstance == null) {
+                        metricsCacheInstance = new MetricsCache();
+                        MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(deployment, metricsCacheInstance);
+                    }
+                    Store.CacheStore(ctx.getTarget(), field, metricsCacheInstance);
+                }
+                if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring)) {
+                    MonitoringRhq mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(deployment);
+                    if (mrhqInstance == null) {
+                        mrhqInstance = new MonitoringRhq();
+                        MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(deployment, mrhqInstance);
+                    }
+
+                    mrhqInstance.rhqMonitoring(ctx.getTarget(), field, deployment);
+                }
             }
         }
 

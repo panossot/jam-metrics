@@ -24,7 +24,7 @@ package org.jboss.metrics.automatedmetrics;
 import java.lang.reflect.Field;
 import org.jboss.logging.Logger;
 import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
-import org.jboss.metrics.automatedmetricsapi.DeploymentMetricProperties;
+import org.jboss.metrics.automatedmetricsapi.utils.DeploymentMetricProperties;
 import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -36,8 +36,6 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
  */
 public class MonitoringRhq {
 
-    private static final MonitoringRhq mrhq = new MonitoringRhq();
-
     private final String APPLICATION_JSON;
     private final int REST_SERVER_PORT;
     private final String REST_SERVER_ADDRESS;
@@ -47,7 +45,7 @@ public class MonitoringRhq {
 
     private Logger logger = Logger.getLogger(MonitoringRhq.class);
 
-    private MonitoringRhq() {
+    public MonitoringRhq() {
 
         APPLICATION_JSON = "application/json";
         REST_SERVER_PORT = Integer.parseInt(System.getProperty("rest.port", "7080"));
@@ -62,13 +60,9 @@ public class MonitoringRhq {
 
     }
 
-    public static MonitoringRhq getRhq() {
-        return mrhq;
-    }
-
     public boolean rhqMonitoring(Object target, Field field, String deployment) throws IllegalArgumentException, IllegalAccessException {
         boolean dataSent = false;
-        String metricIdLoaded = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentProperties().get(deployment).getRhqScheduleId(field.getName());
+        String metricIdLoaded = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment).getRhqScheduleId(field.getName());
 
         if (metricIdLoaded != null) {
             int numericScheduleId = Integer.parseInt(metricIdLoaded);

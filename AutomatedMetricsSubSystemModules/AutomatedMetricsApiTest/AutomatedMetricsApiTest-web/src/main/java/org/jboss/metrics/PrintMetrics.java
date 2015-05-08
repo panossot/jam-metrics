@@ -29,9 +29,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.jboss.metrics.automatedmetricsapi.DeploymentMetricProperties;
-import org.jboss.metrics.automatedmetricsapi.MetricsCache;
-import org.jboss.metrics.automatedmetricsapi.MetricProperties;
+import org.jboss.metrics.automatedmetricsapi.MetricsCacheApi;
+import org.jboss.metrics.automatedmetricsapi.MetricPropertiesApi;
 
 /**
  *
@@ -50,6 +49,8 @@ public class PrintMetrics extends HttpServlet {
     @EJB
     private MetricsApiSessionBean metricsApiSessionBean;
     
+    private String deploymentName = "myTestDeployment";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -64,7 +65,7 @@ public class PrintMetrics extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet PrintMetrics : </h1>");
             metricsApiSessionBean.countClass();
-            out.println(MetricsCache.printMetricsCache());
+            out.println(MetricsCacheApi.printMetricsCache(deploymentName));
             out.println("<br>Successful Run ...</br>");
             out.println("</body>");
             out.println("</html>");
@@ -75,11 +76,12 @@ public class PrintMetrics extends HttpServlet {
         HashMap<String,String> rhqScheduleIds = new HashMap<String,String>();
         rhqScheduleIds.put("count", "11401");
         rhqScheduleIds.put("count2", "11402");
-        MetricProperties metricProperties = new MetricProperties();
+        MetricPropertiesApi metricProperties = new MetricPropertiesApi();
         metricProperties.setRhqMonitoring("true");
         metricProperties.setCacheStore("true");
+        metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
-        DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentProperties("myTestDeployment", metricProperties);
+        metricProperties.storeProperties(deploymentName);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
