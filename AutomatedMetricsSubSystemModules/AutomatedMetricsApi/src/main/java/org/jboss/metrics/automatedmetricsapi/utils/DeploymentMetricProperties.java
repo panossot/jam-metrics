@@ -47,9 +47,9 @@ public class DeploymentMetricProperties {
     
     public void addDeploymentProperties(String name, MetricPropertiesApi metricProperties) {
         if (this.deploymentProperties.containsKey(name))
-            this.deploymentProperties.replace(name, metricProperties);
-        else
-            this.deploymentProperties.put(name, metricProperties);
+            this.deploymentProperties.remove(name);
+        
+        this.deploymentProperties.put(name, metricProperties);
     }
     
     public void removeDeploymentProperties(String name) {
