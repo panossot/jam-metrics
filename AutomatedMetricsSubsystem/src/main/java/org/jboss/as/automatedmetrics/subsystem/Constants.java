@@ -29,7 +29,7 @@ package org.jboss.as.automatedmetrics.subsystem;
 interface Constants {
 
     String AUTOMATED_METRICS = "AutomatedMetrics";
-    String AUTOMATED_METRICS_RECORD = "AutomatedMetricsRecord";
     String RHQ_MONITORING = "rhqMonitoring";
+    String CACHE_STORE = "cacheStore";
     String CONFIGURATION = "configuration";
 }

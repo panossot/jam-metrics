@@ -29,7 +29,6 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.as.server.deployment.module.ModuleDependency;
 import org.jboss.as.server.deployment.module.ModuleSpecification;
-
 import org.jboss.modules.Module;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.modules.ModuleLoader;
@@ -44,6 +43,8 @@ public class AutomatedMetricsDependencyProcessor implements DeploymentUnitProces
 
     private static final ModuleIdentifier ORG_JBOSS_METRICS = ModuleIdentifier.create("org.jboss.metrics.AutomatedMetrics");
     private static final ModuleIdentifier ORG_JBOSS_METRICS_API = ModuleIdentifier.create("org.jboss.metrics.AutomatedMetricsApi");
+    private static final ModuleIdentifier ORG_JBOSS_METRICS_PROPERTIES = ModuleIdentifier.create("org.jboss.metrics.JBossAutomatedMetricsProperties");
+    private static final ModuleIdentifier ORG_JBOSS_METRICS_LIBRARY = ModuleIdentifier.create("org.jboss.metrics.JbossAutomatedMetricsLibray");
 
     /**
      * Add dependencies for modules required for metric deployments
@@ -55,6 +56,32 @@ public class AutomatedMetricsDependencyProcessor implements DeploymentUnitProces
         final ModuleSpecification moduleSpecification = deploymentUnit.getAttachment(Attachments.MODULE_SPECIFICATION);
         final ModuleLoader moduleLoader = Module.getBootModuleLoader();
 
+    //    ResourceRoot deploymentRoot = deploymentUnit.getAttachment(Attachments.DEPLOYMENT_ROOT);
+        //   final VirtualFile rootBeansXml = deploymentRoot.getRoot().getChild("META-INF/beans.xml");
+        //   final boolean rootBeansXmlPresent = rootBeansXml.exists() && rootBeansXml.isFile();
+        //   System.out.println("rootBeansXmlPresent " + rootBeansXmlPresent);
+    /*    Map<ResourceRoot, ExplicitBeanArchiveMetadata> beanArchiveMetadata = new HashMap<>();
+         PropertyReplacingBeansXmlParser parser = new PropertyReplacingBeansXmlParser(deploymentUnit);
+
+         ResourceRoot classesRoot = null;
+         List<ResourceRoot> structure = deploymentUnit.getAttachmentList(Attachments.RESOURCE_ROOTS);
+         for (ResourceRoot resourceRoot : structure) {
+         if (ModuleRootMarker.isModuleRoot(resourceRoot) && !SubDeploymentMarker.isSubDeployment(resourceRoot)) {
+         if (resourceRoot.getRootName().equals("classes")) {
+         // hack for dealing with war modules
+         classesRoot = resourceRoot;
+         deploymentUnit.putAttachment(WeldAttachments.CLASSES_RESOURCE_ROOT, resourceRoot);
+         } else {
+         VirtualFile beansXml = resourceRoot.getRoot().getChild("META-INF/beans.xml");
+         if (beansXml.exists() && beansXml.isFile()) {
+         System.out.println("rootBeansXmlPresent found");
+         beanArchiveMetadata.put(resourceRoot, new ExplicitBeanArchiveMetadata(beansXml, resourceRoot, parseBeansXml(beansXml, parser, deploymentUnit), false));
+         }
+         }
+         }
+         }
+         */
+        //   BeansXml beansXml = deployment.getBeanDeploymentArchive().getBeansXml();
         if (!WeldDeploymentMarker.isPartOfWeldDeployment(deploymentUnit)) {
             return; // Skip if there are no beans.xml files in the deployment
         }
@@ -68,12 +95,32 @@ public class AutomatedMetricsDependencyProcessor implements DeploymentUnitProces
         dep2.addImportFilter(PathFilters.getMetaInfFilter(), true);
         dep2.addExportFilter(PathFilters.getMetaInfFilter(), true);
         moduleSpecification.addSystemDependency(dep2);
+
+        ModuleDependency dep3 = new ModuleDependency(moduleLoader, ORG_JBOSS_METRICS_PROPERTIES, false, false, true, false);
+        dep3.addImportFilter(PathFilters.getMetaInfFilter(), true);
+        dep3.addExportFilter(PathFilters.getMetaInfFilter(), true);
+        moduleSpecification.addSystemDependency(dep3);
+
+        ModuleDependency dep4 = new ModuleDependency(moduleLoader, ORG_JBOSS_METRICS_LIBRARY, false, false, true, false);
+        dep4.addImportFilter(PathFilters.getMetaInfFilter(), true);
+        dep4.addExportFilter(PathFilters.getMetaInfFilter(), true);
+        moduleSpecification.addSystemDependency(dep4);
     }
 
     private void addDependency(ModuleSpecification moduleSpecification, ModuleLoader moduleLoader,
             ModuleIdentifier moduleIdentifier) {
         moduleSpecification.addSystemDependency(new ModuleDependency(moduleLoader, moduleIdentifier, false, false, true, false));
     }
+    /*
+     private BeansXml parseBeansXml(VirtualFile beansXmlFile, PropertyReplacingBeansXmlParser parser, final DeploymentUnit deploymentUnit) throws DeploymentUnitProcessingException {
+     try {
+     return parser.parse(beansXmlFile.asFileURL());
+     } catch (MalformedURLException e) {
+     throw WeldLogger.ROOT_LOGGER.couldNotGetBeansXmlAsURL(beansXmlFile.toString(), e);
+     } catch (RuntimeException e) {
+     throw new DeploymentUnitProcessingException(e);
+     }
+     }*/
 
     @Override
     public void undeploy(DeploymentUnit context) {

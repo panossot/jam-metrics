@@ -38,7 +38,8 @@ class AutomatedMetricsSubsystemParser_1_0 extends PersistentResourceXMLParser {
     private AutomatedMetricsSubsystemParser_1_0() {
         xmlDescription = builder(AutomatedMetricsRootDefinition.INSTANCE, Namespace.METRICS_1_0.getUriString())
                 .addAttributes(
-                        AutomatedMetricsRootDefinition.RHQ_MONITORING_ATTRIBUTE
+                        AutomatedMetricsRootDefinition.RHQ_MONITORING_ATTRIBUTE,
+                        AutomatedMetricsRootDefinition.CACHE_STORE_ATTRIBUTE
                 ).build();
     }
 

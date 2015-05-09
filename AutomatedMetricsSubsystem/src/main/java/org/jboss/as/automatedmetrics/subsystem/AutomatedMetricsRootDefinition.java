@@ -46,13 +46,18 @@ class AutomatedMetricsRootDefinition extends PersistentResourceDefinition {
     protected static final SimpleAttributeDefinition RHQ_MONITORING_ATTRIBUTE
             = new SimpleAttributeDefinitionBuilder(Constants.RHQ_MONITORING, ModelType.BOOLEAN, true)
             .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES)
-            .setDefaultValue(new ModelNode(true))
+            .setDefaultValue(new ModelNode(false))
             .build();
 
-    static final PersistentResourceDefinition[] CHILDREN = { //       AutomatedMetricsApiResourceDefinition.INSTANCE
-    };
+    protected static final SimpleAttributeDefinition CACHE_STORE_ATTRIBUTE
+            = new SimpleAttributeDefinitionBuilder(Constants.CACHE_STORE, ModelType.BOOLEAN, true)
+            .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES)
+            .setDefaultValue(new ModelNode(false))
+            .build();
 
-    static final AttributeDefinition[] ATTRIBUTES = {RHQ_MONITORING_ATTRIBUTE};
+    static final PersistentResourceDefinition[] CHILDREN = {};
+
+    static final AttributeDefinition[] ATTRIBUTES = {RHQ_MONITORING_ATTRIBUTE, CACHE_STORE_ATTRIBUTE};
 
     private AutomatedMetricsRootDefinition() {
         super(AutomatedMetricsExtension.SUBSYSTEM_PATH,

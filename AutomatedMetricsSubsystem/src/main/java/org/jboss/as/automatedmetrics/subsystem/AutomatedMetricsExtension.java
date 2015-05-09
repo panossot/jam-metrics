@@ -42,7 +42,6 @@ public class AutomatedMetricsExtension implements Extension {
 
     public static final String SUBSYSTEM_NAME = "metrics";
     protected static final PathElement SUBSYSTEM_PATH = PathElement.pathElement(SUBSYSTEM, SUBSYSTEM_NAME);
-    protected static final PathElement RHQ_MONITORING_PATH = PathElement.pathElement(Constants.CONFIGURATION, Constants.RHQ_MONITORING);
     private static final String RESOURCE_NAME = AutomatedMetricsExtension.class.getPackage().getName() + ".LocalDescriptions";
     private static final ModelVersion CURRENT_MODEL_VERSION = ModelVersion.create(1, 1, 0);
 
