@@ -30,7 +30,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jboss.metrics.automatedmetricsapi.MetricsCacheApi;
-import org.jboss.metrics.automatedmetricsapi.MetricPropertiesApi;
+import org.jboss.metrics.automatedmetricsapi.MetricsPropertiesApi;
+import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 
 /**
  *
@@ -76,12 +77,12 @@ public class PrintMetrics extends HttpServlet {
         HashMap<String,String> rhqScheduleIds = new HashMap<String,String>();
         rhqScheduleIds.put("count", "11401");
         rhqScheduleIds.put("count2", "11402");
-        MetricPropertiesApi metricProperties = new MetricPropertiesApi();
+        MetricProperties metricProperties = new MetricProperties();
         metricProperties.setRhqMonitoring("true");
         metricProperties.setCacheStore("true");
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
-        metricProperties.storeProperties(deploymentName);
+        MetricsPropertiesApi.storeProperties(deploymentName, metricProperties);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

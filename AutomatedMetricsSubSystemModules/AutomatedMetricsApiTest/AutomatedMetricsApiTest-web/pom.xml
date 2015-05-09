@@ -25,12 +25,11 @@
             <artifactId>AutomatedMetricsApiTest-ejb</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!--dependency>
+        <dependency>
             <groupId>org.jboss.metrics</groupId>
-            <artifactId>AutomatedMetrics</artifactId>
+            <artifactId>JBossAutomatedMetricsProperties</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency-->
+        </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>

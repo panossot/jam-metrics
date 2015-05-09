@@ -28,8 +28,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import org.jboss.metrics.automatedmetricsapi.utils.MetricObject;
-import org.jboss.metrics.automatedmetricsapi.utils.MetricsCacheCollection;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricObject;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
+
 
 /**
  *

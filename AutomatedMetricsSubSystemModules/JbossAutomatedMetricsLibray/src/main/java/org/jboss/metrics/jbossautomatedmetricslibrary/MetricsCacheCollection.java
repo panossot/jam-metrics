@@ -19,41 +19,39 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.metrics.automatedmetricsapi.utils;
+package org.jboss.metrics.jbossautomatedmetricslibrary;
 
 import java.util.HashMap;
-import org.jboss.metrics.automatedmetricsapi.MetricPropertiesApi;
 
 /**
  *
  * @author panos
  */
-public class DeploymentMetricProperties {
-    private static final DeploymentMetricProperties deploymentMetricProperties = new DeploymentMetricProperties();
-    
-    private HashMap<String,MetricPropertiesApi> deploymentProperties;
+public class MetricsCacheCollection {
+    private static MetricsCacheCollection mcachec = new MetricsCacheCollection();
+    private HashMap<String, MetricsCache> metricsCacheInstances;
 
-    private DeploymentMetricProperties() {
-        deploymentProperties = new HashMap<String, MetricPropertiesApi>();
+    private MetricsCacheCollection() {
+        metricsCacheInstances = new HashMap<String, MetricsCache>();
     }
     
-    public static DeploymentMetricProperties getDeploymentMetricProperties() {
-        return deploymentMetricProperties;
-    }
-
-    public MetricPropertiesApi getDeploymentMetricProperty(String name) {
-        return deploymentProperties.get(name);
+    public static MetricsCacheCollection getMetricsCacheCollection() {
+        return mcachec;
     }
     
-    public void addDeploymentProperties(String name, MetricPropertiesApi metricProperties) {
-        if (this.deploymentProperties.containsKey(name))
-            this.deploymentProperties.remove(name);
-        
-        this.deploymentProperties.put(name, metricProperties);
+    public MetricsCache getMetricsCacheInstance(String name) {
+        return (this.metricsCacheInstances.get(name));
     }
     
-    public void removeDeploymentProperties(String name) {
-        this.deploymentProperties.remove(name);
+    public void addMetricsCacheInstance(String name, MetricsCache metricsCache) {
+        this.metricsCacheInstances.put(name, metricsCache);
     }
     
+    public void removeMetricsCacheInstance(String name) {
+        this.metricsCacheInstances.remove(name);
+    }
+    
+    public boolean existsMetricsCacheInstance(String name) {
+        return(this.metricsCacheInstances.containsKey(name));
+    }
 }

@@ -24,7 +24,7 @@ package org.jboss.metrics.automatedmetrics;
 import java.lang.reflect.Field;
 import org.jboss.logging.Logger;
 import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
-import org.jboss.metrics.automatedmetricsapi.utils.DeploymentMetricProperties;
+import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;

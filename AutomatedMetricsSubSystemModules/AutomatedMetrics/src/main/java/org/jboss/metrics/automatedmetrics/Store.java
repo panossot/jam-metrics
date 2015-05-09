@@ -22,8 +22,9 @@
 package org.jboss.metrics.automatedmetrics;
 
 import java.lang.reflect.Field;
-import org.jboss.metrics.automatedmetricsapi.utils.MetricObject;
-import org.jboss.metrics.automatedmetricsapi.utils.MetricsCache;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricObject;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
+
 
 /**
  *

@@ -22,6 +22,8 @@
         <module>AutomatedMetricsApi</module>
         <module>AutomatedMetrics</module>
         <module>AutomatedMetricsApiTest</module>
+        <module>JbossAutomatedMetricsLibray</module>
+        <module>JBossAutomatedMetricsProperties</module>
     </modules>
     
 </project>

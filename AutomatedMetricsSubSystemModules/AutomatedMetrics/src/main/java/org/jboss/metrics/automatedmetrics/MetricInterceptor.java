@@ -29,9 +29,9 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.jboss.metrics.automatedmetricsapi.Metric;
-import org.jboss.metrics.automatedmetricsapi.utils.DeploymentMetricProperties;
-import org.jboss.metrics.automatedmetricsapi.utils.MetricsCache;
-import org.jboss.metrics.automatedmetricsapi.utils.MetricsCacheCollection;
+import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
 
 /**
  *
