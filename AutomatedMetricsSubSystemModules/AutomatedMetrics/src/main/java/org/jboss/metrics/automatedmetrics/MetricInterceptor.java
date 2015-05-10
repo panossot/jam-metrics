@@ -73,7 +73,7 @@ public class MetricInterceptor {
                 if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring)) {
                     MonitoringRhq mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(deployment);
                     if (mrhqInstance == null) {
-                        mrhqInstance = new MonitoringRhq();
+                        mrhqInstance = new MonitoringRhq(deployment);
                         MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(deployment, mrhqInstance);
                     }
 

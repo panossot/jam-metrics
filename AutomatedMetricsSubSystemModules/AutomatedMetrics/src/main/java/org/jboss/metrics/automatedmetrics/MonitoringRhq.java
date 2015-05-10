@@ -25,6 +25,7 @@ import java.lang.reflect.Field;
 import org.jboss.logging.Logger;
 import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
+import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -45,13 +46,14 @@ public class MonitoringRhq {
 
     private Logger logger = Logger.getLogger(MonitoringRhq.class);
 
-    public MonitoringRhq() {
+    public MonitoringRhq(String deployment) {
 
+        MetricProperties metricProperties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment);
         APPLICATION_JSON = "application/json";
-        REST_SERVER_PORT = Integer.parseInt(System.getProperty("rest.port", "7080"));
-        REST_SERVER_USERNAME = System.getProperty("rhqUsername", "rhqadmin");
-        REST_SERVER_PASSWORD = System.getProperty("rhqPassword", "rhqadmin");
-        REST_SERVER_ADDRESS = System.getProperty("rest.server", "lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
+        REST_SERVER_PORT = Integer.parseInt(metricProperties.getRhqServerPort());
+        REST_SERVER_USERNAME = metricProperties.getRhqServerUsername();
+        REST_SERVER_PASSWORD = metricProperties.getRhqServerPassword();
+        REST_SERVER_ADDRESS = metricProperties.getRhqServerUrl();
 
         ResteasyClient client = new ResteasyClientBuilder().connectionPoolSize(10).maxPooledPerRoute(5).build();
         ResteasyWebTarget target = client.target("http://" + REST_SERVER_ADDRESS + ":" + REST_SERVER_PORT);
