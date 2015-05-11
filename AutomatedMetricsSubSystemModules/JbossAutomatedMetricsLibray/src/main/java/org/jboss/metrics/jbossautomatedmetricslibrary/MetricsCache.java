@@ -56,7 +56,7 @@ public class MetricsCache {
 
     public MetricObject searchMetricObject(String metricName) {
         for (MetricObject mObject : getMetricCache()) {
-            if (mObject.name.compareTo(metricName) == 0) {
+            if (mObject.getName().compareTo(metricName) == 0) {
                 return mObject;
             }
         }
@@ -67,8 +67,8 @@ public class MetricsCache {
     public void printMetricObjects() {
         logger.info("Logging metric objects ...");
         for (MetricObject mObject : getMetricCache()) {
-            logger.info("Name : " + mObject.name);
-            Iterator<Object> iob = mObject.metric.iterator();
+            logger.info("Name : " + mObject.getName());
+            Iterator<Object> iob = mObject.getMetric().iterator();
 
             while (iob.hasNext()) {
                 logger.info("Value : " + iob.next().toString());

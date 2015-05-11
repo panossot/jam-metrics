@@ -42,6 +42,8 @@ import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
 public class MetricInterceptor {
 
     private final Map<String, Field> metricFields = new HashMap();
+    private static final Object rhqLock = new Object();
+    private static final Object cacheLock  = new Object();;
     private Field field;
 
     @AroundInvoke
@@ -50,6 +52,8 @@ public class MetricInterceptor {
         Object result = ctx.proceed();
 
         Method method = ctx.getMethod();
+        
+        System.out.println("Inside the interceptor ..... ole ......");
 
         Metric metricAnnotation = method.getAnnotation(Metric.class);
         if (metricAnnotation != null) {
@@ -63,18 +67,24 @@ public class MetricInterceptor {
                 String rhqMonitoring = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment).getRhqMonitoring();
 
                 if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
-                    MetricsCache metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment);
-                    if (metricsCacheInstance == null) {
-                        metricsCacheInstance = new MetricsCache();
-                        MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(deployment, metricsCacheInstance);
+                    MetricsCache metricsCacheInstance;
+                    synchronized(cacheLock){
+                        metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment);
+                        if (metricsCacheInstance == null) {
+                            metricsCacheInstance = new MetricsCache();
+                            MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(deployment, metricsCacheInstance);
+                        }
                     }
                     Store.CacheStore(ctx.getTarget(), field, metricsCacheInstance);
                 }
                 if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring)) {
-                    MonitoringRhq mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(deployment);
-                    if (mrhqInstance == null) {
-                        mrhqInstance = new MonitoringRhq(deployment);
-                        MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(deployment, mrhqInstance);
+                    MonitoringRhq mrhqInstance;
+                    synchronized(rhqLock){
+                        mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(deployment);
+                        if (mrhqInstance == null) {
+                            mrhqInstance = new MonitoringRhq(deployment);
+                            MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(deployment, mrhqInstance);
+                        }
                     }
 
                     mrhqInstance.rhqMonitoring(ctx.getTarget(), field, deployment);

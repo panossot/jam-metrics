@@ -29,10 +29,32 @@ import java.util.ArrayList;
  */
 public class MetricObject {
 
-    public ArrayList<Object> metric;
-    public String name;
+    private ArrayList<Object> metric;
+    private String name;
 
     public MetricObject() {
         metric = new ArrayList<Object>();
     }
+
+    public ArrayList<Object> getMetric() {
+        return metric;
+    }
+
+    public void setMetric(ArrayList<Object> metric) {
+        this.metric = metric;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public synchronized void addMetricValue(Object value) {
+        metric.add(value);
+    }
+    
+    
 }

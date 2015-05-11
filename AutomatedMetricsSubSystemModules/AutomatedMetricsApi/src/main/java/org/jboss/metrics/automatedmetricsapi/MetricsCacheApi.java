@@ -43,12 +43,12 @@ public class MetricsCacheApi {
         HashSet<MetricObject> metricsCache = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment).getMetricCache();
         
         for (MetricObject mObject : metricsCache) {
-            Iterator<Object> iob = mObject.metric.iterator();
+            Iterator<Object> iob = mObject.getMetric().iterator();
             ArrayList<Object> metricValues = new ArrayList<>();
             while (iob.hasNext()) {
                 metricValues.add(iob.next().toString());
             }
-            metricList.put(mObject.name, metricValues);
+            metricList.put(mObject.getName(), metricValues);
         }
         
         return metricList;

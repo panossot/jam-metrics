@@ -22,6 +22,8 @@
 package org.jboss.metrics.automatedmetrics;
 
 import java.lang.reflect.Field;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricObject;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
 
@@ -36,11 +38,11 @@ public class Store {
         String name = field.getName() + "_" + target;
         MetricObject mo = metricsCacheInstance.searchMetricObject(name);
         if (mo != null) {
-            mo.metric.add(field.get(target));
+            mo.addMetricValue(field.get(target));
         } else {
             MetricObject newMo = new MetricObject();
-            newMo.metric.add(field.get(target));
-            newMo.name = name;
+            newMo.addMetricValue(field.get(target));
+            newMo.setName(name);
             metricsCacheInstance.addMetricCacheObject(newMo);
         }
     }
