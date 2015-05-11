@@ -65,7 +65,7 @@ public class PrintMetrics extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet PrintMetrics : </h1>");
-            metricsApiSessionBean.countClass();
+            metricsApiSessionBean.countMethod();
             out.println(MetricsCacheApi.printMetricsCache(deploymentName));
             out.println("<br>Successful Run ...</br>");
             out.println("</body>");

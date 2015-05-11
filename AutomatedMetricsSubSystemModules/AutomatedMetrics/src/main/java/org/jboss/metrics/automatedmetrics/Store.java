@@ -22,18 +22,26 @@
 package org.jboss.metrics.automatedmetrics;
 
 import java.lang.reflect.Field;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricObject;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
+
 
 /**
  *
  * @author panos
  */
 public class Store {
+    
+    private final static Object metricObjectLock = new Object();
 
     public static void CacheStore(Object target, Field field, MetricsCache metricsCacheInstance) throws IllegalArgumentException, IllegalAccessException {
         String name = field.getName() + "_" + target;
-        MetricObject mo = metricsCacheInstance.searchMetricObject(name);
+        MetricObject mo;
+        synchronized(metricObjectLock) {
+            mo = metricsCacheInstance.searchMetricObject(name);
+        }
         if (mo != null) {
             mo.addMetricValue(field.get(target));
         } else {

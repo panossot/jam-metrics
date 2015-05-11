@@ -41,8 +41,7 @@ public class MetricsApiSessionBean {
     }
 
     @Metric(fieldName = {"count","count2"}, deploymentName = "myTestDeployment")
-    public int countClass() {
-        System.out.println("CountClass ................");
+    public int countMethod() {
         count++;
         count2 += 2;
 
