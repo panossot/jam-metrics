@@ -22,8 +22,6 @@
 package org.jboss.metrics.automatedmetrics;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricObject;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
 
