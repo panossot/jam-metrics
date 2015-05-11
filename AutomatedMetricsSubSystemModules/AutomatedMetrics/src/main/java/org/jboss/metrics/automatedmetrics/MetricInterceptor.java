@@ -52,8 +52,6 @@ public class MetricInterceptor {
         Object result = ctx.proceed();
 
         Method method = ctx.getMethod();
-        
-        System.out.println("Inside the interceptor ..... ole ......");
 
         Metric metricAnnotation = method.getAnnotation(Metric.class);
         if (metricAnnotation != null) {
