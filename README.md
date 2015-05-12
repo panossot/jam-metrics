@@ -2,17 +2,21 @@
 This library is created to facilitate the creation, record and monitoring of metrics for any deployment.
 
 ## How to use
-Just annotate the method of your ejb with the annotation @Metric(fieldName = {"field name of first metric","field name of second metric", etc})
+Just define in your deployment the operations of JBoss-Automated-Metrics that you would like to enable using the JBossAutomatedMeticsProperties api.
+
+Then, annotate the method of your ejb with the annotation @Metric(fieldName = {"field name of first metric","field name of second metric", etc}, deploymentName="some name characteristic to the deployment") .
+
+######The annotation parameter deploymentName is used for grouping of metrics under the same metric-properties configuration.
 
 ## Example of usage
-An example of usage can be found under the folder AutomatedMetricsApiTest.
+An example of usage can be found under the folder AutomatedMetricsStandalone/AutomatedMetricsApiTest.
 
 Deploy the generated .war file on Wildfly server to see the metrics being printed.
 
 <br/>
 
 ## JBoss-Automated-Metrics are now availbale using JAVA SE
-Please, check the example in AutomatedMetricsJavaSeApiTest directory to see how you can use JBoss-Automated-Metrics with JAVA SE.
+Please, check the example in JavaSeAutomatedMetrics/AutomatedMetricsJavaSeApiTest directory to see how you can use JBoss-Automated-Metrics with JAVA SE.
 
 <br/>
 
