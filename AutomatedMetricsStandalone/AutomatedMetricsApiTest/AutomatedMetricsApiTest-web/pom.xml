@@ -8,27 +8,31 @@
   </parent>
 
     <groupId>org.jboss.metrics</groupId>
-    <artifactId>AutomatedMetricsApiTest-ejb</artifactId>
+    <artifactId>AutomatedMetricsApiTest-web</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>ejb</packaging>
+    <packaging>war</packaging>
 
-    <name>AutomatedMetricsApiTest-ejb</name>
+    <name>AutomatedMetricsApiTest-web</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
+    
     <dependencies>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>AutomatedMetricsApiTest-ejb</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.jboss.metrics</groupId>
-            <artifactId>AutomatedMetricsApi</artifactId>
+            <artifactId>JBossAutomatedMetricsProperties</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
+            <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
@@ -50,10 +54,10 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-ejb-plugin</artifactId>
+                <artifactId>maven-war-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <ejbVersion>3.1</ejbVersion>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
             <plugin>

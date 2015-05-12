@@ -22,6 +22,12 @@
     <dependencies>
         <dependency>
             <groupId>org.jboss.metrics</groupId>
+            <artifactId>AutomatedMetrics</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.metrics</groupId>
             <artifactId>AutomatedMetricsApi</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
