@@ -46,15 +46,15 @@ public class MetricsCache {
         return metricCache;
     }
 
-    public void addMetricCacheObject(MetricObject cacheObject) {
+    public void synchronized addMetricCacheObject(MetricObject cacheObject) {
         this.getMetricCache().add(cacheObject);
     }
 
-    public void removeMetricCacheObject(MetricObject cacheObject) {
+    public void synchronized removeMetricCacheObject(MetricObject cacheObject) {
         this.getMetricCache().remove(cacheObject);
     }
 
-    public MetricObject searchMetricObject(String metricName) {
+    public MetricObject synchronized searchMetricObject(String metricName) {
         for (MetricObject mObject : getMetricCache()) {
             if (mObject.getName().compareTo(metricName) == 0) {
                 return mObject;
