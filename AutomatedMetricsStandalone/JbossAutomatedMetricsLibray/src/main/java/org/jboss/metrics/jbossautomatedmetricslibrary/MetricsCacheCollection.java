@@ -29,25 +29,25 @@ import java.util.HashMap;
  */
 public class MetricsCacheCollection {
     private static MetricsCacheCollection mcachec = new MetricsCacheCollection();
-    private HashMap<String, MetricsCache> metricsCacheInstances;
+    private volatile HashMap<String, MetricsCache> metricsCacheInstances;
 
     private MetricsCacheCollection() {
         metricsCacheInstances = new HashMap<String, MetricsCache>();
     }
     
-    public static MetricsCacheCollection getMetricsCacheCollection() {
+    public static synchronized MetricsCacheCollection getMetricsCacheCollection() {
         return mcachec;
     }
     
-    public MetricsCache getMetricsCacheInstance(String name) {
+    public synchronized MetricsCache getMetricsCacheInstance(String name) {
         return (this.metricsCacheInstances.get(name));
     }
     
-    public void addMetricsCacheInstance(String name, MetricsCache metricsCache) {
+    public synchronized void addMetricsCacheInstance(String name, MetricsCache metricsCache) {
         this.metricsCacheInstances.put(name, metricsCache);
     }
     
-    public void removeMetricsCacheInstance(String name) {
+    public synchronized void removeMetricsCacheInstance(String name) {
         this.metricsCacheInstances.remove(name);
     }
     
