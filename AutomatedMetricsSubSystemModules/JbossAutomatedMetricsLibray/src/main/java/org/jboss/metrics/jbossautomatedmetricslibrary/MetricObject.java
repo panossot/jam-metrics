@@ -29,26 +29,26 @@ import java.util.ArrayList;
  */
 public class MetricObject {
 
-    private ArrayList<Object> metric;
-    private String name;
+    private volatile ArrayList<Object> metric;
+    private volatile String name;
 
     public MetricObject() {
         metric = new ArrayList<Object>();
     }
 
-    public ArrayList<Object> getMetric() {
+    public synchronized ArrayList<Object> getMetric() {
         return metric;
     }
 
-    public void setMetric(ArrayList<Object> metric) {
+    public synchronized void setMetric(ArrayList<Object> metric) {
         this.metric = metric;
     }
 
-    public String getName() {
+    public synchronized String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public synchronized void setName(String name) {
         this.name = name;
     }
     
