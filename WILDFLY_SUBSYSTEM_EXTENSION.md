@@ -5,7 +5,7 @@ This file is created to discribe how you can add Jboss-Automated-Metrics as a Wi
 1. Go to the directory WildflyAddExtensionSubsystem/AutomatedMetricsSubsystemExtension .
 
 2. Execute the maven command : 
-mvn install -DJBossHome=The directory of you Wildfly installation home directory.
+mvn install -DJBossHome=The directory of your Wildfly installation home directory.
 
 3. Restart Wildfly server.
 
