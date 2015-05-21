@@ -16,7 +16,7 @@ Deploy the generated .war file on Wildfly server to see the metrics being printe
 
 <br/>
 
-## JBoss-Automated-Metrics are now availbale as a Wildfly Subsystem Extension
+## JBoss-Automated-Metrics are now available as a Wildfly Subsystem Extension
 Please, read WILDFLY_SUBSYSTEM_EXTENSION.md to see how you can add JBoss-Automated-Metrics as a Wildfly Subsystem Extension.
 
 
