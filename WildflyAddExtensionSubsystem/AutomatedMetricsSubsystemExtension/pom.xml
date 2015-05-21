@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jboss</groupId>
+        <artifactId>jboss-parent</artifactId>
+        <version>16</version>
+    </parent>
+
+    <groupId>org.jboss.metrics</groupId>
+    <artifactId>wildfly-automated-metrics-extension-subsystem</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    
+    <name>WildFly: Addition of Automated Metrics Extension Subsystem</name>
+    
+    <properties>
+        <JBossHome>/home/panos/NetBeansProjects/gitOfficial/wildflyMetricsStandalone5/build/target/wildfly-10.0.0.Alpha1-SNAPSHOT</JBossHome>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>compile</phase>
+                            <configuration>
+                            <tasks>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/AutomatedMetrics/main/module.xml" tofile="${JBossHome}/modules/system/layers/base/org/jboss/metrics/AutomatedMetrics/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/AutomatedMetricsApi/main/module.xml" tofile="${JBossHome}/modules/system/layers/base/org/jboss/metrics/AutomatedMetricsApi/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/JbossAutomatedMetricsLibray/main/module.xml" tofile="/${JBossHome}/modules/system/layers/base/org/jboss/metrics/JbossAutomatedMetricsLibray/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/JBossAutomatedMetricsProperties/main/module.xml" tofile="${JBossHome}/modules/system/layers/base/org/jboss/metrics/JBossAutomatedMetricsProperties/main/module.xml"/>
+                             </tasks>
+                          </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution> 
+                </executions>
+            </plugin>
+    
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-extension-maven-plugin</artifactId>
+                <version>0.7.0</version>
+                <configuration>
+                    <moduleZip>${basedir}/src/main/resources/wildfly-automated-metrics-9.0.0.Alpha2-SNAPSHOT-module.zip</moduleZip>
+                    <jbossHome>${JBossHome}</jbossHome>
+                    <modulesHome>modules/system/layers/base</modulesHome>
+                    <serverConfig>standalone/configuration/standalone.xml</serverConfig>
+                    <subsystem>${basedir}/src/main/resources/scripts/standalone-subsystem.xml</subsystem>
+                </configuration>
+                
+                <executions>
+                    <execution>
+                        <id>build-dist</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                         
+            </plugin>
+                    
+        </plugins>
+    </build>
+</project>
