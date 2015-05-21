@@ -13,6 +13,13 @@ An example of usage can be found under the folder AutomatedMetricsStandalone/Aut
 
 Deploy the generated .war file on Wildfly server to see the metrics being printed.
 
+
+<br/>
+
+## JBoss-Automated-Metrics are now availbale as a Wildfly Subsystem Extension
+Please, read WILDFLY_SUBSYSTEM_EXTENSION.md to see how you can add JBoss-Automated-Metrics as a Wildfly Subsystem Extension.
+
+
 <br/>
 
 ## JBoss-Automated-Metrics are now availbale using JAVA SE
