@@ -29,30 +29,30 @@ import java.util.ArrayList;
  */
 public class MetricObject {
 
-    private volatile ArrayList<Object> metric;
-    private volatile String name;
+    private ArrayList<Object> metric;
+    private String name;
 
     public MetricObject() {
         metric = new ArrayList<Object>();
     }
 
-    public synchronized ArrayList<Object> getMetric() {
+    public ArrayList<Object> getMetric() {
         return metric;
     }
 
-    public synchronized void setMetric(ArrayList<Object> metric) {
+    public void setMetric(ArrayList<Object> metric) {
         this.metric = metric;
     }
 
-    public synchronized String getName() {
+    public String getName() {
         return name;
     }
 
-    public synchronized void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
     
-    public synchronized void addMetricValue(Object value) {
+    public  void addMetricValue(Object value) {
         metric.add(value);
     }
     

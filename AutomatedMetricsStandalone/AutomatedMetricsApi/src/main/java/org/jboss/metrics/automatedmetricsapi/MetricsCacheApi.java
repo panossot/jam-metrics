@@ -37,13 +37,13 @@ import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
  * @author panos
  */
 public class MetricsCacheApi {
-    public static Map<String,ArrayList<Object>> getMetricsCache(String deployment)
+    public static synchronized Map<String,ArrayList<Object>> getMetricsCache(String deployment)
     {
         Map<String,ArrayList<Object>> metricList = new HashMap<>();
         HashSet<MetricObject> metricsCache = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment).getMetricCache();
         
         for (MetricObject mObject : metricsCache) {
-            Iterator<Object> iob = mObject.getMetric().iterator();
+            Iterator<Object> iob = ((ArrayList<Object>)mObject.getMetric().clone()).iterator();
             ArrayList<Object> metricValues = new ArrayList<>();
             while (iob.hasNext()) {
                 metricValues.add(iob.next().toString());
@@ -54,7 +54,7 @@ public class MetricsCacheApi {
         return metricList;
     }
     
-    public static String printMetricsCache(String deployment) {
+    public static synchronized String printMetricsCache(String deployment) {
         String output = "";
         Map<String, ArrayList<Object>> cache;
         Set<String> metricNames;

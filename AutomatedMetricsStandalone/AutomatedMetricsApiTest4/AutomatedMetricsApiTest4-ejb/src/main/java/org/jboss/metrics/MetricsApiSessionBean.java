@@ -19,39 +19,34 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.metrics.jbossautomatedmetricslibrary;
-
-import java.util.HashMap;
+package org.jboss.metrics;
 
 /**
  *
  * @author panos
  */
-public class MetricsCacheCollection {
-    private static MetricsCacheCollection mcachec = new MetricsCacheCollection();
-    private HashMap<String, MetricsCache> metricsCacheInstances;
+public class MetricsApiSessionBean {
 
-    private MetricsCacheCollection() {
-        metricsCacheInstances = new HashMap<String, MetricsCache>();
+    private final static Object metricLock = new Object();
+    private final static Object metric2Lock = new Object();
+    
+    MetricsClass metricsClass;
+
+    public MetricsApiSessionBean(MetricsClass metricsClass) {
+        this.metricsClass = metricsClass;
     }
     
-    public static MetricsCacheCollection getMetricsCacheCollection() {
-        return mcachec;
+
+    public void countMethod() {
+        for (int i=0; i<100; i++) {
+            synchronized(metricLock) {
+                metricsClass.setCount(metricsClass.getCount()+1);
+            }
+            synchronized(metric2Lock) {
+                metricsClass.setCount2(metricsClass.getCount2()+2);
+            }
+        }
     }
     
-    public MetricsCache getMetricsCacheInstance(String name) {
-        return (this.metricsCacheInstances.get(name));
-    }
-    
-    public void addMetricsCacheInstance(String name, MetricsCache metricsCache) {
-        this.metricsCacheInstances.put(name, metricsCache);
-    }
-    
-    public void removeMetricsCacheInstance(String name) {
-        this.metricsCacheInstances.remove(name);
-    }
-    
-    public boolean existsMetricsCacheInstance(String name) {
-        return(this.metricsCacheInstances.containsKey(name));
-    }
+
 }

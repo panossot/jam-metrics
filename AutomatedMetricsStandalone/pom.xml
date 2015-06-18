@@ -23,6 +23,8 @@
         <module>AutomatedMetrics</module>
         <module>AutomatedMetricsApiTest</module>
         <module>AutomatedMetricsApiTest2</module>
+        <module>AutomatedMetricsApiTest3</module>
+        <module>AutomatedMetricsApiTest4</module>
         <module>JbossAutomatedMetricsLibray</module>
         <module>JBossAutomatedMetricsProperties</module>
     </modules>

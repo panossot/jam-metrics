@@ -31,15 +31,11 @@ import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
  * @author panos
  */
 public class Store {
-    
-    private final static Object metricObjectLock = new Object();
 
     public static void CacheStore(Object target, Field field, MetricsCache metricsCacheInstance) throws IllegalArgumentException, IllegalAccessException {
         String name = field.getName() + "_" + target;
         MetricObject mo;
-        synchronized(metricObjectLock) {
-            mo = metricsCacheInstance.searchMetricObject(name);
-        }
+        mo = metricsCacheInstance.searchMetricObject(name);
         if (mo != null) {
             mo.addMetricValue(field.get(target));
         } else {

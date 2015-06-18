@@ -42,7 +42,7 @@ public class MetricsCache {
     /**
      * @return the metricCache
      */
-    public HashSet<MetricObject> getMetricCache() {
+    public synchronized HashSet<MetricObject> getMetricCache() {
         return metricCache;
     }
 

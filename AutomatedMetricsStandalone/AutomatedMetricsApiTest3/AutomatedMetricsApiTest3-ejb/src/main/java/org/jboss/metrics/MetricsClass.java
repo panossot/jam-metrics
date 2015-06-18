@@ -1,3 +1,7 @@
+package org.jboss.metrics;
+
+import org.jboss.metrics.automatedmetricsapi.Metric;
+
 /*
  * JBoss, Home of Professional Open Source.
  * Copyright 2015, Red Hat, Inc., and individual contributors
@@ -19,39 +23,32 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.metrics.jbossautomatedmetricslibrary;
-
-import java.util.HashMap;
 
 /**
  *
  * @author panos
  */
-public class MetricsCacheCollection {
-    private static MetricsCacheCollection mcachec = new MetricsCacheCollection();
-    private HashMap<String, MetricsCache> metricsCacheInstances;
+public class MetricsClass {
+    private int count = 0;
+    
+    private int count2 = 0;
 
-    private MetricsCacheCollection() {
-        metricsCacheInstances = new HashMap<String, MetricsCache>();
+    public int getCount() {
+        return count;
+    }
+
+    @Metric(fieldName = {"count"}, deploymentName = "myTestDeployment")
+    public synchronized void setCount(int count) {
+        this.count = count;
+    }
+
+    public int getCount2() {
+        return count2;
+    }
+
+    @Metric(fieldName = {"count2"}, deploymentName = "myTestDeployment2")
+    public synchronized void setCount2(int count2) {
+        this.count2 = count2;
     }
     
-    public static MetricsCacheCollection getMetricsCacheCollection() {
-        return mcachec;
-    }
-    
-    public MetricsCache getMetricsCacheInstance(String name) {
-        return (this.metricsCacheInstances.get(name));
-    }
-    
-    public void addMetricsCacheInstance(String name, MetricsCache metricsCache) {
-        this.metricsCacheInstances.put(name, metricsCache);
-    }
-    
-    public void removeMetricsCacheInstance(String name) {
-        this.metricsCacheInstances.remove(name);
-    }
-    
-    public boolean existsMetricsCacheInstance(String name) {
-        return(this.metricsCacheInstances.containsKey(name));
-    }
 }
