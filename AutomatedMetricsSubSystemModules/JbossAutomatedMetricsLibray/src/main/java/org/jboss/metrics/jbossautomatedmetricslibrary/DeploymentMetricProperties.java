@@ -31,28 +31,28 @@ import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 public class DeploymentMetricProperties {
     private static final DeploymentMetricProperties deploymentMetricProperties = new DeploymentMetricProperties();
     
-    private volatile HashMap<String,MetricProperties> deploymentProperties;
+    private HashMap<String,MetricProperties> deploymentProperties;
 
     private DeploymentMetricProperties() {
         deploymentProperties = new HashMap<String, MetricProperties>();
     }
     
-    public static synchronized DeploymentMetricProperties getDeploymentMetricProperties() {
+    public static DeploymentMetricProperties getDeploymentMetricProperties() {
         return deploymentMetricProperties;
     }
 
-    public synchronized MetricProperties getDeploymentMetricProperty(String name) {
+    public MetricProperties getDeploymentMetricProperty(String name) {
         return deploymentProperties.get(name);
     }
     
-    public synchronized void addDeploymentProperties(String name, MetricProperties metricProperties) {
+    public void addDeploymentProperties(String name, MetricProperties metricProperties) {
         if (this.deploymentProperties.containsKey(name))
             this.deploymentProperties.remove(name);
         
         this.deploymentProperties.put(name, metricProperties);
     }
     
-    public synchronized void removeDeploymentProperties(String name) {
+    public void removeDeploymentProperties(String name) {
         this.deploymentProperties.remove(name);
     }
     

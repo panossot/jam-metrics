@@ -29,37 +29,37 @@ import java.util.HashMap;
 public class MonitoringRhqCollection {
 
     private static final MonitoringRhqCollection mrhqc = new MonitoringRhqCollection();
-    private volatile HashMap<String, MonitoringRhq> monitoringRhqInstances;
+    private HashMap<String, MonitoringRhq> monitoringRhqInstances;
 
     private MonitoringRhqCollection() {
         monitoringRhqInstances = new HashMap<String, MonitoringRhq>();
     }
     
-    public static synchronized MonitoringRhqCollection getRhqCollection() {
+    public static MonitoringRhqCollection getRhqCollection() {
         return mrhqc;
     }
     
-    public synchronized HashMap<String, MonitoringRhq> getMonitoringRhqInstances() {
+    public HashMap<String, MonitoringRhq> getMonitoringRhqInstances() {
         return monitoringRhqInstances;
     }
 
-    public synchronized void setMonitoringRhqInstances(HashMap<String, MonitoringRhq> monitoringRhqInstances) {
+    public void setMonitoringRhqInstances(HashMap<String, MonitoringRhq> monitoringRhqInstances) {
         this.monitoringRhqInstances = monitoringRhqInstances;
     }
     
-    public synchronized MonitoringRhq getMonitoringRhqInstance(String name) {
+    public MonitoringRhq getMonitoringRhqInstance(String name) {
         return (this.monitoringRhqInstances.get(name));
     }
     
-    public synchronized void addMonitoringRhqInstance(String name, MonitoringRhq monitoringRhq) {
+    public void addMonitoringRhqInstance(String name, MonitoringRhq monitoringRhq) {
         this.monitoringRhqInstances.put(name, monitoringRhq);
     }
     
-    public synchronized void removeMonitoringRhqInstance(String name) {
+    public void removeMonitoringRhqInstance(String name) {
         this.monitoringRhqInstances.remove(name);
     }
     
-    public synchronized boolean existsMonitoringRhqInstance(String name) {
+    public boolean existsMonitoringRhqInstance(String name) {
         return(this.monitoringRhqInstances.containsKey(name));
     }
 

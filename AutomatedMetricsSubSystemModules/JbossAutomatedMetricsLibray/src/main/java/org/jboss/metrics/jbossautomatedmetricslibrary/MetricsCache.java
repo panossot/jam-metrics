@@ -32,7 +32,7 @@ import org.jboss.logging.Logger;
  */
 public class MetricsCache {
 
-    private volatile HashSet<MetricObject> metricCache;
+    private HashSet<MetricObject> metricCache;
     private static final Logger logger = Logger.getLogger(MetricsCache.class);
 
     public MetricsCache() {
@@ -46,15 +46,15 @@ public class MetricsCache {
         return metricCache;
     }
 
-    public synchronized void addMetricCacheObject(MetricObject cacheObject) {
+    public void addMetricCacheObject(MetricObject cacheObject) {
         this.getMetricCache().add(cacheObject);
     }
 
-    public synchronized void removeMetricCacheObject(MetricObject cacheObject) {
+    public void removeMetricCacheObject(MetricObject cacheObject) {
         this.getMetricCache().remove(cacheObject);
     }
 
-    public synchronized MetricObject searchMetricObject(String metricName) {
+    public MetricObject searchMetricObject(String metricName) {
         for (MetricObject mObject : getMetricCache()) {
             if (mObject.getName().compareTo(metricName) == 0) {
                 return mObject;

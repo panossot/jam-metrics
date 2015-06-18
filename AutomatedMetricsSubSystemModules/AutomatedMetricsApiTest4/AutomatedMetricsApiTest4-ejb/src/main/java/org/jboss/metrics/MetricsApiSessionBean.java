@@ -19,32 +19,34 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.metrics.automatedmetrics;
-
-import java.lang.reflect.Field;
-import org.jboss.metrics.jbossautomatedmetricslibrary.MetricObject;
-import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
-
+package org.jboss.metrics;
 
 /**
  *
  * @author panos
  */
-public class Store {
+public class MetricsApiSessionBean {
 
-    public static void CacheStore(Object target, Field field, MetricsCache metricsCacheInstance) throws IllegalArgumentException, IllegalAccessException {
-        String name = field.getName() + "_" + target;
-        MetricObject mo;
-        mo = metricsCacheInstance.searchMetricObject(name);
+    private final static Object metricLock = new Object();
+    private final static Object metric2Lock = new Object();
+    
+    MetricsClass metricsClass;
 
-        if (mo != null) {
-            mo.addMetricValue(field.get(target));
-        } else {
-            MetricObject newMo = new MetricObject();
-            newMo.addMetricValue(field.get(target));
-            newMo.setName(name);
-            metricsCacheInstance.addMetricCacheObject(newMo);
+    public MetricsApiSessionBean(MetricsClass metricsClass) {
+        this.metricsClass = metricsClass;
+    }
+    
+
+    public void countMethod() {
+        for (int i=0; i<100; i++) {
+            synchronized(metricLock) {
+                metricsClass.setCount(metricsClass.getCount()+1);
+            }
+            synchronized(metric2Lock) {
+                metricsClass.setCount2(metricsClass.getCount2()+2);
+            }
         }
     }
+    
 
 }

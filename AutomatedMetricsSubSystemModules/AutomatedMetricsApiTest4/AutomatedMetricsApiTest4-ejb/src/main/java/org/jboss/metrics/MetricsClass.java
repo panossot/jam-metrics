@@ -1,3 +1,7 @@
+package org.jboss.metrics;
+
+import org.jboss.metrics.automatedmetricsapi.Metric;
+
 /*
  * JBoss, Home of Professional Open Source.
  * Copyright 2015, Red Hat, Inc., and individual contributors
@@ -19,32 +23,32 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.metrics.automatedmetrics;
-
-import java.lang.reflect.Field;
-import org.jboss.metrics.jbossautomatedmetricslibrary.MetricObject;
-import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
-
 
 /**
  *
  * @author panos
  */
-public class Store {
+public class MetricsClass {
+    private static volatile int count = 0;
+    
+    private static volatile int count2 = 0;
 
-    public static void CacheStore(Object target, Field field, MetricsCache metricsCacheInstance) throws IllegalArgumentException, IllegalAccessException {
-        String name = field.getName() + "_" + target;
-        MetricObject mo;
-        mo = metricsCacheInstance.searchMetricObject(name);
-
-        if (mo != null) {
-            mo.addMetricValue(field.get(target));
-        } else {
-            MetricObject newMo = new MetricObject();
-            newMo.addMetricValue(field.get(target));
-            newMo.setName(name);
-            metricsCacheInstance.addMetricCacheObject(newMo);
-        }
+    public synchronized int getCount() {
+        return count;
     }
 
+    @Metric(fieldName = {"count"}, deploymentName = "myTestDeployment")
+    public synchronized void setCount(int count) {
+        this.count = count;
+    }
+
+    public synchronized int getCount2() {
+        return count2;
+    }
+
+    @Metric(fieldName = {"count2"}, deploymentName = "myTestDeployment")
+    public synchronized void setCount2(int count2) {
+        this.count2 = count2;
+    }
+    
 }
