@@ -22,7 +22,11 @@
 package org.jboss.metrics.javase.automatedmetricsjavaseapi;
 
 import org.jboss.metrics.automatedmetricsjavase.MonitoringRhq;
+import org.jboss.metrics.automatedmetricsjavase.MonitoringRhqCollection;
 import org.jboss.metrics.automatedmetricsjavase.Store;
+import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
 
 
 
@@ -32,10 +36,29 @@ import org.jboss.metrics.automatedmetricsjavase.Store;
  */
 public class JbossAutomatedJavaSeMetrics {
 
-    public void metric(Object instance, Object value, String name) throws Exception {
-        Store.CacheStore(instance, value, name);
-        if (Boolean.parseBoolean(System.getProperty("rhqMonitoring", "false")))
-            MonitoringRhq.getRhq().rhqMonitoring(instance, value, name);
-    }
+    public void metric(Object instance, Object value, String metricName, String metricGroup) throws Exception {
+        String cacheStore = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(metricGroup).getCacheStore();
+        String rhqMonitoring = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(metricGroup).getRhqMonitoring();
 
+        if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
+            MetricsCache metricsCacheInstance;
+            metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(metricGroup);
+            if (metricsCacheInstance == null) {
+                metricsCacheInstance = new MetricsCache();
+                MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(metricGroup, metricsCacheInstance);
+            }
+            Store.CacheStore(instance, value, metricName, metricsCacheInstance);
+        }
+        if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring)) {
+            MonitoringRhq mrhqInstance;
+            mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(metricGroup);
+            if (mrhqInstance == null) {
+                mrhqInstance = new MonitoringRhq(metricGroup);
+                MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(metricGroup, mrhqInstance);
+            }
+
+            mrhqInstance.rhqMonitoring(instance, value, metricName, metricGroup);
+        }
+    }
 }
+

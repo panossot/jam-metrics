@@ -21,6 +21,8 @@
     <modules>
         <module>AutomatedMetricsJavaSe</module>
         <module>AutomatedMetricsJavaSeApi</module>
+        <module>JbossAutomatedMetricsLibray</module>
+        <module>JBossAutomatedMetricsProperties</module>
         <module>AutomatedMetricsJavaSeApiTest</module>
     </modules>
 

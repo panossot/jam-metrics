@@ -33,12 +33,10 @@ public class MetricsClass {
     private static AtomicInteger countAtomic;
     private static int count = 0;
     
-    private static AtomicInteger count2Atomic;
     private static int count2 = 0;
 
     public MetricsClass(){
         countAtomic = new AtomicInteger(1);
-        count2Atomic = new AtomicInteger(1);
     }
     
     @Metric(fieldName = {"count"}, deploymentName = "myTestDeployment")
@@ -48,8 +46,7 @@ public class MetricsClass {
 
     @Metric(fieldName = {"count2"}, deploymentName = "myTestDeployment")
     public synchronized void getAndSetCount2Increased() {
-        this.count2Atomic.getAndIncrement();
-        count2 = this.count2Atomic.getAndIncrement();
+        count2 = this.count2+2;
     }
     
 }

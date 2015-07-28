@@ -44,8 +44,8 @@ public class MetricsApiSeTestClass {
     public int countMethod() throws Exception {
         count++;
         count2 += 2;
-        jbMetrics.metric(this,count,"count");
-        jbMetrics.metric(this,count2,"count2");
+        jbMetrics.metric(this,count,"count","myTestDeployment");
+        jbMetrics.metric(this,count2,"count2","myTestDeployment");
 
         return count;
     }

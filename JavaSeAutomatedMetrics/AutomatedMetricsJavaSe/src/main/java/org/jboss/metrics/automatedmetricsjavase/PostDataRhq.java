@@ -22,30 +22,22 @@
 package org.jboss.metrics.automatedmetricsjavase;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
-import org.jboss.metrics.automatedmetricsjavase.utils.DoubleValue;
+import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
 
 /**
  *
  * @author panos
  */
+@Path("/rest/metric/data/{id}")
 public interface PostDataRhq {
 
     @PUT
-    @Path("/rest/metric/data/{id}/raw/{timeStamp}")
+    @Path("/raw/{timeStamp}")
     @Consumes("application/json")
     void postDataRhq(DoubleValue data, @PathParam("id") int id, @PathParam("timeStamp") long timestamp, @HeaderParam(HttpHeaders.ACCEPT) String accept);
-    
-    @GET
-    @Path("/rest/metric/data/{id}")
-    @Consumes("application/json")
-    String getScheduleId(@PathParam("id") int id, @HeaderParam(HttpHeaders.ACCEPT) String accept);
 }

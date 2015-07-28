@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.metrics.automatedmetricsjavase;
+package org.jboss.metrics.jbossautomatedmetricslibrary;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -30,39 +30,33 @@ import org.jboss.logging.Logger;
  *
  * @author panos
  */
-public class MetricsCacheSingleton {
+public class MetricsCache {
 
-    private static MetricsCacheSingleton cache = new MetricsCacheSingleton();
+    private volatile HashSet<MetricObject> metricCache;
+    private static final Logger logger = Logger.getLogger(MetricsCache.class);
 
-    private HashSet<MetricObject> metricCache;
-    private static final Logger logger = Logger.getLogger(MetricsCacheSingleton.class);
-
-    private MetricsCacheSingleton() {
+    public MetricsCache() {
         metricCache = new HashSet();
-    }
-
-    public static MetricsCacheSingleton getCache() {
-        return cache;
     }
 
     /**
      * @return the metricCache
      */
-    public HashSet<MetricObject> getMetricCache() {
+    public synchronized HashSet<MetricObject> getMetricCache() {
         return metricCache;
     }
 
-    public void addMetricCacheObject(MetricObject cacheObject) {
+    public synchronized void addMetricCacheObject(MetricObject cacheObject) {
         this.getMetricCache().add(cacheObject);
     }
 
-    public void removeMetricCacheObject(MetricObject cacheObject) {
+    public synchronized void removeMetricCacheObject(MetricObject cacheObject) {
         this.getMetricCache().remove(cacheObject);
     }
 
-    public MetricObject searchMetricObject(String metricName) {
+    public synchronized MetricObject searchMetricObject(String metricName) {
         for (MetricObject mObject : getMetricCache()) {
-            if (mObject.name.compareTo(metricName) == 0) {
+            if (mObject.getName().compareTo(metricName) == 0) {
                 return mObject;
             }
         }
@@ -73,8 +67,8 @@ public class MetricsCacheSingleton {
     public void printMetricObjects() {
         logger.info("Logging metric objects ...");
         for (MetricObject mObject : getMetricCache()) {
-            logger.info("Name : " + mObject.name);
-            Iterator<Object> iob = mObject.metric.iterator();
+            logger.info("Name : " + mObject.getName());
+            Iterator<Object> iob = mObject.getMetric().iterator();
 
             while (iob.hasNext()) {
                 logger.info("Value : " + iob.next().toString());

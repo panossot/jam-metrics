@@ -28,54 +28,58 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import org.jboss.metrics.automatedmetricsjavase.MetricObject;
-import org.jboss.metrics.automatedmetricsjavase.MetricsCacheSingleton;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricObject;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
+
 
 /**
  *
  * @author panos
  */
-public class MetricsCache {
-
-    public static Map<String, ArrayList<Object>> getMetricsCache() {
-        Map<String, ArrayList<Object>> metricList = new HashMap<>();
-        HashSet<MetricObject> metricsCache = MetricsCacheSingleton.getCache().getMetricCache();
-
+public class MetricsCacheApi {
+    public static synchronized Map<String,ArrayList<Object>> getMetricsCache(String deployment)
+    {
+        Map<String,ArrayList<Object>> metricList = new HashMap<>();
+        HashSet<MetricObject> metricsCache = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment).getMetricCache();
+        
         for (MetricObject mObject : metricsCache) {
-            Iterator<Object> iob = mObject.metric.iterator();
+            Iterator<Object> iob = ((ArrayList<Object>)mObject.getMetric().clone()).iterator();
             ArrayList<Object> metricValues = new ArrayList<>();
             while (iob.hasNext()) {
                 metricValues.add(iob.next().toString());
             }
-            metricList.put(mObject.name, metricValues);
+            metricList.put(mObject.getName(), metricValues);
         }
-
+        
         return metricList;
     }
-
-    public static void printMetricsCache() {
+    
+    public static synchronized String printMetricsCache(String deployment) {
+        String output = "";
         Map<String, ArrayList<Object>> cache;
         Set<String> metricNames;
         Collection<ArrayList<Object>> metricValues;
-        cache = getMetricsCache();
+        cache = getMetricsCache(deployment);
         metricNames = cache.keySet();
         metricValues = cache.values();
 
         Iterator<String> iob = metricNames.iterator();
         Iterator<ArrayList<Object>> iobv = metricValues.iterator();
         while (iob.hasNext()) {
-            System.out.println("<br>Metric Parameter Name : " + iob.next() + "</br>");
+            output += "<br>Metric Parameter Name : " + iob.next() + "</br>\n";
             if (iobv.hasNext()) {
                 ArrayList<Object> values = iobv.next();
                 for (Object value : values) {
-                    System.out.println("<br>Value : " + value.toString() + "</br>");
+                    output += "<br>Value : " + value.toString() + "</br>\n";
                 }
             }
         }
+        
+        return output;
     }
-
-    public static void cleanMetricsCache() {
-        HashSet<MetricObject> metricsCache = MetricsCacheSingleton.getCache().getMetricCache();
-        metricsCache.clear();
+    
+    public static void cleanMetricsCache(String deployment)
+    {
+        MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment).getMetricCache().clear();
     }
 }

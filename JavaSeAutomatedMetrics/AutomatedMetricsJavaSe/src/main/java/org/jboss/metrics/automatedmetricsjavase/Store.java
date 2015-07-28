@@ -21,22 +21,28 @@
  */
 package org.jboss.metrics.automatedmetricsjavase;
 
+import java.lang.reflect.Field;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricObject;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
+
+
 /**
  *
  * @author panos
  */
 public class Store {
 
-    public static void CacheStore(Object instance, Object value, String metricName) throws IllegalArgumentException, IllegalAccessException {
-        String name = metricName + "_" + instance;
-        MetricObject mo = MetricsCacheSingleton.getCache().searchMetricObject(name);
+    public static void CacheStore(Object target, Object value, String metricName, MetricsCache metricsCacheInstance) throws IllegalArgumentException, IllegalAccessException {
+        String name = metricName + "_" + target;
+        MetricObject mo;
+        mo = metricsCacheInstance.searchMetricObject(name);
         if (mo != null) {
-            mo.metric.add(value);
+            mo.addMetricValue(value);
         } else {
             MetricObject newMo = new MetricObject();
-            newMo.metric.add(value);
-            newMo.name = name;
-            MetricsCacheSingleton.getCache().addMetricCacheObject(newMo);
+            newMo.addMetricValue(value);
+            newMo.setName(name);
+            metricsCacheInstance.addMetricCacheObject(newMo);
         }
     }
 

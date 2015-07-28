@@ -19,20 +19,39 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.metrics.automatedmetricsjavase;
+package org.jboss.metrics.jbossautomatedmetricslibrary;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
  * @author panos
  */
-public class MetricObject {
+public class MetricsCacheCollection {
+    private static MetricsCacheCollection mcachec = new MetricsCacheCollection();
+    private HashMap<String, MetricsCache> metricsCacheInstances;
 
-    public ArrayList<Object> metric;
-    public String name;
-
-    public MetricObject() {
-        metric = new ArrayList<Object>();
+    private MetricsCacheCollection() {
+        metricsCacheInstances = new HashMap<String, MetricsCache>();
+    }
+    
+    public static MetricsCacheCollection getMetricsCacheCollection() {
+        return mcachec;
+    }
+    
+    public MetricsCache getMetricsCacheInstance(String name) {
+        return (this.metricsCacheInstances.get(name));
+    }
+    
+    public void addMetricsCacheInstance(String name, MetricsCache metricsCache) {
+        this.metricsCacheInstances.put(name, metricsCache);
+    }
+    
+    public void removeMetricsCacheInstance(String name) {
+        this.metricsCacheInstances.remove(name);
+    }
+    
+    public boolean existsMetricsCacheInstance(String name) {
+        return(this.metricsCacheInstances.containsKey(name));
     }
 }

@@ -19,33 +19,42 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.metrics.automatedmetrics.utils;
+package org.jboss.metrics.jbossautomatedmetricslibrary;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 
 /**
  *
  * @author panos
  */
-@XmlRootElement(name =  "value")
-public class DoubleValue {
+public class MetricObject {
 
-    Double value;
+    private ArrayList<Object> metric;
+    private String name;
 
-    public DoubleValue() {
+    public MetricObject() {
+        metric = new ArrayList<Object>();
     }
 
-    public DoubleValue(Double value) {
-        this.value = value;
+    public ArrayList<Object> getMetric() {
+        return metric;
     }
 
-    @XmlAttribute
-    public Double getValue() {
-        return value;
+    public void setMetric(ArrayList<Object> metric) {
+        this.metric = metric;
     }
 
-    public void setValue(Double value) {
-        this.value = value;
+    public String getName() {
+        return name;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public  void addMetricValue(Object value) {
+        metric.add(value);
+    }
+    
+    
 }
