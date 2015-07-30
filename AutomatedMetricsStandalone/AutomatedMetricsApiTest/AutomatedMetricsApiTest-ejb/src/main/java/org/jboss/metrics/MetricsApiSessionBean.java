@@ -35,7 +35,7 @@ public class MetricsApiSessionBean {
     public MetricsApiSessionBean() {
     }
 
-    @Metric(fieldName = {"count","count2"}, deploymentName = "myTestDeployment")
+    @Metric(fieldName = {"count","count2"}, groupName = "myTestGroup")
     public int countMethod() {
         count++;
         count2 += 2;

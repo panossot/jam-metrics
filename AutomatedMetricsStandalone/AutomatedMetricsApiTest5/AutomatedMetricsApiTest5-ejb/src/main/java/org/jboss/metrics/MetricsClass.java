@@ -33,12 +33,12 @@ public class MetricsClass {
         countAtomic = new AtomicInteger(1);
     }
     
-    @Metric(fieldName = {"count"}, deploymentName = "myTestDeployment")
+    @Metric(fieldName = {"count"}, groupName = "myTestGroup")
     public synchronized void getAndSetCountIncreased() {
         count = this.countAtomic.getAndIncrement();
     }
 
-    @Metric(fieldName = {"count2"}, deploymentName = "myTestDeployment")
+    @Metric(fieldName = {"count2"}, groupName = "myTestGroup")
     public synchronized void getAndSetCount2Increased() {
         count2 = this.count2+2;
     }

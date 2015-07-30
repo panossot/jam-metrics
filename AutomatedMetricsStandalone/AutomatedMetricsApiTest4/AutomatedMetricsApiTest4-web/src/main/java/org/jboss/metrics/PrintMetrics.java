@@ -53,7 +53,7 @@ public class PrintMetrics extends HttpServlet {
     @Inject 
     MetricsClass metricsClass;
     
-    private String deploymentName = "myTestDeployment";
+    private String groupName = "myTestGroup";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -83,8 +83,8 @@ public class PrintMetrics extends HttpServlet {
                 Logger.getLogger(PrintMetrics.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deploymentName)!=null)
-                out.println(MetricsCacheApi.printMetricsCache(deploymentName));
+            if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
+                out.println(MetricsCacheApi.printMetricsCache(groupName));
             
             out.println("<br>Successful Run ...</br>");
             out.println("</body>");
@@ -104,7 +104,7 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.setCacheStore("true");
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
-        MetricsPropertiesApi.storeProperties(deploymentName, metricProperties);
+        MetricsPropertiesApi.storeProperties(groupName, metricProperties);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

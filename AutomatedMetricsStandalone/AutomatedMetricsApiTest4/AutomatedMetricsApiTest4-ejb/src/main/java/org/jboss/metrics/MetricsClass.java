@@ -32,7 +32,7 @@ public class MetricsClass {
         return count;
     }
 
-    @Metric(fieldName = {"count"}, deploymentName = "myTestDeployment")
+    @Metric(fieldName = {"count"}, groupName = "myTestGroup")
     public synchronized void setCount(int count) {
         this.count = count;
     }
@@ -41,7 +41,7 @@ public class MetricsClass {
         return count2;
     }
 
-    @Metric(fieldName = {"count2"}, deploymentName = "myTestDeployment")
+    @Metric(fieldName = {"count2"}, groupName = "myTestGroup")
     public synchronized void setCount2(int count2) {
         this.count2 = count2;
     }

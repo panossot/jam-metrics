@@ -45,7 +45,7 @@ public class PrintMetrics extends HttpServlet {
     @EJB
     private MetricsApiSessionBean metricsApiSessionBean;
     
-    private String deploymentName = "myTestDeployment";
+    private String groupName = "myTestGroup";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -61,7 +61,7 @@ public class PrintMetrics extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet PrintMetrics : </h1>");
             metricsApiSessionBean.countMethod();
-            out.println(MetricsCacheApi.printMetricsCache(deploymentName));
+            out.println(MetricsCacheApi.printMetricsCache(groupName));
             out.println("<br>Successful Run ...</br>");
             out.println("</body>");
             out.println("</html>");
@@ -77,7 +77,7 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.setCacheStore("true");
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
-        MetricsPropertiesApi.storeProperties(deploymentName, metricProperties);
+        MetricsPropertiesApi.storeProperties(groupName, metricProperties);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

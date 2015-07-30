@@ -73,8 +73,8 @@ public class MetricsCacheApi {
         return output;
     }
     
-    public static void cleanMetricsCache(String deployment)
+    public static void cleanMetricsCache(String group)
     {
-        MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment).getMetricCache().clear();
+        MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group).getMetricCache().clear();
     }
 }
