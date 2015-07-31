@@ -40,9 +40,9 @@ public class MonitoringRhq {
 
     private Logger logger = Logger.getLogger(MonitoringRhq.class);
 
-    public MonitoringRhq(String deployment) {
+    public MonitoringRhq(String group) {
 
-        MetricProperties metricProperties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment);
+        MetricProperties metricProperties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
         APPLICATION_JSON = "application/json";
         REST_SERVER_PORT = Integer.parseInt(metricProperties.getRhqServerPort());
         REST_SERVER_USERNAME = metricProperties.getRhqServerUsername();
@@ -56,9 +56,9 @@ public class MonitoringRhq {
 
     }
 
-    public boolean rhqMonitoring(Object target, Object value, String metricName, String deployment) throws IllegalArgumentException, IllegalAccessException {
+    public boolean rhqMonitoring(Object target, Object value, String metricName, String group) throws IllegalArgumentException, IllegalAccessException {
         boolean dataSent = false;
-        String metricIdLoaded = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment).getRhqScheduleId(metricName);
+        String metricIdLoaded = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getRhqScheduleId(metricName);
 
         if (metricIdLoaded != null) {
             int numericScheduleId = Integer.parseInt(metricIdLoaded);

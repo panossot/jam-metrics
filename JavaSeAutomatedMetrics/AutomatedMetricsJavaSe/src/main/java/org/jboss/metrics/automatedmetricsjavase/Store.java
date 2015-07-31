@@ -16,7 +16,6 @@
  */
 package org.jboss.metrics.automatedmetricsjavase;
 
-import java.lang.reflect.Field;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricObject;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
 

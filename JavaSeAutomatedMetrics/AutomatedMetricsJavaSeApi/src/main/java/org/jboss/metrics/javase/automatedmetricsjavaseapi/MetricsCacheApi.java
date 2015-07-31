@@ -32,10 +32,10 @@ import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
  * @author Panagiotis Sotiropoulos
  */
 public class MetricsCacheApi {
-    public static synchronized Map<String,ArrayList<Object>> getMetricsCache(String deployment)
+    public static synchronized Map<String,ArrayList<Object>> getMetricsCache(String group)
     {
         Map<String,ArrayList<Object>> metricList = new HashMap<>();
-        HashSet<MetricObject> metricsCache = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment).getMetricCache();
+        HashSet<MetricObject> metricsCache = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group).getMetricCache();
         
         for (MetricObject mObject : metricsCache) {
             Iterator<Object> iob = ((ArrayList<Object>)mObject.getMetric().clone()).iterator();
@@ -49,12 +49,12 @@ public class MetricsCacheApi {
         return metricList;
     }
     
-    public static synchronized String printMetricsCache(String deployment) {
+    public static synchronized String printMetricsCache(String group) {
         String output = "";
         Map<String, ArrayList<Object>> cache;
         Set<String> metricNames;
         Collection<ArrayList<Object>> metricValues;
-        cache = getMetricsCache(deployment);
+        cache = getMetricsCache(group);
         metricNames = cache.keySet();
         metricValues = cache.values();
 
@@ -73,8 +73,8 @@ public class MetricsCacheApi {
         return output;
     }
     
-    public static void cleanMetricsCache(String deployment)
+    public static void cleanMetricsCache(String group)
     {
-        MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment).getMetricCache().clear();
+        MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group).getMetricCache().clear();
     }
 }

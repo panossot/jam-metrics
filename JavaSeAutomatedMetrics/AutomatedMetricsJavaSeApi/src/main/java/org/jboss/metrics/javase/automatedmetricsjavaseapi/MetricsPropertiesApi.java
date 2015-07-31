@@ -24,7 +24,7 @@ import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
  * @author Panagiotis Sotiropoulos
  */
 public class MetricsPropertiesApi {
-     public static void storeProperties(String deployment, MetricProperties metricsProperties){
-        DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentProperties(deployment, metricsProperties);
+     public static void storeProperties(String group, MetricProperties metricsProperties){
+        DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentProperties(group, metricsProperties);
     }
 }
