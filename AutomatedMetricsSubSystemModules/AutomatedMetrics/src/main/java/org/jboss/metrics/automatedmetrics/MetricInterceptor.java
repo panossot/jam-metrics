@@ -14,15 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.jboss.metrics.automatedmetrics;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import org.jboss.metrics.automatedmetricsapi.DBStore;
 import org.jboss.metrics.automatedmetricsapi.Metric;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
@@ -46,39 +49,52 @@ public class MetricInterceptor {
 
         Method method = ctx.getMethod();
 
-        Metric metricAnnotation = method.getAnnotation(Metric.class);
-        if (metricAnnotation != null) {
-            int fieldNameSize = metricAnnotation.fieldName().length;
-            String deployment = metricAnnotation.deploymentName();
+        try {
+            Metric metricAnnotation = method.getAnnotation(Metric.class);
+            if (metricAnnotation != null) {
+                int fieldNameSize = metricAnnotation.fieldName().length;
+                String group = metricAnnotation.groupName();
 
-            for (int i = 0; i < fieldNameSize; i++) {
+                for (int i = 0; i < fieldNameSize; i++) {
 
-                accessField(metricAnnotation, method, i);
-                String cacheStore = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment).getCacheStore();
-                String rhqMonitoring = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment).getRhqMonitoring();
+                    accessField(metricAnnotation, method, i);
+                    String cacheStore = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getCacheStore();
+                    String rhqMonitoring = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getRhqMonitoring();
 
-                if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
-                    MetricsCache metricsCacheInstance;
-                        metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment);
-                        if (metricsCacheInstance == null) {
-                            metricsCacheInstance = new MetricsCache();
-                            MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(deployment, metricsCacheInstance);
-                        }
-                    Store.CacheStore(ctx.getTarget(), field, metricsCacheInstance);
-                }
-                if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring)) {
-                    MonitoringRhq mrhqInstance;
-                        mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(deployment);
-                        if (mrhqInstance == null) {
-                            mrhqInstance = new MonitoringRhq(deployment);
-                            MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(deployment, mrhqInstance);
-                        }
+                    if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
+                        MetricsCache metricsCacheInstance;
+                            metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group);
+                            if (metricsCacheInstance == null) {
+                                metricsCacheInstance = new MetricsCache();
+                                MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(group, metricsCacheInstance);
+                            }
+                        Store.CacheStore(ctx.getTarget(), field, metricsCacheInstance);
+                    }
+                    if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring)) {
+                        MonitoringRhq mrhqInstance;
+                            mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(group);
+                            if (mrhqInstance == null) {
+                                mrhqInstance = new MonitoringRhq(group);
+                                MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(group, mrhqInstance);
+                            }
 
-                    mrhqInstance.rhqMonitoring(ctx.getTarget(), field, deployment);
+                        mrhqInstance.rhqMonitoring(ctx.getTarget(), field, group);
+                    }
                 }
             }
-        }
 
+            DBStore dbStoreAnnotation = method.getAnnotation(DBStore.class);
+            if (dbStoreAnnotation != null) {  
+                String group = dbStoreAnnotation.groupName();
+                String statementName = dbStoreAnnotation.statementName();
+                String query = ParseDbQuery.parse(dbStoreAnnotation.queryUpdateDB(),metricFields,ctx.getTarget(),group);
+                Statement stmt = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getDatabaseStatement().get(statementName);
+                stmt.executeUpdate(query);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
         return result;
     }
 

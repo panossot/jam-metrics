@@ -16,15 +16,29 @@
  */
 package org.jboss.metrics.automatedmetricsapi;
 
-import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
-import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Repeatable;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import javax.enterprise.util.Nonbinding;
+import javax.interceptor.InterceptorBinding;
 
 /**
  *
  * @author Panagiotis Sotiropoulos
  */
-public class MetricsPropertiesApi {
-     public static void storeProperties(String group, MetricProperties metricsProperties){
-        DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentProperties(group, metricsProperties);
-    }
+@Inherited
+@InterceptorBinding
+@Target({METHOD, TYPE})
+@Retention(RUNTIME)
+public @interface DBStore {
+    @Nonbinding
+    String groupName() default "testGroup";
+    @Nonbinding
+    String statementName() default "";
+    @Nonbinding
+    String[] queryUpdateDB() default {};
 }

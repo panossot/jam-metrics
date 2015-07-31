@@ -16,6 +16,7 @@
  */
 package org.jboss.metrics.jbossautomatedmetricsproperties;
 
+import java.sql.Statement;
 import java.util.HashMap;
 
 /**
@@ -26,6 +27,9 @@ public class MetricProperties {
  
     private String rhqMonitoring = "false";
     private String cacheStore = "false";
+    private String databaseStore = "false";
+    private HashMap<String,Statement> databaseStatement;
+    private HashMap<String,String> updateDbQueries;
     private String rhqServerUrl = "localhost";
     private String rhqServerPort = "7080";
     private String rhqServerUsername = "rhqadmin";
@@ -34,6 +38,8 @@ public class MetricProperties {
 
     public MetricProperties() {
         rhqScheduleIds = new HashMap<>();
+        databaseStatement = new HashMap<>();
+        updateDbQueries = new HashMap<>();
     }
     
     public String getRhqMonitoring() {
@@ -102,6 +108,30 @@ public class MetricProperties {
     
     public void removeRhqScheduleId(String name) {
         this.rhqScheduleIds.remove(name);
+    }
+
+    public String getDatabaseStore() {
+        return databaseStore;
+    }
+
+    public void setDatabaseStore(String databaseStore) {
+        this.databaseStore = databaseStore;
+    }
+
+    public HashMap<String, Statement> getDatabaseStatement() {
+        return databaseStatement;
+    }
+
+    public void setDatabaseStatement(HashMap<String, Statement> databaseStatement) {
+        this.databaseStatement = databaseStatement;
+    }
+
+    public HashMap<String, String> getUpdateDbQueries() {
+        return updateDbQueries;
+    }
+
+    public void setUpdateDbQueries(HashMap<String, String> updateDbQueries) {
+        this.updateDbQueries = updateDbQueries;
     }
 
 }

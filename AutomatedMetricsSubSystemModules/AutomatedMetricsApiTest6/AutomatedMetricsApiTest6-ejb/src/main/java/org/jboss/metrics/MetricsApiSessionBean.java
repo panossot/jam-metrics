@@ -16,33 +16,30 @@
  */
 package org.jboss.metrics;
 
+import javax.ejb.LocalBean;
+import javax.ejb.Stateful;
+import org.jboss.metrics.automatedmetricsapi.DBStore;
 import org.jboss.metrics.automatedmetricsapi.Metric;
 
 /**
  *
  * @author Panagiotis Sotiropoulos
  */
-public class MetricsClass {
+@Stateful
+@LocalBean
+public class MetricsApiSessionBean {
+
     private int count = 0;
     
-    private int count2 = 0;
-
-    public int getCount() {
-        return count;
+    public MetricsApiSessionBean() {
     }
 
     @Metric(fieldName = {"count"}, groupName = "myTestGroup")
-    public synchronized void setCount(int count) {
-        this.count = count;
+    @DBStore(groupName = "myTestGroup", queryUpdateDB = {"StoreDBMetric","count"}, statementName = "statement_1")
+    public int countMethod() {
+        count++;
+
+        return count;
     }
 
-    public int getCount2() {
-        return count2;
-    }
-
-    @Metric(fieldName = {"count2"}, groupName = "myTestGroup")
-    public synchronized void setCount2(int count2) {
-        this.count2 = count2;
-    }
-    
 }

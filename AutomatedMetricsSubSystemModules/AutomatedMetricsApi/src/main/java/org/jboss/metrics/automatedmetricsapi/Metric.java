@@ -37,5 +37,5 @@ public @interface Metric {
     @Nonbinding
     String[] fieldName() default {};
     @Nonbinding
-    String deploymentName() default "testDeployment";
+    String groupName() default "testGroup";
 }

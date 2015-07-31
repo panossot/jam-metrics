@@ -27,7 +27,7 @@ import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
  */
 public class AutomatedMetricsJavaSeApiTest {
 
-    private static String deploymentName = "myTestDeployment";
+    private static String groupName = "myTestGroup";
     
     /**
      * @param args the command line arguments
@@ -38,7 +38,7 @@ public class AutomatedMetricsJavaSeApiTest {
             MetricsApiSeTestClass mTC = new MetricsApiSeTestClass();
             mTC.countMethod();
             mTC.countMethod();
-            System.out.println(MetricsCacheApi.printMetricsCache(deploymentName));
+            System.out.println(MetricsCacheApi.printMetricsCache(groupName));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,6 +53,6 @@ public class AutomatedMetricsJavaSeApiTest {
         metricProperties.setCacheStore("true");
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
-        MetricsPropertiesApi.storeProperties(deploymentName, metricProperties);
+        MetricsPropertiesApi.storeProperties(groupName, metricProperties);
     }
 }

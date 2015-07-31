@@ -18,17 +18,18 @@ package org.jboss.metrics;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.inject.Inject;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jboss.metrics.automatedmetricsapi.MetricsCacheApi;
 import org.jboss.metrics.automatedmetricsapi.MetricsPropertiesApi;
-import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
 import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 
 /**
@@ -45,13 +46,8 @@ public class PrintMetrics extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-    MetricsApiSessionBean metricsBean;
-    
-    MetricsApiSessionBean metricsBean2;
-    
-    @Inject 
-    MetricsClass metricsClass;
+    @EJB
+    private MetricsApiSessionBean metricsApiSessionBean;
     
     private String groupName = "myTestGroup";
     
@@ -68,24 +64,8 @@ public class PrintMetrics extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet PrintMetrics : </h1>");
-            MetricsThreads mTreads =  new MetricsThreads(metricsBean, "1");
-            mTreads.start();
-         
-            MetricsThreads mTreads2 =  new MetricsThreads(metricsBean2, "2");
-            mTreads2.start();
-            
-            MetricsThreads mTreads3 =  new MetricsThreads(metricsBean2, "3");
-            mTreads3.start();
-            
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(PrintMetrics.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
-                out.println(MetricsCacheApi.printMetricsCache(groupName));
-            
+            metricsApiSessionBean.countMethod();
+            out.println(MetricsCacheApi.printMetricsCache(groupName));
             out.println("<br>Successful Run ...</br>");
             out.println("</body>");
             out.println("</html>");
@@ -93,9 +73,6 @@ public class PrintMetrics extends HttpServlet {
     }
     
     private void initializeMetricProperties() {
-        metricsBean = new MetricsApiSessionBean(metricsClass);
-        metricsBean2 = new MetricsApiSessionBean(metricsClass);
-        
         HashMap<String,String> rhqScheduleIds = new HashMap<String,String>();
         rhqScheduleIds.put("count", "11401");
         rhqScheduleIds.put("count2", "11402");
@@ -104,7 +81,43 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.setCacheStore("true");
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
+        metricProperties.setDatabaseStore("true");
+        try {
+            Connection  connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "panos");
+            Statement stmt = connection.createStatement();
+            createDbTable(stmt);
+            HashMap<String,Statement> dbStmt = new HashMap<String,Statement>();
+            dbStmt.put("statement_1", stmt);
+            metricProperties.setDatabaseStatement(dbStmt);
+            HashMap<String,String> query1 = new HashMap<String,String>();
+            query1.put("StoreDBMetric", "INSERT INTO MyMETRICS.metricValues(METRIC_NAME,METRIC_VALUE,METRIC_INSTANCE,RECORD_TIME) VALUES('{1}', [1], '{instance}', '{time}');");
+            metricProperties.setUpdateDbQueries(query1);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
+    }
+    
+    private void createDbTable(Statement stmt) {
+        try {
+            String query = "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'MyMETRICS' AND table_name = 'metricValues'";
+            ResultSet rs = stmt.executeQuery(query);                  
+            rs.next();
+            boolean exists = rs.getInt("COUNT(*)") > 0;
+            
+            if (!exists) {
+                String sql = "CREATE DATABASE MyMETRICS";
+                stmt.executeUpdate(sql);
+                System.out.println("Database created successfully...");
+
+                sql = "CREATE TABLE MyMETRICS.metricValues(ID int NOT NULL AUTO_INCREMENT, METRIC_NAME varchar(255) NOT NULL," +
+                      " METRIC_VALUE varchar(255) NOT NULL, METRIC_INSTANCE varchar(255), RECORD_TIME DATETIME, PRIMARY KEY(ID));"; 
+                
+                stmt.executeUpdate(sql);
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -73,7 +73,7 @@ public class PrintMetrics extends HttpServlet {
         rhqScheduleIds.put("count", "11401");
         rhqScheduleIds.put("count2", "11402");
         MetricProperties metricProperties = new MetricProperties();
-        metricProperties.setRhqMonitoring("true");
+        metricProperties.setRhqMonitoring("false");
         metricProperties.setCacheStore("true");
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
