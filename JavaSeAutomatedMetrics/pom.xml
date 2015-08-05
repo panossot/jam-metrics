@@ -25,6 +25,7 @@
         <module>JBossAutomatedMetricsProperties</module>
         <module>AutomatedMetricsJavaSeApiTest</module>
         <module>AutomatedMetricsJavaSeApiTest2</module>
+        <module>AutomatedMetricsJavaSeApiTest3</module>
     </modules>
 
 </project>
