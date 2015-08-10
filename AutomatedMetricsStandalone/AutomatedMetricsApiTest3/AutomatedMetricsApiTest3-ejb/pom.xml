@@ -4,12 +4,12 @@
     <parent>
     <artifactId>AutomatedMetricsApiTest3</artifactId>
     <groupId>org.jboss.metrics</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0.Final</version>
   </parent>
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>AutomatedMetricsApiTest3-ejb</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0.Final</version>
     <packaging>ejb</packaging>
 
     <name>AutomatedMetricsApiTest3-ejb</name>
@@ -23,13 +23,13 @@
         <dependency>
             <groupId>org.jboss.metrics</groupId>
             <artifactId>AutomatedMetrics</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0.Final</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.jboss.metrics</groupId>
             <artifactId>AutomatedMetricsApi</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0.Final</version>
             <type>jar</type>
         </dependency>
         <dependency>

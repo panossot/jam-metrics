@@ -8,3 +8,4 @@ jboss.xml
 
 #dirs
 target
+/AutomatedMetricsStandalone/JBossAutomatedMetricsProperties/target2/

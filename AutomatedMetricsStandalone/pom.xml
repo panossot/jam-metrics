@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -13,10 +11,33 @@
     <groupId>org.jboss.as</groupId>
     <artifactId>jboss-as-automated-metrics-standalone</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0.Final-redhat-SNAPSHOT</version>
+    <version>1.0.0.Final-SNAPSHOT</version>
 
     <name>JBoss Automated Metrics Standalone</name>
     
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Panagiotis Sotiropoulos</name>
+            <email>psotirop@redhat.com</email>
+            <organization>Red Hat</organization>
+            <organizationUrl>http://www.redhat.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:panossot/jboss-automated-metrics.git</connection>
+        <developerConnection>scm:git:git@github.com:panossot/jboss-automated-metrics.git</developerConnection>
+        <url>https://github.com/panossot/jboss-automated-metrics/tree/master/AutomatedMetricsStandalone</url>
+      <tag>jboss-as-automated-metrics-standalone-SNAPSHOT-1.0.0.Final</tag>
+  </scm>
     
     <modules>
         <module>AutomatedMetricsApi</module>
