@@ -10,10 +10,12 @@
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>AutomatedMetricsApi</artifactId>
-    <version>1.0.0.Final</version>
+    <version>1.0.0.Final-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>AutomatedMetricsApi</name>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>JBoss-Automated-Metrics Api Wildfly-Standalone-Version</description>
+    <url>https://developer.jboss.org/wiki/JBoss-Automated-MetricsEverythingIsAPotentialMetric</url>
 
     <licenses>
         <license>
@@ -36,7 +38,6 @@
         <connection>scm:git:git@github.com:panossot/jboss-automated-metrics.git</connection>
         <developerConnection>scm:git:git@github.com:panossot/jboss-automated-metrics.git</developerConnection>
         <url>https://github.com/panossot/jboss-automated-metrics/tree/master/AutomatedMetricsStandalone/AutomatedMetricsApi</url>
-      <tag>jboss-as-automated-metrics-standalone-SNAPSHOT-1.0.0.Final</tag>
   </scm>
 
     <properties>
@@ -58,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>org.jboss.metrics</groupId>
-            <artifactId>JbossAutomatedMetricsLibray</artifactId>
+            <artifactId>JBossAutomatedMetricsLibrary</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

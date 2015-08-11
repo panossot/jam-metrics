@@ -9,11 +9,13 @@
     </parent>
 
     <groupId>org.jboss.metrics</groupId>
-    <artifactId>JbossAutomatedMetricsLibray</artifactId>
-    <version>1.0.0.Final</version>
+    <artifactId>JBossAutomatedMetricsLibrary</artifactId>
+    <version>1.0.0.Final-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>JbossAutomatedMetricsLibrary</name>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>JBoss-Automated-Metrics Library used in JBoss-Automated-Metrics Api</description>
+    <url>https://developer.jboss.org/wiki/JBoss-Automated-MetricsEverythingIsAPotentialMetric</url>
 
     <licenses>
         <license>

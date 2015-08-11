@@ -13,7 +13,10 @@
     <packaging>pom</packaging>
     <version>1.0.0.Final-SNAPSHOT</version>
 
-    <name>JBoss Automated Metrics Standalone</name>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>JBoss-Automated-Metrics Wildfly-Standalone-Version</description>
+    <url>https://developer.jboss.org/wiki/JBoss-Automated-MetricsEverythingIsAPotentialMetric</url>
+
     
     <licenses>
         <license>
@@ -36,7 +39,6 @@
         <connection>scm:git:git@github.com:panossot/jboss-automated-metrics.git</connection>
         <developerConnection>scm:git:git@github.com:panossot/jboss-automated-metrics.git</developerConnection>
         <url>https://github.com/panossot/jboss-automated-metrics/tree/master/AutomatedMetricsStandalone</url>
-      <tag>jboss-as-automated-metrics-standalone-SNAPSHOT-1.0.0.Final</tag>
   </scm>
     
     <modules>
