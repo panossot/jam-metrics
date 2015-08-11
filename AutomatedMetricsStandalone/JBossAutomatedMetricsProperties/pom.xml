@@ -38,7 +38,18 @@
         <connection>scm:git:git@github.com:panossot/jboss-automated-metrics.git</connection>
         <developerConnection>scm:git:git@github.com:panossot/jboss-automated-metrics.git</developerConnection>
         <url>https://github.com/panossot/jboss-automated-metrics/tree/master/AutomatedMetricsStandalone/JBossAutomatedMetricsProperties</url>
-  </scm>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+        <snapshotRepository>
+           <id>snapshots</id>
+           <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
