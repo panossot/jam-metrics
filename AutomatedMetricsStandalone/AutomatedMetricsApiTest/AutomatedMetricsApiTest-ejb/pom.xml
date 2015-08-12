@@ -4,12 +4,12 @@
     <parent>
     <artifactId>AutomatedMetricsApiTest</artifactId>
     <groupId>org.jboss.metrics</groupId>
-    <version>1.0.0.Final</version>
+    <version>1.0.1.Final-SNAPSHOT</version>
   </parent>
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>AutomatedMetricsApiTest-ejb</artifactId>
-    <version>1.0.0.Final</version>
+    <version>1.0.1.Final-SNAPSHOT</version>
     <packaging>ejb</packaging>
 
     <name>AutomatedMetricsApiTest-ejb</name>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>org.jboss.metrics</groupId>
             <artifactId>AutomatedMetrics</artifactId>
-            <version>1.0.0.Final</version>
+            <version>${project.version}</version>
             <type>jar</type>
             <exclusions>
                 <exclusion>  <!-- declare the exclusion here -->
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.jboss.metrics</groupId>
             <artifactId>AutomatedMetricsApi</artifactId>
-            <version>1.0.0.Final</version>
+            <version>${project.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
