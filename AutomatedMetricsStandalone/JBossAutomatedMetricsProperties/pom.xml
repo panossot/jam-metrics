@@ -10,7 +10,7 @@
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>JBossAutomatedMetricsProperties</artifactId>
-    <version>1.0.0.Final-SNAPSHOT</version>
+    <version>1.0.0.Final</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -38,7 +38,7 @@
         <connection>scm:git:git@github.com:panossot/jboss-automated-metrics.git</connection>
         <developerConnection>scm:git:git@github.com:panossot/jboss-automated-metrics.git</developerConnection>
         <url>https://github.com/panossot/jboss-automated-metrics/tree/master/AutomatedMetricsStandalone/JBossAutomatedMetricsProperties</url>
-  </scm>
+    </scm>
 
     <distributionManagement>
         <snapshotRepository>

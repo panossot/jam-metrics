@@ -25,6 +25,12 @@
             <artifactId>AutomatedMetrics</artifactId>
             <version>1.0.0.Final</version>
             <type>jar</type>
+            <exclusions>
+                <exclusion>  <!-- declare the exclusion here -->
+                    <groupId>org.jboss.metrics</groupId>
+                    <artifactId>AutomatedMetricsApi</artifactId>
+                </exclusion>
+            </exclusions> 
         </dependency>
         <dependency>
             <groupId>org.jboss.metrics</groupId>
