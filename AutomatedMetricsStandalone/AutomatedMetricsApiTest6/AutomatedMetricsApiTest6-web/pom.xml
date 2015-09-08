@@ -4,12 +4,12 @@
     <parent>
     <artifactId>AutomatedMetricsApiTest6</artifactId>
     <groupId>org.jboss.metrics</groupId>
-    <version>1.0.1.Final-SNAPSHOT</version>
+    <version>1.0.1.Final</version>
   </parent>
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>AutomatedMetricsApiTest6-web</artifactId>
-    <version>1.0.1.Final-SNAPSHOT</version>
+    <version>1.0.1.Final</version>
     <packaging>war</packaging>
 
     <name>AutomatedMetricsApiTest6-web</name>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>org.jboss.metrics</groupId>
             <artifactId>JBossAutomatedMetricsProperties</artifactId>
-            <version>1.0.0.Final</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>

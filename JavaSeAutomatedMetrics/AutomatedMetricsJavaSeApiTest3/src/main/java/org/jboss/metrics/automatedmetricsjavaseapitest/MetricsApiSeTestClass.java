@@ -17,7 +17,6 @@
 package org.jboss.metrics.automatedmetricsjavaseapitest;
 
 import org.jboss.metrics.javase.automatedmetricsjavaseapi.JbossAutomatedJavaSeMetrics;
-import org.jboss.metrics.javase.automatedmetricsjavaseapi.JbossAutomatedJavaSeMetricsDbStore;
 
 
 
@@ -27,35 +26,23 @@ import org.jboss.metrics.javase.automatedmetricsjavaseapi.JbossAutomatedJavaSeMe
  */
 public class MetricsApiSeTestClass {
 
-    private int count = 0;
+    private static int count = 0;
     
-    private int count2 = 0;
+    private static int count2 = 0;
     
-    JbossAutomatedJavaSeMetrics jbMetrics;
-    JbossAutomatedJavaSeMetricsDbStore jbMetricsDbStore;
-
-    private final static Object metricLock = new Object();
-    private final static Object metric2Lock = new Object();
-    
-    
-    public MetricsApiSeTestClass() {
-        jbMetrics = new JbossAutomatedJavaSeMetrics();
-    }
-
-    public int countMethod() throws Exception {
+    public void countMethod() throws Exception {
 
         for (int i=0; i<100; i++) {
-            synchronized(metricLock) {
-                count++; 
-                jbMetrics.metric(this,count,"count","myTestGroup"); 
+            synchronized(this) {
+                count += 1;
+                JbossAutomatedJavaSeMetrics.metric(this,count,"count","myTestGroup"); 
             }
-            synchronized(metric2Lock) {
+
+            synchronized(this) {
                 count2 += 2;
-                jbMetrics.metric(this,count2,"count2","myTestGroup");
+                JbossAutomatedJavaSeMetrics.metric(this,count2,"count2","myTestGroup");
             }
         }
-
-        return count;
     }
 
 }

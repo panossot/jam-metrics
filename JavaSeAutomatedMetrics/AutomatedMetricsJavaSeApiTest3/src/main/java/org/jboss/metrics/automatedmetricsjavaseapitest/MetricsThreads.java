@@ -29,9 +29,9 @@ public class MetricsThreads extends Thread {
     private String deploymentName = "myTestDeployment";
     private String deploymentName2 = "myTestDeployment2";
 
-   public  MetricsThreads(String name) {
+   public  MetricsThreads(String name, MetricsApiSeTestClass metricsApiSeTestClass) {
         threadName = name;
-        this.metricsApiSeTestClass = new MetricsApiSeTestClass();
+        this.metricsApiSeTestClass = metricsApiSeTestClass;
         System.out.println("Creating " + threadName);
     }
 

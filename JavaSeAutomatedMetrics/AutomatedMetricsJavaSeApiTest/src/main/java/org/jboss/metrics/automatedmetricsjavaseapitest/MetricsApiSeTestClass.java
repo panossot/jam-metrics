@@ -29,18 +29,12 @@ public class MetricsApiSeTestClass {
     private int count = 0;
     
     private int count2 = 0;
-    
-    JbossAutomatedJavaSeMetrics jbMetrics;
-
-    public MetricsApiSeTestClass() {
-        jbMetrics = new JbossAutomatedJavaSeMetrics();
-    }
 
     public int countMethod() throws Exception {
         count++;
         count2 += 2;
-        jbMetrics.metric(this,count,"count","myTestGroup");
-        jbMetrics.metric(this,count2,"count2","myTestGroup");
+        JbossAutomatedJavaSeMetrics.metric(this,count,"count","myTestGroup");
+        JbossAutomatedJavaSeMetrics.metric(this,count2,"count2","myTestGroup");
 
         return count;
     }

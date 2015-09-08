@@ -42,95 +42,95 @@ public class MetricProperties {
         updateDbQueries = new HashMap<>();
     }
     
-    public String getRhqMonitoring() {
+    public synchronized String getRhqMonitoring() {
         return rhqMonitoring;
     }
 
-    public void setRhqMonitoring(String rhqMonitoring) {
+    public synchronized void setRhqMonitoring(String rhqMonitoring) {
         this.rhqMonitoring = rhqMonitoring;
     }
 
-    public String getCacheStore() {
+    public synchronized String getCacheStore() {
         return cacheStore;
     }
 
-    public void setCacheStore(String cacheStore) {
+    public synchronized void setCacheStore(String cacheStore) {
         this.cacheStore = cacheStore;
     }
 
-    public HashMap<String, String> getRhqScheduleIds() {
+    public synchronized HashMap<String, String> getRhqScheduleIds() {
         return rhqScheduleIds;
     }
 
-    public void setRhqScheduleIds(HashMap<String, String> rhqScheduleIds) {
+    public synchronized void setRhqScheduleIds(HashMap<String, String> rhqScheduleIds) {
         this.rhqScheduleIds = rhqScheduleIds;
     }
     
-    public String getRhqScheduleId(String name) {
+    public synchronized String getRhqScheduleId(String name) {
         return(this.rhqScheduleIds.get(name));
     }
 
-    public String getRhqServerUrl() {
+    public synchronized String getRhqServerUrl() {
         return rhqServerUrl;
     }
 
-    public void setRhqServerUrl(String rhqServerUrl) {
+    public synchronized void setRhqServerUrl(String rhqServerUrl) {
         this.rhqServerUrl = rhqServerUrl;
     }
 
-    public String getRhqServerPort() {
+    public synchronized String getRhqServerPort() {
         return rhqServerPort;
     }
 
-    public void setRhqServerPort(String rhqServerPort) {
+    public synchronized void setRhqServerPort(String rhqServerPort) {
         this.rhqServerPort = rhqServerPort;
     }
 
-    public String getRhqServerUsername() {
+    public synchronized String getRhqServerUsername() {
         return rhqServerUsername;
     }
 
-    public void setRhqServerUsername(String rhqServerUsername) {
+    public synchronized void setRhqServerUsername(String rhqServerUsername) {
         this.rhqServerUsername = rhqServerUsername;
     }
 
-    public String getRhqServerPassword() {
+    public synchronized String getRhqServerPassword() {
         return rhqServerPassword;
     }
 
-    public void setRhqServerPassword(String rhqServerPassword) {
+    public synchronized void setRhqServerPassword(String rhqServerPassword) {
         this.rhqServerPassword = rhqServerPassword;
     }
     
-    public void addRhqScheduleId(String name, String id) {
+    public synchronized void addRhqScheduleId(String name, String id) {
         this.rhqScheduleIds.put(name, id);
     }
     
-    public void removeRhqScheduleId(String name) {
+    public synchronized void removeRhqScheduleId(String name) {
         this.rhqScheduleIds.remove(name);
     }
 
-    public String getDatabaseStore() {
+    public synchronized String getDatabaseStore() {
         return databaseStore;
     }
 
-    public void setDatabaseStore(String databaseStore) {
+    public synchronized void setDatabaseStore(String databaseStore) {
         this.databaseStore = databaseStore;
     }
 
-    public HashMap<String, Statement> getDatabaseStatement() {
+    public synchronized HashMap<String, Statement> getDatabaseStatement() {
         return databaseStatement;
     }
 
-    public void setDatabaseStatement(HashMap<String, Statement> databaseStatement) {
+    public synchronized void setDatabaseStatement(HashMap<String, Statement> databaseStatement) {
         this.databaseStatement = databaseStatement;
     }
 
-    public HashMap<String, String> getUpdateDbQueries() {
+    public synchronized HashMap<String, String> getUpdateDbQueries() {
         return updateDbQueries;
     }
 
-    public void setUpdateDbQueries(HashMap<String, String> updateDbQueries) {
+    public synchronized void setUpdateDbQueries(HashMap<String, String> updateDbQueries) {
         this.updateDbQueries = updateDbQueries;
     }
 

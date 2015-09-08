@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.jboss.as</groupId>
         <artifactId>jboss-as-automated-metrics-javase</artifactId>
-        <version>1.0.0.Final-redhat-SNAPSHOT</version>
+        <version>1.0.1.Final</version>
     </parent>
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>AutomatedMetricsSeApiTest2</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1.Final</version>
     <packaging>jar</packaging>
     
     <name>AutomatedMetricsJavaSeApiTest2</name>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>org.jboss.metrics</groupId>
             <artifactId>AutomatedMetricsJavaSeApi</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>

@@ -42,43 +42,43 @@ public class MetricProperties {
         updateDbQueries = new HashMap<>();
     }
     
-    public String getRhqMonitoring() {
+    public synchronized String getRhqMonitoring() {
         return rhqMonitoring;
     }
 
-    public void setRhqMonitoring(String rhqMonitoring) {
+    public synchronized void setRhqMonitoring(String rhqMonitoring) {
         this.rhqMonitoring = rhqMonitoring;
     }
 
-    public String getCacheStore() {
+    public synchronized String getCacheStore() {
         return cacheStore;
     }
 
-    public void setCacheStore(String cacheStore) {
+    public synchronized void setCacheStore(String cacheStore) {
         this.cacheStore = cacheStore;
     }
 
-    public HashMap<String, String> getRhqScheduleIds() {
+    public synchronized HashMap<String, String> getRhqScheduleIds() {
         return rhqScheduleIds;
     }
 
-    public void setRhqScheduleIds(HashMap<String, String> rhqScheduleIds) {
+    public synchronized void setRhqScheduleIds(HashMap<String, String> rhqScheduleIds) {
         this.rhqScheduleIds = rhqScheduleIds;
     }
     
-    public String getRhqScheduleId(String name) {
+    public synchronized String getRhqScheduleId(String name) {
         return(this.rhqScheduleIds.get(name));
     }
 
-    public String getRhqServerUrl() {
+    public synchronized String getRhqServerUrl() {
         return rhqServerUrl;
     }
 
-    public void setRhqServerUrl(String rhqServerUrl) {
+    public synchronized void setRhqServerUrl(String rhqServerUrl) {
         this.rhqServerUrl = rhqServerUrl;
     }
 
-    public String getRhqServerPort() {
+    public synchronized String getRhqServerPort() {
         return rhqServerPort;
     }
 

@@ -27,7 +27,7 @@ import org.jboss.logging.Logger;
  */
 public class MetricsCache {
 
-    private volatile HashSet<MetricObject> metricCache;
+    private HashSet<MetricObject> metricCache;
     private static final Logger logger = Logger.getLogger(MetricsCache.class);
 
     public MetricsCache() {
@@ -59,7 +59,7 @@ public class MetricsCache {
         return null;
     }
 
-    public void printMetricObjects() {
+    public synchronized void printMetricObjects() {
         logger.info("Logging metric objects ...");
         for (MetricObject mObject : getMetricCache()) {
             logger.info("Name : " + mObject.getName());

@@ -39,13 +39,13 @@ public class AutomatedMetricsJavaSeApiTest {
         try {
             initializeMetricProperties();
             MetricsApiSeTestClass mTC = new MetricsApiSeTestClass();
-            MetricsThreads mTreads =  new MetricsThreads("1");
+            MetricsThreads mTreads =  new MetricsThreads("1",mTC);
             mTreads.start();
          
-            MetricsThreads mTreads2 =  new MetricsThreads("2");
+            MetricsThreads mTreads2 =  new MetricsThreads("2",mTC);
             mTreads2.start();
             
-            MetricsThreads mTreads3 =  new MetricsThreads("3");
+            MetricsThreads mTreads3 =  new MetricsThreads("3",mTC);
             mTreads3.start();
             
             try {

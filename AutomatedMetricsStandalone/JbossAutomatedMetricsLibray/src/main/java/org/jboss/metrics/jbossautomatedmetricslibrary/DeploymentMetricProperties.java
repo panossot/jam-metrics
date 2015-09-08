@@ -26,7 +26,7 @@ import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 public class DeploymentMetricProperties {
     private static final DeploymentMetricProperties deploymentMetricProperties = new DeploymentMetricProperties();
     
-    private volatile HashMap<String,MetricProperties> deploymentProperties;
+    private HashMap<String,MetricProperties> deploymentProperties;
 
     private DeploymentMetricProperties() {
         deploymentProperties = new HashMap<String, MetricProperties>();

@@ -26,7 +26,7 @@ import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties
  */
 public class JbossAutomatedJavaSeMetricsDbStore {
 
-    public void metricsDbStore(Object instance, Object[] values, String group, String statementName, String[] queryUpdateDB) throws Exception {
+    public static void metricsDbStore(Object instance, Object[] values, String group, String statementName, String[] queryUpdateDB) throws Exception {
         String dbStore = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getDatabaseStore();
         
         try {

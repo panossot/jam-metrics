@@ -31,28 +31,36 @@ import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
  */
 public class JbossAutomatedJavaSeMetrics {
 
-    public void metric(Object instance, Object value, String metricName, String metricGroup) throws Exception {
+    private final static Object cacheStorage = new Object();
+    private final static Object rhqMonitoring = new Object();
+
+    public static void metric(Object instance, Object value, String metricName, String metricGroup) throws Exception {
         String cacheStore = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(metricGroup).getCacheStore();
         String rhqMonitoring = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(metricGroup).getRhqMonitoring();
 
-        if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
-            MetricsCache metricsCacheInstance;
-            metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(metricGroup);
-            if (metricsCacheInstance == null) {
-                metricsCacheInstance = new MetricsCache();
-                MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(metricGroup, metricsCacheInstance);
-            }
-            Store.CacheStore(instance, value, metricName, metricsCacheInstance);
+        synchronized(cacheStorage) {
+		if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
+		    MetricsCache metricsCacheInstance;
+		    metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(metricGroup);
+		    if (metricsCacheInstance == null) {
+		        metricsCacheInstance = new MetricsCache();
+		        MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(metricGroup, metricsCacheInstance);
+		    }
+		    Store.CacheStore(instance, value, metricName, metricsCacheInstance);
+		}
         }
-        if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring)) {
-            MonitoringRhq mrhqInstance;
-            mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(metricGroup);
-            if (mrhqInstance == null) {
-                mrhqInstance = new MonitoringRhq(metricGroup);
-                MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(metricGroup, mrhqInstance);
-            }
 
-            mrhqInstance.rhqMonitoring(instance, value, metricName, metricGroup);
+        synchronized(rhqMonitoring) {
+		if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring)) {
+		    MonitoringRhq mrhqInstance;
+		    mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(metricGroup);
+		    if (mrhqInstance == null) {
+		        mrhqInstance = new MonitoringRhq(metricGroup);
+		        MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(metricGroup, mrhqInstance);
+		    }
+
+		    mrhqInstance.rhqMonitoring(instance, value, metricName, metricGroup);
+		}
         }
     }
 }

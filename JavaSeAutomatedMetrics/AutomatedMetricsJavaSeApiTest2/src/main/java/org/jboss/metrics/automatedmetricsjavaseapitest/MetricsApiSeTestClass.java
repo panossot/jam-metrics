@@ -30,22 +30,14 @@ public class MetricsApiSeTestClass {
     private int count = 0;
     
     private int count2 = 0;
-    
-    JbossAutomatedJavaSeMetrics jbMetrics;
-    JbossAutomatedJavaSeMetricsDbStore jbMetricsDbStore;
-
-    public MetricsApiSeTestClass() {
-        jbMetrics = new JbossAutomatedJavaSeMetrics();
-        jbMetricsDbStore = new JbossAutomatedJavaSeMetricsDbStore();
-    }
 
     public int countMethod() throws Exception {
         count++;
         count2 += 2;
-        jbMetrics.metric(this,count,"count","myTestGroup");
-        jbMetricsDbStore.metricsDbStore(this, new Object[]{count}, "myTestGroup", "statement_1", new String[]{"StoreDBMetric","count"});
-        jbMetrics.metric(this,count2,"count2","myTestGroup");
-        jbMetricsDbStore.metricsDbStore(this, new Object[]{count2}, "myTestGroup", "statement_1", new String[]{"StoreDBMetric","count2"});
+        JbossAutomatedJavaSeMetrics.metric(this,count,"count","myTestGroup");
+        JbossAutomatedJavaSeMetricsDbStore.metricsDbStore(this, new Object[]{count}, "myTestGroup", "statement_1", new String[]{"StoreDBMetric","count"});
+        JbossAutomatedJavaSeMetrics.metric(this,count2,"count2","myTestGroup");
+        JbossAutomatedJavaSeMetricsDbStore.metricsDbStore(this, new Object[]{count2}, "myTestGroup", "statement_1", new String[]{"StoreDBMetric","count2"});
 
         return count;
     }

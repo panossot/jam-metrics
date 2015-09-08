@@ -11,7 +11,7 @@
     <groupId>org.jboss.as</groupId>
     <artifactId>jboss-as-automated-metrics-standalone</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1.Final-SNAPSHOT</version>
+    <version>1.0.1.Final</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>JBoss-Automated-Metrics Wildfly-Standalone-Version</description>
