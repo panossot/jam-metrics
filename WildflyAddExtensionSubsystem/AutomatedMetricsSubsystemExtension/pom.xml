@@ -9,7 +9,7 @@
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>wildfly-automated-metrics-extension-subsystem</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1.Final</version>
     <packaging>jar</packaging>
     
     <name>WildFly: Addition of Automated Metrics Extension Subsystem</name>
@@ -30,9 +30,15 @@
                             <configuration>
                             <tasks>
                                 <copy file="${basedir}/src/main/resources/modules/metrics/AutomatedMetrics/main/module.xml" tofile="${JBossHome}/modules/system/layers/base/org/jboss/metrics/AutomatedMetrics/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/AutomatedMetrics/main/AutomatedMetrics-1.0.1.Final.jar" tofile="${JBossHome}/modules/system/layers/base/org/jboss/metrics/AutomatedMetrics/main/AutomatedMetrics-1.0.1.Final.jar"/>
                                 <copy file="${basedir}/src/main/resources/modules/metrics/AutomatedMetricsApi/main/module.xml" tofile="${JBossHome}/modules/system/layers/base/org/jboss/metrics/AutomatedMetricsApi/main/module.xml"/>
-                                <copy file="${basedir}/src/main/resources/modules/metrics/JbossAutomatedMetricsLibray/main/module.xml" tofile="/${JBossHome}/modules/system/layers/base/org/jboss/metrics/JbossAutomatedMetricsLibray/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/AutomatedMetricsApi/main/AutomatedMetricsApi-1.0.1.Final.jar" tofile="${JBossHome}/modules/system/layers/base/org/jboss/metrics/AutomatedMetricsApi/main/AutomatedMetricsApi-1.0.1.Final.jar"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/JBossAutomatedMetricsLibrary/main/module.xml" tofile="/${JBossHome}/modules/system/layers/base/org/jboss/metrics/JBossAutomatedMetricsLibrary/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/JBossAutomatedMetricsLibrary/main/JBossAutomatedMetricsLibrary-1.0.1.Final.jar" tofile="/${JBossHome}/modules/system/layers/base/org/jboss/metrics/JBossAutomatedMetricsLibrary/main/JBossAutomatedMetricsLibrary-1.0.1.Final.jar"/>
                                 <copy file="${basedir}/src/main/resources/modules/metrics/JBossAutomatedMetricsProperties/main/module.xml" tofile="${JBossHome}/modules/system/layers/base/org/jboss/metrics/JBossAutomatedMetricsProperties/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/JBossAutomatedMetricsProperties/main/JBossAutomatedMetricsProperties-1.0.1.Final.jar" tofile="${JBossHome}/modules/system/layers/base/org/jboss/metrics/JBossAutomatedMetricsProperties/main/JBossAutomatedMetricsProperties-1.0.1.Final.jar"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/jboss.as.automatedmetrics/main/module.xml" tofile="${JBossHome}/modules/system/layers/base/org/jboss/as/automatedmetrics/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/jboss.as.automatedmetrics/main/wildfly-automated-metrics-10.0.0.Alpha1-SNAPSHOT.jar" tofile="${JBossHome}/modules/system/layers/base/org/jboss/as/automatedmetrics/main/wildfly-automated-metrics-10.0.0.Alpha1-SNAPSHOT.jar"/>
                              </tasks>
                           </configuration>
                         <goals>
@@ -47,7 +53,7 @@
                 <artifactId>wildfly-extension-maven-plugin</artifactId>
                 <version>0.7.0</version>
                 <configuration>
-                    <moduleZip>${basedir}/src/main/resources/wildfly-automated-metrics-9.0.0.Alpha2-SNAPSHOT-module.zip</moduleZip>
+                    <moduleZip>${basedir}/src/main/resources/wildfly-automated-metrics-10.0.0.Alpha1-SNAPSHOT-module.zip</moduleZip>
                     <jbossHome>${JBossHome}</jbossHome>
                     <modulesHome>modules/system/layers/base</modulesHome>
                     <serverConfig>standalone/configuration/standalone.xml</serverConfig>

@@ -9,7 +9,7 @@
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>AutomatedMetricsApiTest-web</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1.Final</version>
     <packaging>war</packaging>
 
     <name>AutomatedMetricsApiTest-web</name>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>org.jboss.metrics</groupId>
             <artifactId>JBossAutomatedMetricsProperties</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
