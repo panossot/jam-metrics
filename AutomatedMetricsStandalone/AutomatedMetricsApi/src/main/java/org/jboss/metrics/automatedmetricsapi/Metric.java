@@ -38,4 +38,12 @@ public @interface Metric {
     String[] fieldName() default {};
     @Nonbinding
     String groupName() default "testGroup";
+    @Nonbinding
+    String[] plot() default {};
+    @Nonbinding
+    String[] typePlot() default {};
+    @Nonbinding
+    String[] data() default {};
+    @Nonbinding
+    String[] color() default {};
 }

@@ -16,8 +16,11 @@
  */
 package org.jboss.metrics.jbossautomatedmetricsproperties;
 
+import java.awt.Color;
 import java.sql.Statement;
 import java.util.HashMap;
+import javax.swing.JFrame;
+import org.math.plot.Plot2DPanel;
 
 /**
  *
@@ -28,8 +31,13 @@ public class MetricProperties {
     private String rhqMonitoring = "false";
     private String cacheStore = "false";
     private String databaseStore = "false";
+    private String metricPlot = "false";
     private HashMap<String,Statement> databaseStatement;
     private HashMap<String,String> updateDbQueries;
+    private HashMap<String,Plot2DPanel> plots;
+    private HashMap<String,JFrame> frames;
+    private HashMap<String,Color> colors;
+    private int plotRefreshRate = 0;
     private String rhqServerUrl = "localhost";
     private String rhqServerPort = "7080";
     private String rhqServerUsername = "rhqadmin";
@@ -40,6 +48,9 @@ public class MetricProperties {
         rhqScheduleIds = new HashMap<>();
         databaseStatement = new HashMap<>();
         updateDbQueries = new HashMap<>();
+        plots = new HashMap<>();
+        colors = new HashMap<>();
+        frames = new HashMap<>();
     }
     
     public synchronized String getRhqMonitoring() {
@@ -134,4 +145,67 @@ public class MetricProperties {
         this.updateDbQueries = updateDbQueries;
     }
 
+    public synchronized String getMetricPlot() {
+        return metricPlot;
+    }
+
+    public synchronized void setMetricPlot(String metricPlot) {
+        this.metricPlot = metricPlot;
+    }
+
+    public synchronized HashMap<String, Plot2DPanel> getPlots() {
+        return plots;
+    }
+
+    public void setPlots(HashMap<String, Plot2DPanel> plots) {
+        this.plots = plots;
+    }
+
+    public synchronized void addPlot(String name, Plot2DPanel plot) {
+        this.plots.put(name, plot);
+    }
+    
+    public synchronized void removePlot(String name) {
+        this.plots.remove(name);
+    }
+
+    public synchronized int getPlotRefreshRate() {
+        return plotRefreshRate;
+    }
+
+    public synchronized void setPlotRefreshRate(int plotRefreshRate) {
+        this.plotRefreshRate = plotRefreshRate;
+    }
+
+    public synchronized HashMap<String, Color> getColors() {
+        return colors;
+    }
+
+    public synchronized void setColors(HashMap<String, Color> colors) {
+        this.colors = colors;
+    }
+    
+    public synchronized void addColor(String name, Color color) {
+        this.colors.put(name, color);
+    }
+    
+    public synchronized void removeColor(String name) {
+        this.colors.remove(name);
+    }
+    
+    public synchronized HashMap<String, JFrame> getFrames() {
+        return frames;
+    }
+
+    public void setFrames(HashMap<String, JFrame> frames) {
+        this.frames = frames;
+    }
+
+    public synchronized void addFrame(String name, JFrame frame) {
+        this.frames.put(name, frame);
+    }
+    
+    public synchronized void removeFrame(String name) {
+        this.frames.remove(name);
+    }
 }

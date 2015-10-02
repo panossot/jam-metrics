@@ -32,10 +32,10 @@ public class Store {
         MetricObject mo;
         mo = metricsCacheInstance.searchMetricObject(name);
         if (mo != null) {
-            mo.addMetricValue(field.get(target));
+            mo.addMetricValue(field.get(target),true);
         } else {
             MetricObject newMo = new MetricObject();
-            newMo.addMetricValue(field.get(target));
+            newMo.addMetricValue(field.get(target),true);
             newMo.setName(name);
             metricsCacheInstance.addMetricCacheObject(newMo);
         }

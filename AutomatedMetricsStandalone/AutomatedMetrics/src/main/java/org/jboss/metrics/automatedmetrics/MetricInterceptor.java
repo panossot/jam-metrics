@@ -17,6 +17,7 @@
 
 package org.jboss.metrics.automatedmetrics;
 
+import java.awt.Color;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.Statement;
@@ -25,11 +26,15 @@ import java.util.Map;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import org.apache.commons.lang.ArrayUtils;
 import org.jboss.metrics.automatedmetricsapi.DBStore;
 import org.jboss.metrics.automatedmetricsapi.Metric;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricObject;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
+import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
+import org.math.plot.Plot2DPanel;
 
 /**
  *
@@ -53,14 +58,20 @@ public class MetricInterceptor {
             Metric metricAnnotation = method.getAnnotation(Metric.class);
             if (metricAnnotation != null) {
                 int fieldNameSize = metricAnnotation.fieldName().length;
+                int dataSize = metricAnnotation.data().length;
                 String group = metricAnnotation.groupName();
 
+                MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
+                String cacheStore = properties.getCacheStore();
+                String rhqMonitoring = properties.getRhqMonitoring();
+                String metricPlot = properties.getMetricPlot();
+                int refreshRate = properties.getPlotRefreshRate();
+                
+                    
                 for (int i = 0; i < fieldNameSize; i++) {
 
                     accessField(metricAnnotation, method, i);
-                    String cacheStore = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getCacheStore();
-                    String rhqMonitoring = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getRhqMonitoring();
-
+                    
                     if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
                         MetricsCache metricsCacheInstance;
                             metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group);
@@ -81,15 +92,28 @@ public class MetricInterceptor {
                         mrhqInstance.rhqMonitoring(ctx.getTarget(), field, group);
                     }
                 }
+                
+                if (metricPlot != null && Boolean.parseBoolean(metricPlot)) {
+                    if (dataSize != 0) {
+                        for (int i = 0; i < dataSize; i++) {
+                            getData(metricAnnotation, i);
+                            MetricPlot.plot(metricAnnotation, field, ctx.getTarget(), properties, group, refreshRate, i);
+                        }
+                    }
+                }
             }
 
             DBStore dbStoreAnnotation = method.getAnnotation(DBStore.class);
             if (dbStoreAnnotation != null) {  
                 String group = dbStoreAnnotation.groupName();
-                String statementName = dbStoreAnnotation.statementName();
-                String query = ParseDbQuery.parse(dbStoreAnnotation.queryUpdateDB(),metricFields,ctx.getTarget(),group);
-                Statement stmt = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getDatabaseStatement().get(statementName);
-                stmt.executeUpdate(query);
+                MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
+                String dataBaseStorage = properties.getDatabaseStore();
+                if (dataBaseStorage != null && Boolean.parseBoolean(dataBaseStorage)) {
+                    String statementName = dbStoreAnnotation.statementName();
+                    String query = ParseDbQuery.parse(dbStoreAnnotation.queryUpdateDB(),metricFields,ctx.getTarget(),group);
+                    Statement stmt = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getDatabaseStatement().get(statementName);
+                    stmt.executeUpdate(query);
+                }
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -105,6 +129,14 @@ public class MetricInterceptor {
             field = method.getDeclaringClass().getDeclaredField(metricAnnotation.fieldName()[fieldNum]);
             field.setAccessible(true);
             metricFields.put(metricAnnotation.fieldName()[fieldNum], field);
+        }
+    }
+    
+    private void getData(Metric metricAnnotation, int fieldNum) throws Exception {
+        if (metricFields.containsKey(metricAnnotation.data()[fieldNum])) {
+            field = metricFields.get(metricAnnotation.data()[fieldNum]);
+        }else {
+            field = null;
         }
     }
 }
