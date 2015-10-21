@@ -58,10 +58,7 @@ public class DeploymentMetricProperties {
     }
     
     public synchronized void addDeploymentInternalParameters(String name, MetricInternalParameters metricInternalParameters) {
-        if (this. deploymentInternalParameters.containsKey(name))
-            this. deploymentInternalParameters.remove(name);
-        
-        this. deploymentInternalParameters.put(name, metricInternalParameters);
+        this. deploymentInternalParameters.putIfAbsent(name, metricInternalParameters);
     }
     
 }

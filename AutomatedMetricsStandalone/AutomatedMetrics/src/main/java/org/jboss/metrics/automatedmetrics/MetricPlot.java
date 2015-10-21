@@ -50,7 +50,8 @@ public class MetricPlot {
         }
         String plotName = metricAnnotation.plot()[i];
         MetricOfPlot mOP = new MetricOfPlot(field.getName(),plotName);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).initializePlotedCount(mOP);
+        if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotedCount().get(mOP)==null)
+            DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).resetPlotedCount(mOP);
         
         if (mo != null) {
             int plotSize = 0;
@@ -63,7 +64,7 @@ public class MetricPlot {
             }
 
             if (plotSize != 0) {
-                Double[] plotArray = mo.getDoubleMetric().toArray(new Double[plotSize]);
+                Double[] plotArray = mo.getMetric().toArray(new Double[plotSize]);
                 Plot2DPanel plot = properties.getPlots().get(plotName);
                 Color color = null;
                 if (metricAnnotation.color().length != 0) {

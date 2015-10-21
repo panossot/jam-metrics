@@ -18,9 +18,13 @@
 package org.jboss.metrics.automatedmetrics;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import org.jboss.logging.Logger;
 import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
+import org.jboss.metrics.automatedmetrics.utils.MDataPoint;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
 import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
@@ -58,19 +62,42 @@ public class MonitoringRhq {
 
     }
 
-    public boolean rhqMonitoring(Object target, Field field, String deployment) throws IllegalArgumentException, IllegalAccessException {
+    public boolean rhqMonitoring(Object target, Field field, String deployment, MetricsCache metricsCacheInstance) throws IllegalArgumentException, IllegalAccessException {
         boolean dataSent = false;
+        String name = field.getName() + "_" + target;
         String metricIdLoaded = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment).getRhqScheduleId(field.getName());
-
+        int metricsRhqMonitored = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(deployment).getRhqMonitoringCount(name);
+        int refreshRhqRate = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment).getRhqMonitoringRefreshRate();
+        ArrayList<Object> metricValues = metricsCacheInstance.searchMetricObject(name).getMetric();
+        int metricCount = metricValues.size();
+                
         if (metricIdLoaded != null) {
             int numericScheduleId = Integer.parseInt(metricIdLoaded);
             long now = System.currentTimeMillis();
 
-            DoubleValue dataPoint = new DoubleValue(Double.parseDouble(field.get(target).toString()));
-            try {
-                postRhq.postDataRhq(dataPoint, numericScheduleId, now, APPLICATION_JSON);
-            } catch (Exception e) {
-               e.printStackTrace();
+            if (refreshRhqRate == 1) {
+                DoubleValue dataPoint = new DoubleValue(Double.parseDouble(field.get(target).toString()));
+                try {
+                    postRhq.postDataRhq(dataPoint, numericScheduleId, now, APPLICATION_JSON);
+                } catch (Exception e) {
+                   e.printStackTrace();
+                }
+            }else if(metricCount >= metricsRhqMonitored + refreshRhqRate) {
+                List<MDataPoint> points = new ArrayList<>(refreshRhqRate);
+                
+                for (int i=metricsRhqMonitored; i<metricsRhqMonitored+refreshRhqRate; i++) {
+                    MDataPoint dataPoint = new MDataPoint();
+                    dataPoint.setScheduleId(numericScheduleId);
+                    dataPoint.setTimeStamp(now++);
+                    dataPoint.setValue((Double)metricValues.get(i));
+                    points.add(dataPoint);
+                }
+                try {
+                    postRhq.postArrayDataRhq(points, APPLICATION_JSON);
+                    DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(deployment).putRhqMonitoringCount(name, metricsRhqMonitored + refreshRhqRate);
+                } catch (Exception e) {
+                   e.printStackTrace();
+                }
             }
         }
 

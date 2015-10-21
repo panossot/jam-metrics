@@ -14,19 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.metrics.automatedmetricsapi;
+package org.jboss.metrics;
 
-import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
-import org.jboss.metrics.jbossautomatedmetricslibrary.MetricInternalParameters;
-import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateful;
+import org.jboss.metrics.automatedmetricsapi.Metric;
 
 /**
  *
  * @author Panagiotis Sotiropoulos
  */
-public class MetricsPropertiesApi {
-     public static void storeProperties(String group, MetricProperties metricsProperties){
-        DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentProperties(group, metricsProperties);
-        DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentInternalParameters(group, new MetricInternalParameters());
+@Stateful
+@LocalBean
+public class MetricsApiSessionBean {
+
+    private int count = 0;
+    
+    private int count2 = 0;
+
+    public MetricsApiSessionBean() {
     }
+
+    @Metric(fieldName = {"count","count2"}, groupName = "myTestGroup")
+    public int countMethod() {
+        count++;
+        count2 += 2;
+
+        return count;
+    }
+
 }

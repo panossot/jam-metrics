@@ -25,51 +25,72 @@ public class MetricInternalParameters {
     private HashMap<String,Integer> plotHandler;
     private HashMap<String,Boolean> plotRefreshed;
     private HashMap<MetricOfPlot,Integer> plotedCount;
+    private HashMap<String,Integer> rhqMonitoringCount;
 
     public MetricInternalParameters() {
         this.plotHandler = new HashMap<>();
         this.plotRefreshed = new HashMap<>();
         this.plotedCount = new HashMap<>();
+        this.rhqMonitoringCount = new HashMap<>();
     }
 
-    public HashMap<String, Integer> getPlotHandler() {
+    public synchronized HashMap<String, Integer> getPlotHandler() {
         return plotHandler;
     }
 
-    public void setPlotHandler(HashMap<String, Integer> plotHandler) {
+    public synchronized void setPlotHandler(HashMap<String, Integer> plotHandler) {
         this.plotHandler = plotHandler;
     }
     
-    public void putPlotHandler(String plotName, int value) {
+    public synchronized void putPlotHandler(String plotName, int value) {
         this.plotHandler.put(plotName, value);
     }
 
-    public HashMap<String, Boolean> getPlotRefreshed() {
+    public synchronized HashMap<String, Boolean> getPlotRefreshed() {
         return plotRefreshed;
     }
 
-    public void setPlotRefreshed(HashMap<String, Boolean> plotRefreshed) {
+    public synchronized void setPlotRefreshed(HashMap<String, Boolean> plotRefreshed) {
         this.plotRefreshed = plotRefreshed;
     }
     
-    public void putPlotRefreshed(String plotName, boolean value) {
+    public synchronized void putPlotRefreshed(String plotName, boolean value) {
         this.plotRefreshed.put(plotName, value);
     }
 
-    public HashMap<MetricOfPlot, Integer> getPlotedCount() {
+    public synchronized HashMap<MetricOfPlot, Integer> getPlotedCount() {
         return plotedCount;
     }
 
-    public void setPlotedCount(HashMap<MetricOfPlot, Integer> plotedCount) {
+    public synchronized void setPlotedCount(HashMap<MetricOfPlot, Integer> plotedCount) {
         this.plotedCount = plotedCount;
     }
      
-    public void putPlotedCount(MetricOfPlot metricOfPlot, int value) {
+    public synchronized void putPlotedCount(MetricOfPlot metricOfPlot, int value) {
         this.plotedCount.put(metricOfPlot, value);
     }
     
-    public void initializePlotedCount(MetricOfPlot metricOfPlot) {
-        if (this.plotedCount.get(metricOfPlot) == null)
-            this.plotedCount.put(metricOfPlot, 0);
+    public synchronized void resetPlotedCount(MetricOfPlot metricOfPlot) {
+        this.plotedCount.put(metricOfPlot, 0);
+    }
+
+    public synchronized HashMap<String, Integer> getRhqMonitoringCount() {
+        return rhqMonitoringCount;
+    }
+    
+    public synchronized int getRhqMonitoringCount(String metric) {
+        return rhqMonitoringCount.get(metric)!=null?rhqMonitoringCount.get(metric):0;
+    }
+
+    public synchronized void setRhqMonitoringCount(HashMap<String, Integer> rhqMonitoringCount) {
+        this.rhqMonitoringCount = rhqMonitoringCount;
+    }
+    
+    public synchronized void putRhqMonitoringCount(String metric, int value) {
+        this.rhqMonitoringCount.put(metric, value);
+    }
+    
+    public synchronized void resetRhqMonitoringCount(String metric) {
+        this.rhqMonitoringCount.put(metric, 0);
     }
 }

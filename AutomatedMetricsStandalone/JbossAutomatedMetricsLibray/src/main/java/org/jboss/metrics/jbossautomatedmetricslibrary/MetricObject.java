@@ -27,12 +27,10 @@ import java.util.Map;
 public class MetricObject {
 
     private ArrayList<Object> metric;
-    private ArrayList<Double> doubleMetric;
     private String name;
 
     public MetricObject() {
         metric = new ArrayList<Object>();
-        doubleMetric = new ArrayList<Double>();
     }
 
     public synchronized ArrayList<Object> getMetric() {
@@ -56,21 +54,11 @@ public class MetricObject {
     }
     
     public synchronized void addMetricValue(Object value, boolean doubleValue) {
-        metric.add(value);
         if (doubleValue) {
-            doubleMetric.add(Double.parseDouble(value.toString()));
+            metric.add(Double.parseDouble(value.toString()));
+        }else {
+            metric.add(value);
         }
     }
 
-    public ArrayList<Double> getDoubleMetric() {
-        return doubleMetric;
-    }
-
-    public void setDoubleMetric(ArrayList<Double> doubleMetric) {
-        this.doubleMetric = doubleMetric;
-    }
-    
-    public synchronized void addDoubleMetricValue(double value) {
-        doubleMetric.add(value);
-    }
 }

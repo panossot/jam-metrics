@@ -37,7 +37,8 @@ public class MetricProperties {
     private HashMap<String,Plot2DPanel> plots;
     private HashMap<String,JFrame> frames;
     private HashMap<String,Color> colors;
-    private int plotRefreshRate = 0;
+    private int plotRefreshRate = 1;
+    private int rhqMonitoringRefreshRate = 1;
     private String rhqServerUrl = "localhost";
     private String rhqServerPort = "7080";
     private String rhqServerUsername = "rhqadmin";
@@ -157,7 +158,7 @@ public class MetricProperties {
         return plots;
     }
 
-    public void setPlots(HashMap<String, Plot2DPanel> plots) {
+    public synchronized void setPlots(HashMap<String, Plot2DPanel> plots) {
         this.plots = plots;
     }
 
@@ -197,7 +198,7 @@ public class MetricProperties {
         return frames;
     }
 
-    public void setFrames(HashMap<String, JFrame> frames) {
+    public synchronized void setFrames(HashMap<String, JFrame> frames) {
         this.frames = frames;
     }
 
@@ -207,5 +208,13 @@ public class MetricProperties {
     
     public synchronized void removeFrame(String name) {
         this.frames.remove(name);
+    }
+
+    public synchronized int getRhqMonitoringRefreshRate() {
+        return rhqMonitoringRefreshRate;
+    }
+
+    public synchronized void setRhqMonitoringRefreshRate(int rhqMonitoringRefreshRate) {
+        this.rhqMonitoringRefreshRate = rhqMonitoringRefreshRate;
     }
 }

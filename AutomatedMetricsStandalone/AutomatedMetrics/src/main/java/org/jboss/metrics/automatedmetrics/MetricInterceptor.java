@@ -66,14 +66,14 @@ public class MetricInterceptor {
                 String rhqMonitoring = properties.getRhqMonitoring();
                 String metricPlot = properties.getMetricPlot();
                 int refreshRate = properties.getPlotRefreshRate();
-                
+                MetricsCache metricsCacheInstance = null;
                     
                 for (int i = 0; i < fieldNameSize; i++) {
 
                     accessField(metricAnnotation, method, i);
                     
                     if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
-                        MetricsCache metricsCacheInstance;
+                        
                             metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group);
                             if (metricsCacheInstance == null) {
                                 metricsCacheInstance = new MetricsCache();
@@ -89,7 +89,7 @@ public class MetricInterceptor {
                                 MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(group, mrhqInstance);
                             }
 
-                        mrhqInstance.rhqMonitoring(ctx.getTarget(), field, group);
+                        mrhqInstance.rhqMonitoring(ctx.getTarget(), field, group, metricsCacheInstance);
                     }
                 }
                 

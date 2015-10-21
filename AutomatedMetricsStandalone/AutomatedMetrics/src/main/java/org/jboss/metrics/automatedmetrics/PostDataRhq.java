@@ -16,23 +16,31 @@
  */
 package org.jboss.metrics.automatedmetrics;
 
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.HttpHeaders;
 import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
+import org.jboss.metrics.automatedmetrics.utils.MDataPoint;
 
 /**
  *
  * @author Panagiotis Sotiropoulos
  */
-@Path("/rest/metric/data/{id}")
+@Path("/rest/metric/data")
 public interface PostDataRhq {
 
     @PUT
-    @Path("/raw/{timeStamp}")
+    @Path("/{id}/raw/{timeStamp}")
     @Consumes("application/json")
     void postDataRhq(DoubleValue data, @PathParam("id") int id, @PathParam("timeStamp") long timestamp, @HeaderParam(HttpHeaders.ACCEPT) String accept);
+    
+    @POST
+    @Path("/raw")
+    @Consumes("application/json")
+    void postArrayDataRhq(List<MDataPoint> data, @HeaderParam(HttpHeaders.ACCEPT) String accept);
 }

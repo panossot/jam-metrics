@@ -99,6 +99,9 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
+        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot1", false);
+        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot2", false);
+        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot3", false);
     }
 
     private void initializePlots(boolean init) {
@@ -140,7 +143,6 @@ public class PrintMetrics extends HttpServlet {
                     }
                 });
 
-                DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot1", false);
                 metricPlots.put("plot1", plot);
                 frames.put("plot1", frame);
             }
@@ -165,7 +167,6 @@ public class PrintMetrics extends HttpServlet {
                     }
                 });
 
-                DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot2", false);
                 metricPlots.put("plot2", plot2);
                 frames.put("plot2", frame2);
             }
@@ -190,7 +191,6 @@ public class PrintMetrics extends HttpServlet {
                     }
                 });
 
-                DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot3", false);
                 metricPlots.put("plot3", plot3);
                 frames.put("plot3", frame3);
             }
