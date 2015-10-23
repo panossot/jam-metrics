@@ -34,11 +34,6 @@ import org.jboss.metrics.automatedmetrics.utils.MDataPoint;
 @Path("/rest/metric/data")
 public interface PostDataRhq {
 
-    @PUT
-    @Path("/{id}/raw/{timeStamp}")
-    @Consumes("application/json")
-    void postDataRhq(DoubleValue data, @PathParam("id") int id, @PathParam("timeStamp") long timestamp, @HeaderParam(HttpHeaders.ACCEPT) String accept);
-    
     @POST
     @Path("/raw")
     @Consumes("application/json")

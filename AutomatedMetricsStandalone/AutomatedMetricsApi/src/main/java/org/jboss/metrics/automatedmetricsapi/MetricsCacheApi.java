@@ -18,6 +18,7 @@ package org.jboss.metrics.automatedmetricsapi;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -38,7 +39,7 @@ public class MetricsCacheApi {
         HashSet<MetricObject> metricsCache = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment).getMetricCache();
         
         for (MetricObject mObject : metricsCache) {
-            Iterator<Object> iob = ((ArrayList<Object>)mObject.getMetric().clone()).iterator();
+            Iterator<Object> iob = Collections.synchronizedList(new ArrayList<Object>(mObject.getMetric())).iterator();
             ArrayList<Object> metricValues = new ArrayList<>();
             while (iob.hasNext()) {
                 metricValues.add(iob.next().toString());

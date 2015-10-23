@@ -37,7 +37,9 @@ public class Store {
             MetricObject newMo = new MetricObject();
             newMo.addMetricValue(field.get(target),true);
             newMo.setName(name);
-            metricsCacheInstance.addMetricCacheObject(newMo);
+            if (!metricsCacheInstance.addMetricCacheObject(newMo)) {
+                CacheStore(target, field, metricsCacheInstance);
+            }
         }
     }
 

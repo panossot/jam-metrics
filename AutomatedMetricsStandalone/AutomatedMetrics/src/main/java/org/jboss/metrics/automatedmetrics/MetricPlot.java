@@ -37,7 +37,7 @@ public class MetricPlot {
 
     private static List<String> plotsUsed = new ArrayList();
     
-    public static void plot(Metric metricAnnotation, Field field, Object target, MetricProperties properties, String group, int refreshRate, int i) {
+    public static synchronized void plot(Metric metricAnnotation, Field field, Object target, MetricProperties properties, String group, int refreshRate, int i) {
         if (i == 0)
             plotsUsed.clear();
         

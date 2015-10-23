@@ -25,6 +25,7 @@ import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
 import org.jboss.metrics.automatedmetrics.utils.MDataPoint;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
 import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
@@ -45,6 +46,7 @@ public class MonitoringRhq {
     private final PostDataRhq postRhq;
 
     private Logger logger = Logger.getLogger(MonitoringRhq.class);
+    private static long nowHistory = 0;
 
     public MonitoringRhq(String deployment) {
 
@@ -62,27 +64,23 @@ public class MonitoringRhq {
 
     }
 
-    public boolean rhqMonitoring(Object target, Field field, String deployment, MetricsCache metricsCacheInstance) throws IllegalArgumentException, IllegalAccessException {
+    public synchronized boolean rhqMonitoring(Object target, Field field, String group) throws IllegalArgumentException, IllegalAccessException {
         boolean dataSent = false;
         String name = field.getName() + "_" + target;
-        String metricIdLoaded = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment).getRhqScheduleId(field.getName());
-        int metricsRhqMonitored = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(deployment).getRhqMonitoringCount(name);
-        int refreshRhqRate = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment).getRhqMonitoringRefreshRate();
-        ArrayList<Object> metricValues = metricsCacheInstance.searchMetricObject(name).getMetric();
+        MetricsCache metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group);
+        String metricIdLoaded = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getRhqScheduleId(field.getName());
+        int metricsRhqMonitored = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getRhqMonitoringCount(name);
+        int refreshRhqRate = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getRhqMonitoringRefreshRate();
+        List<Object> metricValues = metricsCacheInstance.searchMetricObject(name).getMetric();
         int metricCount = metricValues.size();
                 
         if (metricIdLoaded != null) {
             int numericScheduleId = Integer.parseInt(metricIdLoaded);
             long now = System.currentTimeMillis();
+            if (now<nowHistory)
+                now = nowHistory+1;
 
-            if (refreshRhqRate == 1) {
-                DoubleValue dataPoint = new DoubleValue(Double.parseDouble(field.get(target).toString()));
-                try {
-                    postRhq.postDataRhq(dataPoint, numericScheduleId, now, APPLICATION_JSON);
-                } catch (Exception e) {
-                   e.printStackTrace();
-                }
-            }else if(metricCount >= metricsRhqMonitored + refreshRhqRate) {
+            if(metricCount >= metricsRhqMonitored + refreshRhqRate) {
                 List<MDataPoint> points = new ArrayList<>(refreshRhqRate);
                 
                 for (int i=metricsRhqMonitored; i<metricsRhqMonitored+refreshRhqRate; i++) {
@@ -94,11 +92,12 @@ public class MonitoringRhq {
                 }
                 try {
                     postRhq.postArrayDataRhq(points, APPLICATION_JSON);
-                    DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(deployment).putRhqMonitoringCount(name, metricsRhqMonitored + refreshRhqRate);
+                    DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).putRhqMonitoringCount(name, metricsRhqMonitored + refreshRhqRate);
                 } catch (Exception e) {
                    e.printStackTrace();
                 }
             }
+            nowHistory=now;
         }
 
         return dataSent;

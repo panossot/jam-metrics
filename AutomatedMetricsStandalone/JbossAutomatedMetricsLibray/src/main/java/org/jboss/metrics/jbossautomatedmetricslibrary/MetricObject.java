@@ -17,7 +17,9 @@
 package org.jboss.metrics.jbossautomatedmetricslibrary;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,14 +28,14 @@ import java.util.Map;
  */
 public class MetricObject {
 
-    private ArrayList<Object> metric;
+    private List<Object> metric;
     private String name;
 
     public MetricObject() {
-        metric = new ArrayList<Object>();
+        metric = Collections.synchronizedList(new ArrayList<Object>());
     }
 
-    public synchronized ArrayList<Object> getMetric() {
+    public synchronized List<Object> getMetric() {
         return metric;
     }
 

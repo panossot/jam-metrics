@@ -41,8 +41,8 @@ public class MetricsCache {
         return metricCache;
     }
 
-    public synchronized void addMetricCacheObject(MetricObject cacheObject) {
-        this.getMetricCache().add(cacheObject);
+    public synchronized boolean addMetricCacheObject(MetricObject cacheObject) {
+        return (this.getMetricCache().add(cacheObject));
     }
 
     public synchronized void removeMetricCacheObject(MetricObject cacheObject) {

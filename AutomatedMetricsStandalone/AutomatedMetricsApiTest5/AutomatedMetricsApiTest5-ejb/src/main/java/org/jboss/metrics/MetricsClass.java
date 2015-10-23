@@ -17,6 +17,7 @@
 package org.jboss.metrics;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import org.jboss.metrics.automatedmetricsapi.DBStore;
 import org.jboss.metrics.automatedmetricsapi.Metric;
 
 /**
@@ -34,11 +35,13 @@ public class MetricsClass {
     }
     
     @Metric(fieldName = {"count"}, groupName = "myTestGroup")
+    @DBStore(groupName = "myTestGroup", queryUpdateDB = {"StoreDBMetric","count"}, statementName = "statement_1")
     public synchronized void getAndSetCountIncreased() {
         count = this.countAtomic.getAndIncrement();
     }
 
     @Metric(fieldName = {"count2"}, groupName = "myTestGroup")
+    @DBStore(groupName = "myTestGroup", queryUpdateDB = {"StoreDBMetric","count2"}, statementName = "statement_1")
     public synchronized void getAndSetCount2Increased() {
         count2 = this.count2+2;
     }
