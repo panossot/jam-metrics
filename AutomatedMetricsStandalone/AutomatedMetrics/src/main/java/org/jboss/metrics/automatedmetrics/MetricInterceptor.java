@@ -41,6 +41,8 @@ import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 public class MetricInterceptor {
 
     private Map<String, Field> metricFields = new HashMap();
+    private final Object rhqLock = new Object();
+    private final Object dbLock = new Object();
 
     @AroundInvoke
     public Object metricsInterceptor(InvocationContext ctx) throws Exception {
@@ -85,10 +87,12 @@ public class MetricInterceptor {
                         new Thread() {
                             public void run() {
                                 MonitoringRhq mrhqInstance;
-                                mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(group);
-                                if (mrhqInstance == null) {
-                                    mrhqInstance = new MonitoringRhq(group);
-                                    MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(group, mrhqInstance);
+                                synchronized(rhqLock) {
+                                    mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(group);
+                                    if (mrhqInstance == null) {
+                                        mrhqInstance = new MonitoringRhq(group);
+                                        MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(group, mrhqInstance);
+                                    }
                                 }
 
                                 try {
@@ -96,6 +100,7 @@ public class MetricInterceptor {
                                 } catch (IllegalArgumentException | IllegalAccessException ex) {
                                    ex.printStackTrace();
                                 }
+                                
                             }
                         }.start();
                     }
@@ -133,10 +138,12 @@ public class MetricInterceptor {
                     new Thread() {
                         public void run() {
                             DBStoreInstance dBStoreInstance;
-                            dBStoreInstance = DBStoreCollection.getDBStoreCollection().getDbStoreInstance(group);
-                            if (dBStoreInstance == null) {
-                                dBStoreInstance = new DBStoreInstance();
-                                DBStoreCollection.getDBStoreCollection().addDbStoreInstance(group, dBStoreInstance);
+                            synchronized(dbLock) {
+                                dBStoreInstance = DBStoreCollection.getDBStoreCollection().getDbStoreInstance(group);
+                                if (dBStoreInstance == null) {
+                                    dBStoreInstance = new DBStoreInstance();
+                                    DBStoreCollection.getDBStoreCollection().addDbStoreInstance(group, dBStoreInstance);
+                                }
                             }
 
                             try {
