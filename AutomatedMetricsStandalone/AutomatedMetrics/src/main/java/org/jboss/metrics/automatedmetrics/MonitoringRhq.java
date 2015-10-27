@@ -17,11 +17,9 @@
 
 package org.jboss.metrics.automatedmetrics;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import org.jboss.logging.Logger;
-import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
 import org.jboss.metrics.automatedmetrics.utils.MDataPoint;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
@@ -47,6 +45,7 @@ public class MonitoringRhq {
 
     private Logger logger = Logger.getLogger(MonitoringRhq.class);
     private static long nowHistory = 0;
+    private static Object historyLock = new Object();
 
     public MonitoringRhq(String deployment) {
 
@@ -64,11 +63,11 @@ public class MonitoringRhq {
 
     }
 
-    public synchronized boolean rhqMonitoring(Object target, Field field, String group) throws IllegalArgumentException, IllegalAccessException {
+    public synchronized boolean rhqMonitoring(Object target, String fieldName, String group) throws IllegalArgumentException, IllegalAccessException {
         boolean dataSent = false;
-        String name = field.getName() + "_" + target;
+        String name = fieldName + "_" + target;
         MetricsCache metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group);
-        String metricIdLoaded = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getRhqScheduleId(field.getName());
+        String metricIdLoaded = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getRhqScheduleId(fieldName);
         int metricsRhqMonitored = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getRhqMonitoringCount(name);
         int refreshRhqRate = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getRhqMonitoringRefreshRate();
         List<Object> metricValues = metricsCacheInstance.searchMetricObject(name).getMetric();
@@ -77,8 +76,11 @@ public class MonitoringRhq {
         if (metricIdLoaded != null) {
             int numericScheduleId = Integer.parseInt(metricIdLoaded);
             long now = System.currentTimeMillis();
-            if (now<nowHistory)
-                now = nowHistory+1;
+            
+            synchronized(historyLock) {
+                if (now<nowHistory)
+                    now = nowHistory+1;
+            }
 
             if(metricCount >= metricsRhqMonitored + refreshRhqRate) {
                 List<MDataPoint> points = new ArrayList<>(refreshRhqRate);
@@ -97,7 +99,9 @@ public class MonitoringRhq {
                    e.printStackTrace();
                 }
             }
-            nowHistory=now;
+            synchronized(historyLock) {
+                nowHistory=now;
+            }
         }
 
         return dataSent;

@@ -52,4 +52,8 @@ public class MetricsThreads extends Thread {
             t.start();
         }
     }
+    
+    public Thread getT(){
+        return (this.t);
+    }
 }

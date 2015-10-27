@@ -22,8 +22,6 @@ import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
@@ -53,6 +51,7 @@ public class MetricInterceptor {
         try {
             final Metric metricAnnotation = method.getAnnotation(Metric.class);
             MetricsCache metricsCacheInstance = null;
+            HashMap<String, Object> metricValuesInternal = new HashMap();
             if (metricAnnotation != null) {
                 int fieldNameSize = metricAnnotation.fieldName().length;
                 final int dataSize = metricAnnotation.data().length;
@@ -63,10 +62,14 @@ public class MetricInterceptor {
                 String rhqMonitoring = properties.getRhqMonitoring();
                 String metricPlot = properties.getMetricPlot();
                 final int refreshRate = properties.getPlotRefreshRate();
-                    
+
                 for (int i = 0; i < fieldNameSize; i++) {
 
                     final Field field = accessField(metricAnnotation, method, i);
+                    final Object fieldValue = field.get(target);
+                    final String fieldName = field.getName();
+                    metricValuesInternal.put(metricAnnotation.fieldName()[i], field.get(target));
+                    
                     
                     if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
                         
@@ -75,7 +78,7 @@ public class MetricInterceptor {
                                 metricsCacheInstance = new MetricsCache();
                                 MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(group, metricsCacheInstance);
                             }
-                        Store.CacheStore(target, field, metricsCacheInstance);
+                        Store.CacheStore(target, fieldName, fieldValue, metricsCacheInstance, properties);
                     }
                     
                     if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring)) {
@@ -89,9 +92,9 @@ public class MetricInterceptor {
                                 }
 
                                 try {
-                                    mrhqInstance.rhqMonitoring(target, field, group);
+                                    mrhqInstance.rhqMonitoring(target, fieldName, group);
                                 } catch (IllegalArgumentException | IllegalAccessException ex) {
-                                    Logger.getLogger(MetricInterceptor.class.getName()).log(Level.SEVERE, null, ex);
+                                   ex.printStackTrace();
                                 }
                             }
                         }.start();
@@ -106,9 +109,11 @@ public class MetricInterceptor {
                                 for (int i = 0; i < dataSize; i++) {
                                     try {
                                         Field field = getData(metricAnnotation, i);
-                                        MetricPlot.plot(metricAnnotation, field, target, properties, group, refreshRate, i);
+                                        String fieldName = field.getName();
+                                        Object fieldValue = field.get(target);
+                                        MetricPlot.plot(metricAnnotation, fieldName, target, properties, group, refreshRate, i);
                                     } catch (Exception ex) {
-                                        Logger.getLogger(MetricInterceptor.class.getName()).log(Level.SEVERE, null, ex);
+                                        ex.printStackTrace();
                                     }
                                 }
                             }
@@ -124,7 +129,7 @@ public class MetricInterceptor {
                 String dataBaseStorage = properties.getDatabaseStore();
                 final MetricsCache mCI = metricsCacheInstance;
                 if (dataBaseStorage != null && Boolean.parseBoolean(dataBaseStorage)) {
-                    final Map<String, Field> metricFieldsCloned = (Map<String, Field>) ((HashMap<String, Field>)metricFields).clone();
+                    final Map<String, Object> metricValuesCloned = (Map<String, Object>)metricValuesInternal.clone();
                     new Thread() {
                         public void run() {
                             DBStoreInstance dBStoreInstance;
@@ -135,9 +140,9 @@ public class MetricInterceptor {
                             }
 
                             try {
-                                dBStoreInstance.dbStore(dbStoreAnnotation, target, metricFieldsCloned, group);
+                                dBStoreInstance.dbStore(dbStoreAnnotation, target, metricValuesCloned, group);
                             } catch (IllegalArgumentException | IllegalAccessException | SQLException ex) {
-                                Logger.getLogger(MetricInterceptor.class.getName()).log(Level.SEVERE, null, ex);
+                                ex.printStackTrace();
                             }
                         }
                     }.start();

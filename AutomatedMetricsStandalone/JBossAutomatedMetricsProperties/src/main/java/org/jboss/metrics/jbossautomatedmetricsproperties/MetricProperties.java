@@ -30,6 +30,7 @@ public class MetricProperties {
  
     private String rhqMonitoring = "false";
     private String cacheStore = "false";
+    private int cacheMaxSize = Integer.MAX_VALUE;
     private String databaseStore = "false";
     private String metricPlot = "false";
     private HashMap<String,Statement> databaseStatement;
@@ -217,4 +218,13 @@ public class MetricProperties {
     public synchronized void setRhqMonitoringRefreshRate(int rhqMonitoringRefreshRate) {
         this.rhqMonitoringRefreshRate = rhqMonitoringRefreshRate;
     }
+
+    public int getCacheMaxSize() {
+        return cacheMaxSize;
+    }
+
+    public void setCacheMaxSize(int cacheMaxSize) {
+        this.cacheMaxSize = cacheMaxSize;
+    }
+
 }

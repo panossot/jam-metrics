@@ -74,7 +74,7 @@ public class MetricsCacheApi {
         return output;
     }
     
-    public static void cleanMetricsCache(String group)
+    public static synchronized void cleanMetricsCache(String group)
     {
         MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group).getMetricCache().clear();
     }

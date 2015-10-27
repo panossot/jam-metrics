@@ -17,14 +17,12 @@
 
 package org.jboss.metrics.automatedmetrics;
 
-import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
 import org.jboss.logging.Logger;
 import org.jboss.metrics.automatedmetricsapi.DBStore;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
-import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
 
 /**
  *
@@ -37,9 +35,9 @@ public class DBStoreInstance {
     public DBStoreInstance() {
     }
 
-    public void dbStore(DBStore dbStoreAnnotation, Object target, Map<String, Field> metricFields, String group) throws IllegalArgumentException, IllegalAccessException, SQLException {
+    public void dbStore(DBStore dbStoreAnnotation, Object target, Map<String, Object> metricValues, String group) throws IllegalArgumentException, IllegalAccessException, SQLException {
         String statementName = dbStoreAnnotation.statementName();
-        String query = ParseDbQuery.parse(dbStoreAnnotation.queryUpdateDB(),metricFields,target,group);
+        String query = ParseDbQuery.parse(dbStoreAnnotation.queryUpdateDB(),metricValues,target,group);
         Statement stmt = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getDatabaseStatement().get(statementName);
         stmt.executeUpdate(query);
     }

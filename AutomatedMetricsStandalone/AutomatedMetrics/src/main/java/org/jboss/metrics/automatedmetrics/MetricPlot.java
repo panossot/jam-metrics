@@ -16,7 +16,6 @@
 package org.jboss.metrics.automatedmetrics;
 
 import java.awt.Color;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.ArrayUtils;
@@ -37,19 +36,19 @@ public class MetricPlot {
 
     private static List<String> plotsUsed = new ArrayList();
     
-    public static synchronized void plot(Metric metricAnnotation, Field field, Object target, MetricProperties properties, String group, int refreshRate, int i) {
+    public static synchronized void plot(Metric metricAnnotation, String fieldName, Object target, MetricProperties properties, String group, int refreshRate, int i) {
         if (i == 0)
             plotsUsed.clear();
         
         MetricsCache metricsCacheInstance;
         metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group);
         MetricObject mo = null;
-        if (metricsCacheInstance != null && field != null) {
-            String instanceName = field.getName() + "_" + target;
+        if (metricsCacheInstance != null) {
+            String instanceName = fieldName + "_" + target;
             mo = metricsCacheInstance.searchMetricObject(instanceName);
         }
         String plotName = metricAnnotation.plot()[i];
-        MetricOfPlot mOP = new MetricOfPlot(field.getName(),plotName);
+        MetricOfPlot mOP = new MetricOfPlot(fieldName,plotName);
         if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotedCount().get(mOP)==null)
             DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).resetPlotedCount(mOP);
         

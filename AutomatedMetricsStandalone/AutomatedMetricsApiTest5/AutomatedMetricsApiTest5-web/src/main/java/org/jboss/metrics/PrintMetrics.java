@@ -81,11 +81,7 @@ public class PrintMetrics extends HttpServlet {
             MetricsThreads mTreads3 =  new MetricsThreads(metricsBean2, "3");
             mTreads3.start();
             
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(PrintMetrics.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            while (mTreads.getT().isAlive() || mTreads2.getT().isAlive() || mTreads3.getT().isAlive()){};
             
             if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
                 out.println(MetricsCacheApi.printMetricsCache(groupName));
@@ -104,12 +100,13 @@ public class PrintMetrics extends HttpServlet {
         rhqScheduleIds.put("count", "11391");
         rhqScheduleIds.put("count2", "11392");
         MetricProperties metricProperties = new MetricProperties();
-        metricProperties.setRhqMonitoring("false");
+        metricProperties.setRhqMonitoring("true");
         metricProperties.setRhqMonitoringRefreshRate(100);
         metricProperties.setCacheStore("true");
+        metricProperties.setCacheMaxSize(10000);
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
-        metricProperties.setDatabaseStore("false");
+        metricProperties.setDatabaseStore("true");
         try {
             Connection  connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "panos");
             Statement stmt = connection.createStatement();

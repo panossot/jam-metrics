@@ -16,7 +16,6 @@
  */
 package org.jboss.metrics.automatedmetrics;
 
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Map;
@@ -27,7 +26,7 @@ import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties
  * @author Panagiotis Sotiropoulos
  */
 public class ParseDbQuery {
-    public static String parse(String[] queryParams, Map<String, Field> metricFields, Object target, String group){
+    public static String parse(String[] queryParams, Map<String, Object> metricValues, Object target, String group){
         String query = "";
         
         try {
@@ -42,7 +41,7 @@ public class ParseDbQuery {
                     replacable = "{"+i+"}";
                     query = query.replace(replacable, queryParams[i]);
                     replacable = "[" + i + "]";
-                    query = query.replace(replacable, metricFields.get(queryParams[i]).get(target).toString());
+                    query = query.replace(replacable, metricValues.get(queryParams[i]).toString());
                     i++;
                     queryParamNum --;
                 }
