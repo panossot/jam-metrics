@@ -42,6 +42,7 @@ public class MetricsApiSeTestClass {
                 count2 += 2;
                 JbossAutomatedJavaSeMetrics.metric(this,count2,"count2","myTestGroup");
             }
+            
         }
     }
 

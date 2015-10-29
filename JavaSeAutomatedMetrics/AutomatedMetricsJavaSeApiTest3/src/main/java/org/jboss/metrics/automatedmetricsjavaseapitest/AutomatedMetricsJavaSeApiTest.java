@@ -48,11 +48,7 @@ public class AutomatedMetricsJavaSeApiTest {
             MetricsThreads mTreads3 =  new MetricsThreads("3",mTC);
             mTreads3.start();
             
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(AutomatedMetricsJavaSeApiTest.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            while (mTreads.getT().isAlive() || mTreads2.getT().isAlive() || mTreads3.getT().isAlive()){};
             
             if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
                 System.out.println(MetricsCacheApi.printMetricsCache(groupName));
@@ -64,8 +60,8 @@ public class AutomatedMetricsJavaSeApiTest {
     
     private static void initializeMetricProperties() {
         HashMap<String,String> rhqScheduleIds = new HashMap<String,String>();
-        rhqScheduleIds.put("count", "11401");
-        rhqScheduleIds.put("count2", "11402");
+        rhqScheduleIds.put("count", "11391");
+        rhqScheduleIds.put("count2", "11392");
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setRhqMonitoring("false");
         metricProperties.setCacheStore("true");

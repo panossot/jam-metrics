@@ -100,13 +100,14 @@ public class PrintMetrics extends HttpServlet {
         rhqScheduleIds.put("count", "11391");
         rhqScheduleIds.put("count2", "11392");
         MetricProperties metricProperties = new MetricProperties();
-        metricProperties.setRhqMonitoring("true");
+        metricProperties.setRhqMonitoring("false");
         metricProperties.setRhqMonitoringRefreshRate(100);
         metricProperties.setCacheStore("true");
+        metricProperties.setRhqMonitoringRefreshRate(100);
         metricProperties.setCacheMaxSize(10000);
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
-        metricProperties.setDatabaseStore("true");
+        metricProperties.setDatabaseStore("false");
         try {
             Connection  connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "panos");
             Statement stmt = connection.createStatement();

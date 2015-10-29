@@ -16,8 +16,9 @@
  */
 package org.jboss.metrics.javase.automatedmetricsjavaseapi;
 
-import java.sql.Statement;
-import org.jboss.metrics.automatedmetricsjavase.ParseDbQuery;
+import java.sql.SQLException;
+import org.jboss.metrics.automatedmetricsjavase.DBStoreCollection;
+import org.jboss.metrics.automatedmetricsjavase.DBStoreInstance;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 
 /**
@@ -26,19 +27,36 @@ import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties
  */
 public class JbossAutomatedJavaSeMetricsDbStore {
 
-    public static void metricsDbStore(Object instance, Object[] values, String group, String statementName, String[] queryUpdateDB) throws Exception {
-        String dbStore = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getDatabaseStore();
+    private final static Object dbLock = new Object();
+    
+    public static void metricsDbStore(final Object instance, final Object[] values, final String group, final String statementName, final String[] queryUpdateDB) throws Exception {
+        String dataBaseStorage = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getDatabaseStore();
         
         try {
-            if (dbStore != null && Boolean.parseBoolean(dbStore)) {
-                String query = ParseDbQuery.parse(queryUpdateDB,values,instance,group);
-                Statement stmt = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getDatabaseStatement().get(statementName);
-                stmt.executeUpdate(query);
+            if (dataBaseStorage != null && Boolean.parseBoolean(dataBaseStorage)) {
+                new Thread() {
+                    public void run() {
+                        DBStoreInstance dBStoreInstance;
+                        synchronized(dbLock) {
+                            dBStoreInstance = DBStoreCollection.getDBStoreCollection().getDbStoreInstance(group);
+                            if (dBStoreInstance == null) {
+                                dBStoreInstance = new DBStoreInstance();
+                                DBStoreCollection.getDBStoreCollection().addDbStoreInstance(group, dBStoreInstance);
+                            }
+                        }
+
+                        try {
+                            dBStoreInstance.dbStore(queryUpdateDB, instance, values, statementName, group);
+                        } catch (IllegalArgumentException | IllegalAccessException | SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }.start();
             }
         } catch(Exception e) {
             e.printStackTrace();
         }
-
+         
     }
 }
 

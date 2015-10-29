@@ -14,19 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.metrics.javase.automatedmetricsjavaseapi;
 
+package org.jboss.metrics.automatedmetricsjavase;
+
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Map;
+import org.jboss.logging.Logger;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
-import org.jboss.metrics.jbossautomatedmetricslibrary.MetricInternalParameters;
-import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 
 /**
  *
  * @author Panagiotis Sotiropoulos
  */
-public class MetricsPropertiesApi {
-     public static void storeProperties(String group, MetricProperties metricsProperties){
-        DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentProperties(group, metricsProperties);
-        DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentInternalParameters(group, new MetricInternalParameters());
+public class DBStoreInstance {
+
+    private Logger logger = Logger.getLogger(DBStoreInstance.class);
+
+    public DBStoreInstance() {
     }
+
+    public void dbStore(String[] queryUpdateDB, Object target, Object[] metricValues, final String statementName, String group) throws IllegalArgumentException, IllegalAccessException, SQLException {
+        String query = ParseDbQuery.parse(queryUpdateDB,metricValues,target,group);
+        Statement stmt = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getDatabaseStatement().get(statementName);
+        stmt.executeUpdate(query);
+    }
+
 }

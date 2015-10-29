@@ -41,8 +41,9 @@ import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 public class MetricInterceptor {
 
     private Map<String, Field> metricFields = new HashMap();
-    private final Object rhqLock = new Object();
-    private final Object dbLock = new Object();
+    private final static Object rhqLock = new Object();
+    private final static Object dbLock = new Object();
+    private final static Object cacheLock = new Object();
 
     @AroundInvoke
     public Object metricsInterceptor(InvocationContext ctx) throws Exception {
@@ -74,13 +75,14 @@ public class MetricInterceptor {
                     
                     
                     if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
-                        
+                        synchronized(cacheLock) {
                             metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group);
                             if (metricsCacheInstance == null) {
                                 metricsCacheInstance = new MetricsCache();
                                 MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(group, metricsCacheInstance);
                             }
-                        Store.CacheStore(target, fieldName, fieldValue, metricsCacheInstance, properties);
+                            Store.CacheStore(target, fieldName, fieldValue, metricsCacheInstance, properties);
+                        }
                     }
                     
                     if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring)) {

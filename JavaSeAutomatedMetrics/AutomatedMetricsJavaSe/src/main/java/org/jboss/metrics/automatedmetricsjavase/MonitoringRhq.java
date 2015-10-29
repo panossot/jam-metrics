@@ -14,11 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.jboss.metrics.automatedmetricsjavase;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jboss.logging.Logger;
-import org.jboss.metrics.automatedmetrics.utils.DoubleValue;
+import org.jboss.metrics.automatedmetricsjavase.utils.MDataPoint;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
+import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
 import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
@@ -39,10 +44,12 @@ public class MonitoringRhq {
     private final PostDataRhq postRhq;
 
     private Logger logger = Logger.getLogger(MonitoringRhq.class);
+    private static long nowHistory = 0;
+    private static Object historyLock = new Object();
 
-    public MonitoringRhq(String group) {
+    public MonitoringRhq(String deployment) {
 
-        MetricProperties metricProperties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
+        MetricProperties metricProperties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment);
         APPLICATION_JSON = "application/json";
         REST_SERVER_PORT = Integer.parseInt(metricProperties.getRhqServerPort());
         REST_SERVER_USERNAME = metricProperties.getRhqServerUsername();
@@ -56,19 +63,44 @@ public class MonitoringRhq {
 
     }
 
-    public boolean rhqMonitoring(Object target, Object value, String metricName, String group) throws IllegalArgumentException, IllegalAccessException {
+    public synchronized boolean rhqMonitoring(Object target, String fieldName, String group) throws IllegalArgumentException, IllegalAccessException {
         boolean dataSent = false;
-        String metricIdLoaded = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getRhqScheduleId(metricName);
-
+        String name = fieldName + "_" + target;
+        MetricsCache metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group);
+        String metricIdLoaded = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getRhqScheduleId(fieldName);
+        int metricsRhqMonitored = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getRhqMonitoringCount(name);
+        int refreshRhqRate = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getRhqMonitoringRefreshRate();
+        List<Object> metricValues = metricsCacheInstance.searchMetricObject(name).getMetric();
+        int metricCount = metricValues.size();
+                
         if (metricIdLoaded != null) {
             int numericScheduleId = Integer.parseInt(metricIdLoaded);
             long now = System.currentTimeMillis();
+            
+            synchronized(historyLock) {
+                if (now<nowHistory)
+                    now = nowHistory+1;
+            }
 
-            DoubleValue dataPoint = new DoubleValue(Double.parseDouble(value.toString()));
-            try {
-                postRhq.postDataRhq(dataPoint, numericScheduleId, now, APPLICATION_JSON);
-            } catch (Exception e) {
-               e.printStackTrace();
+            if(metricCount >= metricsRhqMonitored + refreshRhqRate) {
+                List<MDataPoint> points = new ArrayList<>(refreshRhqRate);
+                
+                for (int i=metricsRhqMonitored; i<metricsRhqMonitored+refreshRhqRate; i++) {
+                    MDataPoint dataPoint = new MDataPoint();
+                    dataPoint.setScheduleId(numericScheduleId);
+                    dataPoint.setTimeStamp(now++);
+                    dataPoint.setValue((Double)metricValues.get(i));
+                    points.add(dataPoint);
+                }
+                try {
+                    postRhq.postArrayDataRhq(points, APPLICATION_JSON);
+                    DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).putRhqMonitoringCount(name, metricsRhqMonitored + refreshRhqRate);
+                } catch (Exception e) {
+                   e.printStackTrace();
+                }
+            }
+            synchronized(historyLock) {
+                nowHistory=now;
             }
         }
 

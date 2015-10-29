@@ -18,6 +18,7 @@ package org.jboss.metrics.javase.automatedmetricsjavaseapi;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,13 +33,13 @@ import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
  * @author Panagiotis Sotiropoulos
  */
 public class MetricsCacheApi {
-    public static synchronized Map<String,ArrayList<Object>> getMetricsCache(String group)
+    public static synchronized Map<String,ArrayList<Object>> getMetricsCache(String deployment)
     {
         Map<String,ArrayList<Object>> metricList = new HashMap<>();
-        HashSet<MetricObject> metricsCache = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group).getMetricCache();
+        HashSet<MetricObject> metricsCache = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(deployment).getMetricCache();
         
         for (MetricObject mObject : metricsCache) {
-            Iterator<Object> iob = ((ArrayList<Object>)mObject.getMetric().clone()).iterator();
+            Iterator<Object> iob = Collections.synchronizedList(new ArrayList<Object>(mObject.getMetric())).iterator();
             ArrayList<Object> metricValues = new ArrayList<>();
             while (iob.hasNext()) {
                 metricValues.add(iob.next().toString());
@@ -49,12 +50,12 @@ public class MetricsCacheApi {
         return metricList;
     }
     
-    public static synchronized String printMetricsCache(String group) {
+    public static synchronized String printMetricsCache(String deployment) {
         String output = "";
         Map<String, ArrayList<Object>> cache;
         Set<String> metricNames;
         Collection<ArrayList<Object>> metricValues;
-        cache = getMetricsCache(group);
+        cache = getMetricsCache(deployment);
         metricNames = cache.keySet();
         metricValues = cache.values();
 
@@ -73,7 +74,7 @@ public class MetricsCacheApi {
         return output;
     }
     
-    public static void cleanMetricsCache(String group)
+    public static synchronized void cleanMetricsCache(String group)
     {
         MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group).getMetricCache().clear();
     }

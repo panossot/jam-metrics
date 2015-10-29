@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.jboss.metrics.automatedmetricsjavase;
 
 import java.util.HashMap;
@@ -34,27 +35,27 @@ public class MonitoringRhqCollection {
         return mrhqc;
     }
     
-    public HashMap<String, MonitoringRhq> getMonitoringRhqInstances() {
+    public synchronized HashMap<String, MonitoringRhq> getMonitoringRhqInstances() {
         return monitoringRhqInstances;
     }
 
-    public void setMonitoringRhqInstances(HashMap<String, MonitoringRhq> monitoringRhqInstances) {
+    public synchronized void setMonitoringRhqInstances(HashMap<String, MonitoringRhq> monitoringRhqInstances) {
         this.monitoringRhqInstances = monitoringRhqInstances;
     }
     
-    public MonitoringRhq getMonitoringRhqInstance(String name) {
+    public synchronized MonitoringRhq getMonitoringRhqInstance(String name) {
         return (this.monitoringRhqInstances.get(name));
     }
     
-    public void addMonitoringRhqInstance(String name, MonitoringRhq monitoringRhq) {
+    public synchronized void addMonitoringRhqInstance(String name, MonitoringRhq monitoringRhq) {
         this.monitoringRhqInstances.put(name, monitoringRhq);
     }
     
-    public void removeMonitoringRhqInstance(String name) {
+    public synchronized void removeMonitoringRhqInstance(String name) {
         this.monitoringRhqInstances.remove(name);
     }
     
-    public boolean existsMonitoringRhqInstance(String name) {
+    public synchronized boolean existsMonitoringRhqInstance(String name) {
         return(this.monitoringRhqInstances.containsKey(name));
     }
 

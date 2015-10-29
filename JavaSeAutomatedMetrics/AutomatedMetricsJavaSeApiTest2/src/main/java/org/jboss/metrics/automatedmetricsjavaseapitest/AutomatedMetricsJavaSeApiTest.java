@@ -50,14 +50,14 @@ public class AutomatedMetricsJavaSeApiTest {
     
     private static void initializeMetricProperties() {
         HashMap<String,String> rhqScheduleIds = new HashMap<String,String>();
-        rhqScheduleIds.put("count", "11401");
-        rhqScheduleIds.put("count2", "11402");
+        rhqScheduleIds.put("count", "11391");
+        rhqScheduleIds.put("count2", "11392");
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setRhqMonitoring("false");
         metricProperties.setCacheStore("true");
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
-        metricProperties.setDatabaseStore("true");
+        metricProperties.setDatabaseStore("false");
         try {
             Connection  connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "panos");
             Statement stmt = connection.createStatement();

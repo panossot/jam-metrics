@@ -22,6 +22,7 @@ import org.jboss.metrics.automatedmetricsjavase.Store;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
+import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 
 
 
@@ -32,36 +33,49 @@ import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
 public class JbossAutomatedJavaSeMetrics {
 
     private final static Object cacheStorage = new Object();
-    private final static Object rhqMonitoring = new Object();
+    private final static Object rhqLock = new Object();
+    private final static Object cacheLock = new Object();
 
-    public static void metric(Object instance, Object value, String metricName, String metricGroup) throws Exception {
-        String cacheStore = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(metricGroup).getCacheStore();
-        String rhqMonitoring = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(metricGroup).getRhqMonitoring();
+    public static void metric(final Object instance, Object value, final String metricName, final String metricGroup) throws Exception {
+        final MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(metricGroup);
+        String cacheStore = properties.getCacheStore();
+        String rhqMonitoring = properties.getRhqMonitoring();
 
         synchronized(cacheStorage) {
-		if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
-		    MetricsCache metricsCacheInstance;
-		    metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(metricGroup);
-		    if (metricsCacheInstance == null) {
-		        metricsCacheInstance = new MetricsCache();
-		        MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(metricGroup, metricsCacheInstance);
-		    }
-		    Store.CacheStore(instance, value, metricName, metricsCacheInstance);
+            if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
+		MetricsCache metricsCacheInstance;
+                metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(metricGroup);
+		if (metricsCacheInstance == null) {
+		    metricsCacheInstance = new MetricsCache();
+		    MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(metricGroup, metricsCacheInstance);
 		}
+		Store.CacheStore(instance, metricName, value, metricsCacheInstance, properties);
+            }
         }
+        
+        if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring)) {
+            new Thread() {
+                public void run() {
+                    MonitoringRhq mrhqInstance;
+                    synchronized(rhqLock) {
+                        mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(metricGroup);
+                        if (mrhqInstance == null) {
+                            mrhqInstance = new MonitoringRhq(metricGroup);
+                            MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(metricGroup, mrhqInstance);
+                        }
+                    }
 
-        synchronized(rhqMonitoring) {
-		if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring)) {
-		    MonitoringRhq mrhqInstance;
-		    mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(metricGroup);
-		    if (mrhqInstance == null) {
-		        mrhqInstance = new MonitoringRhq(metricGroup);
-		        MonitoringRhqCollection.getRhqCollection().addMonitoringRhqInstance(metricGroup, mrhqInstance);
-		    }
+                    try {
+                        mrhqInstance.rhqMonitoring(instance, metricName, metricGroup);
+                    } catch (IllegalArgumentException | IllegalAccessException ex) {
+                        ex.printStackTrace();
+                    }
 
-		    mrhqInstance.rhqMonitoring(instance, value, metricName, metricGroup);
-		}
+                }
+            }.start();
         }
+        
     }
+    
 }
 

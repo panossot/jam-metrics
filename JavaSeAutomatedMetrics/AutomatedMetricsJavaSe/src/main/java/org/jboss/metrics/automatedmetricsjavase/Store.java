@@ -16,8 +16,10 @@
  */
 package org.jboss.metrics.automatedmetricsjavase;
 
+import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricObject;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
+import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 
 
 /**
@@ -26,17 +28,22 @@ import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
  */
 public class Store {
 
-    public static void CacheStore(Object target, Object value, String metricName, MetricsCache metricsCacheInstance) throws IllegalArgumentException, IllegalAccessException {
-        String name = metricName + "_" + target;
+    public static void CacheStore(Object target, String fieldName, Object fieldValue, MetricsCache metricsCacheInstance, MetricProperties properties) throws IllegalArgumentException, IllegalAccessException {
+        String name = fieldName + "_" + target;
         MetricObject mo;
         mo = metricsCacheInstance.searchMetricObject(name);
         if (mo != null) {
-            mo.addMetricValue(value);
+            mo.addMetricValue(fieldValue,true);
+            
+            if (properties.getCacheMaxSize() < mo.getMetric().size())
+                mo.getMetric().remove(0);
         } else {
             MetricObject newMo = new MetricObject();
-            newMo.addMetricValue(value);
+            newMo.addMetricValue(fieldValue,true);
             newMo.setName(name);
-            metricsCacheInstance.addMetricCacheObject(newMo);
+            if (!metricsCacheInstance.addMetricCacheObject(newMo)) {
+                Store.CacheStore(target, fieldName, fieldValue, metricsCacheInstance, properties);
+            }
         }
     }
 
