@@ -16,8 +16,11 @@
  */
 package org.jboss.metrics.jbossautomatedmetricsproperties;
 
+import java.awt.Color;
 import java.sql.Statement;
 import java.util.HashMap;
+import javax.swing.JFrame;
+import org.math.plot.Plot2DPanel;
 
 /**
  *
@@ -27,9 +30,16 @@ public class MetricProperties {
  
     private String rhqMonitoring = "false";
     private String cacheStore = "false";
+    private int cacheMaxSize = Integer.MAX_VALUE;
     private String databaseStore = "false";
+    private String metricPlot = "false";
     private HashMap<String,Statement> databaseStatement;
     private HashMap<String,String> updateDbQueries;
+    private HashMap<String,Plot2DPanel> plots;
+    private HashMap<String,JFrame> frames;
+    private HashMap<String,Color> colors;
+    private int plotRefreshRate = 1;
+    private int rhqMonitoringRefreshRate = 1;
     private String rhqServerUrl = "localhost";
     private String rhqServerPort = "7080";
     private String rhqServerUsername = "rhqadmin";
@@ -40,6 +50,9 @@ public class MetricProperties {
         rhqScheduleIds = new HashMap<>();
         databaseStatement = new HashMap<>();
         updateDbQueries = new HashMap<>();
+        plots = new HashMap<>();
+        colors = new HashMap<>();
+        frames = new HashMap<>();
     }
     
     public synchronized String getRhqMonitoring() {
@@ -82,56 +95,136 @@ public class MetricProperties {
         return rhqServerPort;
     }
 
-    public void setRhqServerPort(String rhqServerPort) {
+    public synchronized void setRhqServerPort(String rhqServerPort) {
         this.rhqServerPort = rhqServerPort;
     }
 
-    public String getRhqServerUsername() {
+    public synchronized String getRhqServerUsername() {
         return rhqServerUsername;
     }
 
-    public void setRhqServerUsername(String rhqServerUsername) {
+    public synchronized void setRhqServerUsername(String rhqServerUsername) {
         this.rhqServerUsername = rhqServerUsername;
     }
 
-    public String getRhqServerPassword() {
+    public synchronized String getRhqServerPassword() {
         return rhqServerPassword;
     }
 
-    public void setRhqServerPassword(String rhqServerPassword) {
+    public synchronized void setRhqServerPassword(String rhqServerPassword) {
         this.rhqServerPassword = rhqServerPassword;
     }
     
-    public void addRhqScheduleId(String name, String id) {
+    public synchronized void addRhqScheduleId(String name, String id) {
         this.rhqScheduleIds.put(name, id);
     }
     
-    public void removeRhqScheduleId(String name) {
+    public synchronized void removeRhqScheduleId(String name) {
         this.rhqScheduleIds.remove(name);
     }
 
-    public String getDatabaseStore() {
+    public synchronized String getDatabaseStore() {
         return databaseStore;
     }
 
-    public void setDatabaseStore(String databaseStore) {
+    public synchronized void setDatabaseStore(String databaseStore) {
         this.databaseStore = databaseStore;
     }
 
-    public HashMap<String, Statement> getDatabaseStatement() {
+    public synchronized HashMap<String, Statement> getDatabaseStatement() {
         return databaseStatement;
     }
 
-    public void setDatabaseStatement(HashMap<String, Statement> databaseStatement) {
+    public synchronized void setDatabaseStatement(HashMap<String, Statement> databaseStatement) {
         this.databaseStatement = databaseStatement;
     }
 
-    public HashMap<String, String> getUpdateDbQueries() {
+    public synchronized HashMap<String, String> getUpdateDbQueries() {
         return updateDbQueries;
     }
 
-    public void setUpdateDbQueries(HashMap<String, String> updateDbQueries) {
+    public synchronized void setUpdateDbQueries(HashMap<String, String> updateDbQueries) {
         this.updateDbQueries = updateDbQueries;
+    }
+
+    public synchronized String getMetricPlot() {
+        return metricPlot;
+    }
+
+    public synchronized void setMetricPlot(String metricPlot) {
+        this.metricPlot = metricPlot;
+    }
+
+    public synchronized HashMap<String, Plot2DPanel> getPlots() {
+        return plots;
+    }
+
+    public synchronized void setPlots(HashMap<String, Plot2DPanel> plots) {
+        this.plots = plots;
+    }
+
+    public synchronized void addPlot(String name, Plot2DPanel plot) {
+        this.plots.put(name, plot);
+    }
+    
+    public synchronized void removePlot(String name) {
+        this.plots.remove(name);
+    }
+
+    public synchronized int getPlotRefreshRate() {
+        return plotRefreshRate;
+    }
+
+    public synchronized void setPlotRefreshRate(int plotRefreshRate) {
+        this.plotRefreshRate = plotRefreshRate;
+    }
+
+    public synchronized HashMap<String, Color> getColors() {
+        return colors;
+    }
+
+    public synchronized void setColors(HashMap<String, Color> colors) {
+        this.colors = colors;
+    }
+    
+    public synchronized void addColor(String name, Color color) {
+        this.colors.put(name, color);
+    }
+    
+    public synchronized void removeColor(String name) {
+        this.colors.remove(name);
+    }
+    
+    public synchronized HashMap<String, JFrame> getFrames() {
+        return frames;
+    }
+
+    public synchronized void setFrames(HashMap<String, JFrame> frames) {
+        this.frames = frames;
+    }
+
+    public synchronized void addFrame(String name, JFrame frame) {
+        this.frames.put(name, frame);
+    }
+    
+    public synchronized void removeFrame(String name) {
+        this.frames.remove(name);
+    }
+
+    public synchronized int getRhqMonitoringRefreshRate() {
+        return rhqMonitoringRefreshRate;
+    }
+
+    public synchronized void setRhqMonitoringRefreshRate(int rhqMonitoringRefreshRate) {
+        this.rhqMonitoringRefreshRate = rhqMonitoringRefreshRate;
+    }
+
+    public int getCacheMaxSize() {
+        return cacheMaxSize;
+    }
+
+    public void setCacheMaxSize(int cacheMaxSize) {
+        this.cacheMaxSize = cacheMaxSize;
     }
 
 }

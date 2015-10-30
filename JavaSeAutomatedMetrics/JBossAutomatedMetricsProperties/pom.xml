@@ -10,7 +10,7 @@
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>JBossAutomatedMetricsProperties</artifactId>
-    <version>1.0.1.Final</version>
+    <version>1.0.2.Final</version>
     <packaging>jar</packaging>
 
     <name>JBossAutomatedMetricsProperties</name>
@@ -26,6 +26,11 @@
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.yannrichet</groupId>
+            <artifactId>JMathPlot</artifactId>
+            <version>1.0.1</version>
         </dependency>
     </dependencies>
 

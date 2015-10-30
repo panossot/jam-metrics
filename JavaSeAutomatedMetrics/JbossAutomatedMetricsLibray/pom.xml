@@ -10,7 +10,7 @@
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>JBossAutomatedMetricsLibray</artifactId>
-    <version>1.0.1.Final</version>
+    <version>1.0.2.Final</version>
     <packaging>jar</packaging>
 
     <name>JbossAutomatedMetricsLibrary</name>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.jboss.metrics</groupId>
             <artifactId>JBossAutomatedMetricsProperties</artifactId>
-            <version>1.0.1.Final</version>
+            <version>1.0.2.Final</version>
         </dependency>
     </dependencies>
 

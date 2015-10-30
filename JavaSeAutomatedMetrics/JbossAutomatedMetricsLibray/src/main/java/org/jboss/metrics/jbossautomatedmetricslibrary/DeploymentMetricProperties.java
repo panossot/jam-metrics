@@ -26,10 +26,12 @@ import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 public class DeploymentMetricProperties {
     private static final DeploymentMetricProperties deploymentMetricProperties = new DeploymentMetricProperties();
     
-    private volatile HashMap<String,MetricProperties> deploymentProperties;
+    private HashMap<String,MetricProperties> deploymentProperties;
+    private HashMap<String,MetricInternalParameters>  deploymentInternalParameters;
 
     private DeploymentMetricProperties() {
         deploymentProperties = new HashMap<String, MetricProperties>();
+         deploymentInternalParameters = new HashMap<String, MetricInternalParameters>();
     }
     
     public static synchronized DeploymentMetricProperties getDeploymentMetricProperties() {
@@ -49,6 +51,14 @@ public class DeploymentMetricProperties {
     
     public synchronized void removeDeploymentProperties(String name) {
         this.deploymentProperties.remove(name);
+    }
+
+    public synchronized MetricInternalParameters getDeploymentInternalParameters(String name) {
+        return  deploymentInternalParameters.get(name);
+    }
+    
+    public synchronized void addDeploymentInternalParameters(String name, MetricInternalParameters metricInternalParameters) {
+        this. deploymentInternalParameters.putIfAbsent(name, metricInternalParameters);
     }
     
 }
