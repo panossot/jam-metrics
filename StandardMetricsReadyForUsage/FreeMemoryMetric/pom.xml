@@ -5,12 +5,12 @@
   <parent>
       <groupId>org.jboss.as</groupId>
       <artifactId>jboss-as-automated-metrics-standard-metrics</artifactId>
-      <version>1.0.0.Final-redhat-SNAPSHOT</version>
+      <version>1.0.3.Final-SNAPSHOT</version>
   </parent>
 
   <groupId>org.jboss.metrics</groupId>
   <artifactId>FreeMemoryMetric</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.3.Final-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>FreeMemoryMetric</name>

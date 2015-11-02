@@ -4,12 +4,12 @@
     <parent>
     <artifactId>FreeMemoryMetric</artifactId>
     <groupId>org.jboss.metrics</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.3.Final-SNAPSHOT</version>
   </parent>
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>FreeMemoryMetric-web</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.3.Final-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>FreeMemoryMetric-web</name>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>org.jboss.metrics</groupId>
             <artifactId>JBossAutomatedMetricsProperties</artifactId>
-            <version>1.0.0.Final</version>
+            <version>1.0.2.Final</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>

@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.jboss.as</groupId>
         <artifactId>jboss-as-automated-metrics-javase</artifactId>
-        <version>1.0.2.Final</version>
+        <version>1.0.3.Final-SNAPSHOT</version>
     </parent>
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>AutomatedMetricsSeApiTest3</artifactId>
-    <version>1.0.2.Final</version>
+    <version>1.0.3.Final-SNAPSHOT</version>
     <packaging>jar</packaging>
     
     <name>AutomatedMetricsJavaSeApiTest3</name>
