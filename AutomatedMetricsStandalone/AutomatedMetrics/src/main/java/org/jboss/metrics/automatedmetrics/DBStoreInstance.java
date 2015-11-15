@@ -22,6 +22,7 @@ import java.sql.Statement;
 import java.util.Map;
 import org.jboss.logging.Logger;
 import org.jboss.metrics.automatedmetricsapi.DBStore;
+import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParams;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 
 /**
@@ -35,9 +36,9 @@ public class DBStoreInstance {
     public DBStoreInstance() {
     }
 
-    public void dbStore(DBStore dbStoreAnnotation, Object target, Map<String, Object> metricValues, String group) throws IllegalArgumentException, IllegalAccessException, SQLException {
+    public void dbStore(DBStore dbStoreAnnotation, Object target, Map<String, Object> metricValues, String group, CodeParams cp) throws IllegalArgumentException, IllegalAccessException, SQLException {
         String statementName = dbStoreAnnotation.statementName();
-        String query = ParseDbQuery.parse(dbStoreAnnotation.queryUpdateDB(),metricValues,target,group);
+        String query = ParseDbQuery.parse(dbStoreAnnotation.queryUpdateDB(),metricValues,target,group,cp);
         Statement stmt = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getDatabaseStatement().get(statementName);
         stmt.executeUpdate(query);
     }

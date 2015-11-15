@@ -17,6 +17,7 @@
 
 package org.jboss.metrics.automatedmetrics;
 
+import com.rits.cloning.Cloner;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -27,6 +28,8 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.jboss.metrics.automatedmetricsapi.DBStore;
 import org.jboss.metrics.automatedmetricsapi.Metric;
+import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParams;
+import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParamsCollection;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
@@ -50,7 +53,7 @@ public class MetricInterceptor {
         Object result = ctx.proceed();
         Method method = ctx.getMethod();
         final Object target = ctx.getTarget();
-
+            
         try {
             final Metric metricAnnotation = method.getAnnotation(Metric.class);
             MetricsCache metricsCacheInstance = null;
@@ -137,6 +140,19 @@ public class MetricInterceptor {
                 final MetricsCache mCI = metricsCacheInstance;
                 if (dataBaseStorage != null && Boolean.parseBoolean(dataBaseStorage)) {
                     final Map<String, Object> metricValuesCloned = (Map<String, Object>)metricValuesInternal.clone();
+                    CodeParams cp = null;
+                    try {
+                        Field metricUser = method.getDeclaringClass().getDeclaredField("metricUser");
+                        if (metricUser != null) {
+                            metricUser.setAccessible(true);
+                            if (CodeParamsCollection.getCodeParamsCollection().existsCodeParamsInstance(metricUser.get(target).toString()))
+                                cp = CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(metricUser.get(target).toString());
+                        }
+                    }catch(Exception e) {
+                        // Probably the metric user is not defined. Go on with the execution of the database storage.
+                    }
+                    Cloner cloner = new Cloner();
+                    final CodeParams cParams = cloner.deepClone(cp);
                     new Thread() {
                         public void run() {
                             DBStoreInstance dBStoreInstance;
@@ -149,7 +165,7 @@ public class MetricInterceptor {
                             }
 
                             try {
-                                dBStoreInstance.dbStore(dbStoreAnnotation, target, metricValuesCloned, group);
+                                dBStoreInstance.dbStore(dbStoreAnnotation, target, metricValuesCloned, group, cParams);
                             } catch (IllegalArgumentException | IllegalAccessException | SQLException ex) {
                                 ex.printStackTrace();
                             }

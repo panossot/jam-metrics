@@ -65,6 +65,7 @@ public class AutomatedMetricsJavaSeApiTest {
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setRhqMonitoring("false");
         metricProperties.setCacheStore("true");
+        metricProperties.setRhqMonitoringRefreshRate(100);
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         metricProperties.setDatabaseStore("false");

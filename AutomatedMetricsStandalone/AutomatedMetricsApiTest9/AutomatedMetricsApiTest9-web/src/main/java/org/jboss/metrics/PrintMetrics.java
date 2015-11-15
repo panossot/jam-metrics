@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jboss.metrics.automatedmetricsapi.MetricsCacheApi;
 import org.jboss.metrics.automatedmetricsapi.MetricsPropertiesApi;
-import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParamsCollection;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
 import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 
@@ -104,11 +103,11 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.setRhqMonitoring("false");
         metricProperties.setRhqMonitoringRefreshRate(100);
         metricProperties.setCacheStore("true");
+        metricProperties.setRhqMonitoringRefreshRate(100);
         metricProperties.setCacheMaxSize(10000);
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         metricProperties.setDatabaseStore("false");
-        CodeParamsCollection.getCodeParamsCollection().addCodeParamsInstance("Niki");
         try {
             Connection  connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "panos");
             Statement stmt = connection.createStatement();
@@ -117,7 +116,7 @@ public class PrintMetrics extends HttpServlet {
             dbStmt.put("statement_1", stmt);
             metricProperties.setDatabaseStatement(dbStmt);
             HashMap<String,String> query1 = new HashMap<String,String>();
-            query1.put("StoreDBMetric", "INSERT INTO MyMETRICS.metricValues(SEQUENCE_NUM,METRIC_NAME,METRIC_VALUE,METRIC_INSTANCE,RECORD_TIME) VALUES(#sequenceNum#, '{1}', [1], '{instance}', '{time}');");
+            query1.put("StoreDBMetric", "INSERT INTO MyMETRICS.metricValues(METRIC_RECORD_SEQUENCE,METRIC_NAME,METRIC_VALUE,METRIC_INSTANCE,RECORD_TIME) VALUES($metricSeq$, '{1}', [1], '{instance}', '{time}');");
             metricProperties.setUpdateDbQueries(query1);
         } catch(Exception e) {
             e.printStackTrace();
@@ -137,7 +136,7 @@ public class PrintMetrics extends HttpServlet {
                 stmt.executeUpdate(sql);
                 System.out.println("Database created successfully...");
 
-                sql = "CREATE TABLE MyMETRICS.metricValues(ID int NOT NULL AUTO_INCREMENT, SEQUENCE_NUM int, METRIC_NAME varchar(255) NOT NULL," +
+                sql = "CREATE TABLE MyMETRICS.metricValues(ID int NOT NULL AUTO_INCREMENT, METRIC_RECORD_SEQUENCE, METRIC_NAME varchar(255) NOT NULL," +
                       " METRIC_VALUE varchar(255) NOT NULL, METRIC_INSTANCE varchar(255), RECORD_TIME DATETIME, PRIMARY KEY(ID));"; 
                 
                 stmt.executeUpdate(sql);
