@@ -18,7 +18,7 @@ package org.jboss.metrics.automatedmetricsjavase;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
-import java.util.Map;
+import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParams;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 
 /**
@@ -26,7 +26,7 @@ import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties
  * @author Panagiotis Sotiropoulos
  */
 public class ParseDbQuery {
-    public static String parse(String[] queryParams, Object[] metricValues, Object target, String group){
+    public static String parse(String[] queryParams, Object[] metricValues, Object target, String group, CodeParams cp){
         String query = "";
         
         try {
@@ -45,6 +45,40 @@ public class ParseDbQuery {
                     i++;
                     queryParamNum --;
                 }
+                
+                while (query.contains("~")) {
+                    int index1 = query.indexOf("~");
+                    int index2 = query.indexOf("~", index1+1);
+
+                    String stringParam = query.substring(index1, index2+1);
+                    if (cp!=null)
+                        query = query.replaceAll(stringParam, cp.getStringCodeParam(stringParam.replaceAll("~", "")));
+                    else
+                        query = query.replaceAll(stringParam, "");
+                }
+                
+                while (query.contains("#")) {
+                    int index1 = query.indexOf("#");
+                    int index2 = query.indexOf("#", index1+1);
+                    String stringParam = query.substring(index1, index2+1);
+                    if (cp!=null)
+                        query = query.replaceAll(stringParam, String.valueOf(cp.getIntegerCodeParam(stringParam.replaceAll("#", ""))));
+                    else
+                        query = query.replaceAll(stringParam, "NULL");
+                    
+                }
+                
+                while (query.contains("**")) {
+                    int index1 = query.indexOf("**");
+                    int index2 = query.indexOf("**", index1+1);
+
+                    String stringParam = query.substring(index1, index2+1);
+                    if (cp!=null)
+                        query = query.replaceAll(stringParam, String.valueOf(cp.getDoubleCodeParam(stringParam.replaceAll("**", ""))));
+                    else
+                        query = query.replaceAll(stringParam, "NULL");
+                }
+                
                 query = query.replace("{instance}", target.toString());
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 GregorianCalendar calendar = new GregorianCalendar();

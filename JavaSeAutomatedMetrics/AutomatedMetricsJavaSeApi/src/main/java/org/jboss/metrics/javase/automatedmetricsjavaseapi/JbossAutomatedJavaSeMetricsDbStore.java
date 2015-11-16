@@ -16,9 +16,12 @@
  */
 package org.jboss.metrics.javase.automatedmetricsjavaseapi;
 
+import com.rits.cloning.Cloner;
 import java.sql.SQLException;
 import org.jboss.metrics.automatedmetricsjavase.DBStoreCollection;
 import org.jboss.metrics.automatedmetricsjavase.DBStoreInstance;
+import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParams;
+import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParamsCollection;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 
 /**
@@ -29,11 +32,19 @@ public class JbossAutomatedJavaSeMetricsDbStore {
 
     private final static Object dbLock = new Object();
     
-    public static void metricsDbStore(final Object instance, final Object[] values, final String group, final String statementName, final String[] queryUpdateDB) throws Exception {
+    public static void metricsDbStore(final Object instance, final Object[] values, final String group, final String statementName, final String[] queryUpdateDB, final String metricUser) throws Exception {
         String dataBaseStorage = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getDatabaseStore();
         
         try {
             if (dataBaseStorage != null && Boolean.parseBoolean(dataBaseStorage)) {
+                CodeParams cp = null;
+                if (CodeParamsCollection.getCodeParamsCollection().existsCodeParamsInstance(metricUser)) {
+                    cp = CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(metricUser);
+                }
+                    
+                Cloner cloner = new Cloner();
+                final CodeParams cParams = cloner.deepClone(cp);
+                    
                 new Thread() {
                     public void run() {
                         DBStoreInstance dBStoreInstance;
@@ -46,7 +57,7 @@ public class JbossAutomatedJavaSeMetricsDbStore {
                         }
 
                         try {
-                            dBStoreInstance.dbStore(queryUpdateDB, instance, values, statementName, group);
+                            dBStoreInstance.dbStore(queryUpdateDB, instance, values, statementName, group, cParams);
                         } catch (IllegalArgumentException | IllegalAccessException | SQLException ex) {
                             ex.printStackTrace();
                         }

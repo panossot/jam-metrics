@@ -9,18 +9,17 @@
     </parent>
 
     <groupId>org.jboss.metrics</groupId>
-    <artifactId>AutomatedMetricsSeApiTest3</artifactId>
+    <artifactId>AutomatedMetricsJavaSeApiTest4</artifactId>
     <version>1.0.3.Final-SNAPSHOT</version>
     <packaging>jar</packaging>
     
-    <name>AutomatedMetricsJavaSeApiTest3</name>
+    <name>AutomatedMetricsJavaSeApiTest4</name>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
-        <env.MAVEN_OPTS>-DmetricsXmlPath=/home/panos -DrhqMonitoring=true</env.MAVEN_OPTS>
     </properties>
     
     <dependencies>
@@ -51,16 +50,6 @@
                         <configuration>  
                             <killAfter>-1</killAfter>
                             <mainClass>org.jboss.metrics.automatedmetricsjavaseapitest.AutomatedMetricsJavaSeApiTest</mainClass>  
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>metricsXmlPath</key>
-                                    <value>/home/panos</value>
-                                </systemProperty>
-                                <systemProperty>
-                                    <key>rhqMonitoring</key>
-                                    <value>true</value>
-                                </systemProperty>
-                            </systemProperties>
                         </configuration>  
                     </execution>  
                 </executions>  
