@@ -18,7 +18,7 @@ package org.jboss.metrics.automatedmetricsjavaseapitest;
 
 import org.jboss.metrics.javase.automatedmetricsjavaseapi.JbossAutomatedJavaSeMetrics;
 import org.jboss.metrics.javase.automatedmetricsjavaseapi.JbossAutomatedJavaSeMetricsDbStore;
-import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParamsCollection;
+import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParamsCollection;
 
 
 

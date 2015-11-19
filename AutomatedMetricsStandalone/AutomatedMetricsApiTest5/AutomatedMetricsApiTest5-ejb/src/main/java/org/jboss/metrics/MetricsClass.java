@@ -19,7 +19,7 @@ package org.jboss.metrics;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.jboss.metrics.automatedmetricsapi.DBStore;
 import org.jboss.metrics.automatedmetricsapi.Metric;
-import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParamsCollection;
+import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParamsCollection;
 
 /**
  *

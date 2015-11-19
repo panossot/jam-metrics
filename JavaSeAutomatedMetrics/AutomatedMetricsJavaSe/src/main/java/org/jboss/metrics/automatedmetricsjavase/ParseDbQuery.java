@@ -18,7 +18,7 @@ package org.jboss.metrics.automatedmetricsjavase;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
-import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParams;
+import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParams;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 
 /**

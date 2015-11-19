@@ -28,8 +28,8 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.jboss.metrics.automatedmetricsapi.DBStore;
 import org.jboss.metrics.automatedmetricsapi.Metric;
-import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParams;
-import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParamsCollection;
+import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParams;
+import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParamsCollection;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
@@ -140,17 +140,22 @@ public class MetricInterceptor {
                 final MetricsCache mCI = metricsCacheInstance;
                 if (dataBaseStorage != null && Boolean.parseBoolean(dataBaseStorage)) {
                     final Map<String, Object> metricValuesCloned = (Map<String, Object>)metricValuesInternal.clone();
+                    Field metricUser = null;
                     CodeParams cp = null;
+                    String mUser = "default";
                     try {
-                        Field metricUser = method.getDeclaringClass().getDeclaredField("metricUser");
+                        metricUser = method.getDeclaringClass().getDeclaredField("metricUser");
                         if (metricUser != null) {
                             metricUser.setAccessible(true);
+                            mUser = metricUser.get(target).toString();
                             if (CodeParamsCollection.getCodeParamsCollection().existsCodeParamsInstance(metricUser.get(target).toString()))
                                 cp = CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(metricUser.get(target).toString());
                         }
                     }catch(Exception e) {
                         // Probably the metric user is not defined. Go on with the execution of the database storage.
                     }
+                    
+                    final String user = mUser;
                     Cloner cloner = new Cloner();
                     final CodeParams cParams = cloner.deepClone(cp);
                     new Thread() {
@@ -165,7 +170,7 @@ public class MetricInterceptor {
                             }
 
                             try {
-                                dBStoreInstance.dbStore(dbStoreAnnotation, target, metricValuesCloned, group, cParams);
+                                dBStoreInstance.dbStore(dbStoreAnnotation, target, metricValuesCloned, group, cParams, user);
                             } catch (IllegalArgumentException | IllegalAccessException | SQLException ex) {
                                 ex.printStackTrace();
                             }

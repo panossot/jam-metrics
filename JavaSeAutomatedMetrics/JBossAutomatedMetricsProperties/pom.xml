@@ -10,7 +10,7 @@
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>JBossAutomatedMetricsProperties</artifactId>
-    <version>1.0.3.Final-SNAPSHOT</version>
+    <version>1.0.2.Final-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>JBossAutomatedMetricsProperties</name>

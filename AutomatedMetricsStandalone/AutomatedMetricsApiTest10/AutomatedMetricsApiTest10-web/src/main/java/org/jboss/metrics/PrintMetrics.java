@@ -23,8 +23,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jboss.metrics.automatedmetricsapi.MetricsCacheApi;
 import org.jboss.metrics.automatedmetricsapi.MetricsPropertiesApi;
-import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParamsCollection;
+import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParamsCollection;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
 import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 
@@ -102,13 +100,16 @@ public class PrintMetrics extends HttpServlet {
         rhqScheduleIds.put("count2", "11392");
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setRhqMonitoring("false");
-        metricProperties.setRhqMonitoringRefreshRate(300);
+        metricProperties.setRhqMonitoringRefreshRate(100);
         metricProperties.setCacheStore("true");
         metricProperties.setCacheMaxSize(10000);
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
-        metricProperties.setDatabaseStore("false");
-        CodeParamsCollection.getCodeParamsCollection().addCodeParamsInstance("Niki");
+        metricProperties.setDatabaseStore("true");
+        HashMap<String,Integer> dbUpdateRates = new HashMap<>();
+        dbUpdateRates.put("Niki", 300);
+        metricProperties.setUpdateRateOfDbQueries(dbUpdateRates);
+        metricProperties.addUserName("Niki");
         try {
             Connection  connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "panos");
             Statement stmt = connection.createStatement();

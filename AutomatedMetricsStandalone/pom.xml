@@ -56,6 +56,7 @@
         <module>AutomatedMetricsApiTest10</module>
         <module>JbossAutomatedMetricsLibray</module>
         <module>JBossAutomatedMetricsProperties</module>
+        <module>JBossAutomatedMetricsLibrary2</module>
     </modules>
     
 </project>

@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.sql.Statement;
 import java.util.HashMap;
 import javax.swing.JFrame;
+import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParamsCollection;
 import org.math.plot.Plot2DPanel;
 
 /**
@@ -35,6 +36,7 @@ public class MetricProperties {
     private String metricPlot = "false";
     private HashMap<String,Statement> databaseStatement;
     private HashMap<String,String> updateDbQueries;
+    private HashMap<String,Integer> updateRateOfDbQueries;
     private HashMap<String,Plot2DPanel> plots;
     private HashMap<String,JFrame> frames;
     private HashMap<String,Color> colors;
@@ -49,6 +51,7 @@ public class MetricProperties {
     public MetricProperties() {
         rhqScheduleIds = new HashMap<>();
         databaseStatement = new HashMap<>();
+        updateRateOfDbQueries = new HashMap<>();
         updateDbQueries = new HashMap<>();
         plots = new HashMap<>();
         colors = new HashMap<>();
@@ -139,11 +142,30 @@ public class MetricProperties {
         this.databaseStatement = databaseStatement;
     }
 
-    public synchronized HashMap<String, String> getUpdateDbQueries() {
+    public synchronized HashMap<String, Integer> getUpdateRateOfDbQueries() {
+        return updateRateOfDbQueries;
+    }
+    
+    public synchronized int getUpdateRateOfDbQuery(String user) {
+        if (!this.updateRateOfDbQueries.containsKey(user))
+            this.updateRateOfDbQueries.put(user, 1);
+        
+        return updateRateOfDbQueries.get(user);
+    }
+
+    public synchronized void setUpdateRateOfDbQueries(HashMap<String, Integer> updateDbQueries) {
+        this.updateRateOfDbQueries = updateDbQueries;
+    }
+    
+    public synchronized void setUpdateRateOfDbQuery(String user, int value) {
+        this.updateRateOfDbQueries.put(user,value);
+    }
+
+    public HashMap<String, String> getUpdateDbQueries() {
         return updateDbQueries;
     }
 
-    public synchronized void setUpdateDbQueries(HashMap<String, String> updateDbQueries) {
+    public void setUpdateDbQueries(HashMap<String, String> updateDbQueries) {
         this.updateDbQueries = updateDbQueries;
     }
 
@@ -219,12 +241,16 @@ public class MetricProperties {
         this.rhqMonitoringRefreshRate = rhqMonitoringRefreshRate;
     }
 
-    public int getCacheMaxSize() {
+    public synchronized int getCacheMaxSize() {
         return cacheMaxSize;
     }
 
-    public void setCacheMaxSize(int cacheMaxSize) {
+    public synchronized void setCacheMaxSize(int cacheMaxSize) {
         this.cacheMaxSize = cacheMaxSize;
+    }
+    
+    public void addUserName(String user) {
+        CodeParamsCollection.getCodeParamsCollection().addCodeParamsInstance(user);
     }
 
 }

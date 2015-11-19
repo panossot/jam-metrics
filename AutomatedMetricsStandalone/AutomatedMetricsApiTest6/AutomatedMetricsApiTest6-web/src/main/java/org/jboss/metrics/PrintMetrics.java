@@ -74,8 +74,8 @@ public class PrintMetrics extends HttpServlet {
     
     private void initializeMetricProperties() {
         HashMap<String,String> rhqScheduleIds = new HashMap<String,String>();
-        rhqScheduleIds.put("count", "11401");
-        rhqScheduleIds.put("count2", "11402");
+        rhqScheduleIds.put("count", "11391");
+        rhqScheduleIds.put("count2", "11392");
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setRhqMonitoring("false");
         metricProperties.setCacheStore("true");

@@ -23,7 +23,6 @@ import java.sql.Statement;
 import java.util.HashMap;
 import org.jboss.metrics.javase.automatedmetricsjavaseapi.MetricsCacheApi;
 import org.jboss.metrics.javase.automatedmetricsjavaseapi.MetricsPropertiesApi;
-import org.jboss.metrics.jbossautomatedmetricslibrary.CodeParamsCollection;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
 import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 
@@ -70,7 +69,10 @@ public class AutomatedMetricsJavaSeApiTest {
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         metricProperties.setDatabaseStore("false");
-        CodeParamsCollection.getCodeParamsCollection().addCodeParamsInstance("Niki");
+        HashMap<String,Integer> dbUpdateRates = new HashMap<>();
+        dbUpdateRates.put("Niki", 3);
+        metricProperties.setUpdateRateOfDbQueries(dbUpdateRates);
+        metricProperties.addUserName("Niki");
         try {
             Connection  connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "panos");
             Statement stmt = connection.createStatement();

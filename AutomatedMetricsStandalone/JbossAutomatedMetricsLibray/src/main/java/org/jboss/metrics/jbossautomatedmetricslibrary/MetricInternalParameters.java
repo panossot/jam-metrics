@@ -26,12 +26,14 @@ public class MetricInternalParameters {
     private HashMap<String,Boolean> plotRefreshed;
     private HashMap<MetricOfPlot,Integer> plotedCount;
     private HashMap<String,Integer> rhqMonitoringCount;
+    private HashMap<String,HashMap<String,DbQueries>> dbQueries;
 
     public MetricInternalParameters() {
         this.plotHandler = new HashMap<>();
         this.plotRefreshed = new HashMap<>();
         this.plotedCount = new HashMap<>();
         this.rhqMonitoringCount = new HashMap<>();
+        this.dbQueries = new HashMap<>();
     }
 
     public synchronized HashMap<String, Integer> getPlotHandler() {
@@ -93,4 +95,23 @@ public class MetricInternalParameters {
     public synchronized void resetRhqMonitoringCount(String metric) {
         this.rhqMonitoringCount.put(metric, 0);
     }
+
+    public synchronized DbQueries getDbQueries(String user, String statement) {
+        if (user == null) 
+            user = "default";
+        addDbQueries(user, statement);
+        return dbQueries.get(user).get(statement);
+    }
+
+    public synchronized void addDbQueries(String user, String statement) {
+        if (user == null) 
+            user = "default";
+        
+        if (!this.dbQueries.containsKey(user))
+            this.dbQueries.put(user, new HashMap<String, DbQueries>());
+        
+        if (!this.dbQueries.get(user).containsKey(statement))
+            this.dbQueries.get(user).put(statement, new DbQueries(statement));
+    }
+
 }
