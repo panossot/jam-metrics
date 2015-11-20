@@ -69,9 +69,7 @@ public class AutomatedMetricsJavaSeApiTest {
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         metricProperties.setDatabaseStore("false");
-        HashMap<String,Integer> dbUpdateRates = new HashMap<>();
-        dbUpdateRates.put("Niki", 3);
-        metricProperties.setUpdateRateOfDbQueries(dbUpdateRates);
+        metricProperties.setUpdateRateOfDbQuery("StoreDBMetric", 3);
         metricProperties.addUserName("Niki");
         try {
             Connection  connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "panos");

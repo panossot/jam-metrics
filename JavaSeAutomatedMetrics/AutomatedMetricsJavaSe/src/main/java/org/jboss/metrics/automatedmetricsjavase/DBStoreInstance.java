@@ -46,7 +46,7 @@ public class DBStoreInstance {
         synchronized(dbLock){
             dbQueries.addDbStorageQuery(statementName, query);
             int queryNum = dbQueries.getDbStorageCount(statementName);
-            int updateQueryNum = mProperties.getUpdateRateOfDbQuery(user);
+            int updateQueryNum = mProperties.getUpdateRateOfDbQuery(queryUpdateDB[0]);
         
             if (queryNum>=updateQueryNum) {
                 Statement stmt = mProperties.getDatabaseStatement().get(statementName);

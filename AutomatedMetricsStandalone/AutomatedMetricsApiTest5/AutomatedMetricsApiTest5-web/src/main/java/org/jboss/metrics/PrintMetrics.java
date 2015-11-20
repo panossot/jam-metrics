@@ -107,7 +107,7 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         metricProperties.setDatabaseStore("false");
         HashMap<String,Integer> dbUpdateRates = new HashMap<>();
-        dbUpdateRates.put("Niki", 300);
+        dbUpdateRates.put("StoreDBMetric", 300);
         metricProperties.setUpdateRateOfDbQueries(dbUpdateRates);
         metricProperties.addUserName("Niki");
         try {

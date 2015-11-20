@@ -146,19 +146,19 @@ public class MetricProperties {
         return updateRateOfDbQueries;
     }
     
-    public synchronized int getUpdateRateOfDbQuery(String user) {
-        if (!this.updateRateOfDbQueries.containsKey(user))
-            this.updateRateOfDbQueries.put(user, 1);
+    public synchronized int getUpdateRateOfDbQuery(String statement) {
+        if (!this.updateRateOfDbQueries.containsKey(statement))
+            this.updateRateOfDbQueries.put(statement, 1);
         
-        return updateRateOfDbQueries.get(user);
+        return updateRateOfDbQueries.get(statement);
     }
 
     public synchronized void setUpdateRateOfDbQueries(HashMap<String, Integer> updateDbQueries) {
         this.updateRateOfDbQueries = updateDbQueries;
     }
     
-    public synchronized void setUpdateRateOfDbQuery(String user, int value) {
-        this.updateRateOfDbQueries.put(user,value);
+    public synchronized void setUpdateRateOfDbQuery(String statement, int value) {
+        this.updateRateOfDbQueries.put(statement,value);
     }
 
     public HashMap<String, String> getUpdateDbQueries() {
