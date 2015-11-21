@@ -16,7 +16,6 @@
  */
 package org.jboss.metrics.automatedmetrics;
 
-import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricObject;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
 import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;

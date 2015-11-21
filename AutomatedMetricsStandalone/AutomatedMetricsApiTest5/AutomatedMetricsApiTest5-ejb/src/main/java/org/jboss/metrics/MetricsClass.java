@@ -19,6 +19,7 @@ package org.jboss.metrics;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.jboss.metrics.automatedmetricsapi.DBStore;
 import org.jboss.metrics.automatedmetricsapi.Metric;
+import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParams;
 import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParamsCollection;
 
 /**
@@ -32,6 +33,8 @@ public class MetricsClass {
     private static int count2 = 0;
     private static AtomicInteger i;
     private String metricUser="Niki";
+    
+    private CodeParams cp;
 
     public MetricsClass(){
         countAtomic = new AtomicInteger(1);

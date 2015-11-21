@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.sql.Statement;
 import java.util.HashMap;
 import javax.swing.JFrame;
-import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParamsCollection;
 import org.math.plot.Plot2DPanel;
 
 /**
@@ -33,6 +32,7 @@ public class MetricProperties {
     private String cacheStore = "false";
     private int cacheMaxSize = Integer.MAX_VALUE;
     private String databaseStore = "false";
+    private String filterMetrics = "false";
     private String metricPlot = "false";
     private HashMap<String,Statement> databaseStatement;
     private HashMap<String,String> updateDbQueries;
@@ -72,6 +72,14 @@ public class MetricProperties {
 
     public synchronized void setCacheStore(String cacheStore) {
         this.cacheStore = cacheStore;
+    }
+
+    public String getFilterMetrics() {
+        return filterMetrics;
+    }
+
+    public void setFilterMetrics(String filterMetrics) {
+        this.filterMetrics = filterMetrics;
     }
 
     public synchronized HashMap<String, String> getRhqScheduleIds() {
@@ -248,9 +256,4 @@ public class MetricProperties {
     public synchronized void setCacheMaxSize(int cacheMaxSize) {
         this.cacheMaxSize = cacheMaxSize;
     }
-    
-    public void addUserName(String user) {
-        CodeParamsCollection.getCodeParamsCollection().addCodeParamsInstance(user);
-    }
-
 }

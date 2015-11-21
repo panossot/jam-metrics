@@ -21,7 +21,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
+import org.jboss.metrics.javase.automatedmetricsjavaseapi.CodeParamsApi;
 import org.jboss.metrics.javase.automatedmetricsjavaseapi.MetricsCacheApi;
+
 import org.jboss.metrics.javase.automatedmetricsjavaseapi.MetricsPropertiesApi;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
 import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
@@ -70,7 +72,7 @@ public class AutomatedMetricsJavaSeApiTest {
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         metricProperties.setDatabaseStore("false");
         metricProperties.setUpdateRateOfDbQuery("StoreDBMetric", 3);
-        metricProperties.addUserName("Niki");
+        CodeParamsApi.addUserName("Niki");
         try {
             Connection  connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "panos");
             Statement stmt = connection.createStatement();

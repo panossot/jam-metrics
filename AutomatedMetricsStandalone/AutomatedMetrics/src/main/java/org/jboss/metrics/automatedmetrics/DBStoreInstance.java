@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import org.jboss.logging.Logger;
 import org.jboss.metrics.automatedmetricsapi.DBStore;
-import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParams;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DbQueries;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
+import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParams;
 import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 
 /**

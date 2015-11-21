@@ -92,12 +92,19 @@ public class CodeParams {
         return filterParams.get(name).get();
     }
     
+    public synchronized boolean getFilterParam(String name, boolean defaultAllow) {
+        if (!filterParams.containsKey(name))
+            return defaultAllow;
+        
+        return filterParams.get(name).get();
+    }
+    
     public synchronized void putFilterParam(String name, boolean value) {
         this.filterParams.put(name, new AtomicBoolean(value));
     }
 
-    public synchronized void setFilterParam(String name, boolean allow) {
-        this.filterParams.get(name).set(allow);
+    public synchronized void setFilterParam(String name, boolean allow) {                    
+        this.filterParams.put(name,new AtomicBoolean(allow));
     }
 
 }

@@ -39,7 +39,8 @@ public class CodeParamsCollection {
     }
     
     public synchronized void addCodeParamsInstance(String name) {
-        this.codeParamsCollectionInstances.put(name, new CodeParams());
+        if (!this.codeParamsCollectionInstances.containsKey(name))
+            this.codeParamsCollectionInstances.put(name, new CodeParams());
     }
     
     public synchronized void removeCodeParamsInstance(String name) {

@@ -28,11 +28,11 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.jboss.metrics.automatedmetricsapi.DBStore;
 import org.jboss.metrics.automatedmetricsapi.Metric;
-import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParams;
-import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParamsCollection;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCache;
 import org.jboss.metrics.jbossautomatedmetricslibrary.MetricsCacheCollection;
+import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParams;
+import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParamsCollection;
 import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 
 /**

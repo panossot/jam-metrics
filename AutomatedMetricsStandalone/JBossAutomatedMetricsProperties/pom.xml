@@ -60,11 +60,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.metrics</groupId>
-            <artifactId>JBossAutomatedMetricsLibrary2</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.github.yannrichet</groupId>
             <artifactId>JMathPlot</artifactId>
             <version>1.0.1</version>
