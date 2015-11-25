@@ -131,53 +131,6 @@ public class MetricInterceptor {
                     }.start();
                 }
             }
-
-            final DBStore dbStoreAnnotation = method.getAnnotation(DBStore.class);
-            if (dbStoreAnnotation != null) {  
-                final String group = dbStoreAnnotation.groupName();
-                MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
-                String dataBaseStorage = properties.getDatabaseStore();
-                final MetricsCache mCI = metricsCacheInstance;
-                if (dataBaseStorage != null && Boolean.parseBoolean(dataBaseStorage)) {
-                    final Map<String, Object> metricValuesCloned = (Map<String, Object>)metricValuesInternal.clone();
-                    Field metricUser = null;
-                    CodeParams cp = null;
-                    String mUser = "default";
-                    try {
-                        metricUser = method.getDeclaringClass().getDeclaredField("metricUser");
-                        if (metricUser != null) {
-                            metricUser.setAccessible(true);
-                            mUser = metricUser.get(target).toString();
-                            if (CodeParamsCollection.getCodeParamsCollection().existsCodeParamsInstance(metricUser.get(target).toString()))
-                                cp = CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(metricUser.get(target).toString());
-                        }
-                    }catch(Exception e) {
-                        // Probably the metric user is not defined. Go on with the execution of the database storage.
-                    }
-                    
-                    final String user = mUser;
-                    Cloner cloner = new Cloner();
-                    final CodeParams cParams = cloner.deepClone(cp);
-                    new Thread() {
-                        public void run() {
-                            DBStoreInstance dBStoreInstance;
-                            synchronized(dbLock) {
-                                dBStoreInstance = DBStoreCollection.getDBStoreCollection().getDbStoreInstance(group);
-                                if (dBStoreInstance == null) {
-                                    dBStoreInstance = new DBStoreInstance();
-                                    DBStoreCollection.getDBStoreCollection().addDbStoreInstance(group, dBStoreInstance);
-                                }
-                            }
-
-                            try {
-                                dBStoreInstance.dbStore(dbStoreAnnotation, target, metricValuesCloned, group, cParams, user);
-                            } catch (IllegalArgumentException | IllegalAccessException | SQLException ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    }.start();
-                }
-            }
         } catch(Exception e) {
             e.printStackTrace();
         }

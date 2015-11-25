@@ -5,5 +5,6 @@
        version="1.1" bean-discovery-mode="all">
     <interceptors>
         <class>org.jboss.metrics.automatedmetrics.MetricInterceptor</class>
+        <class>org.jboss.metrics.automatedmetrics.DBStoreInterceptor</class>
     </interceptors>
 </beans>
