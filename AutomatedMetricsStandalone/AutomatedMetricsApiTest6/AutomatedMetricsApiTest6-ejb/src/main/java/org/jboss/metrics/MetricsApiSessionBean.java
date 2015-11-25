@@ -35,7 +35,7 @@ public class MetricsApiSessionBean {
     }
 
     @Metric(fieldName = {"count"}, groupName = "myTestGroup")
-    @DBStore(groupName = "myTestGroup", queryUpdateDB = {"StoreDBMetric","count"}, statementName = "statement_1")
+    @DBStore(groupName = "myTestGroup", queryUpdateDB = {"StoreDBMetric","count"}, statementName = "statement_1", sync=true)
     public int countMethod() {
         count++;
 

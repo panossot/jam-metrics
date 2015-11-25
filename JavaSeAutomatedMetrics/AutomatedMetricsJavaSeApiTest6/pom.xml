@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jboss.as</groupId>
+        <artifactId>jboss-as-automated-metrics-javase</artifactId>
+        <version>1.0.3.Final-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.jboss.metrics</groupId>
+    <artifactId>AutomatedMetricsJavaSeApiTest6</artifactId>
+    <version>1.0.3.Final-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    
+    <name>AutomatedMetricsJavaSeApiTest6</name>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.metrics</groupId>
+            <artifactId>AutomatedMetricsJavaSeApi</artifactId>
+            <version>${project.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>  
+                <groupId>org.codehaus.mojo</groupId>  
+                <artifactId>exec-maven-plugin</artifactId> 
+                <executions>  
+                    <execution>  
+                        <phase>test</phase>  
+                        <goals>  
+                            <goal>java</goal>  
+                        </goals>  
+                        <configuration>  
+                            <killAfter>-1</killAfter>
+                            <mainClass>org.jboss.metrics.automatedmetricsjavaseapitest.AutomatedMetricsJavaSeApiTest</mainClass>  
+                        </configuration>  
+                    </execution>  
+                </executions>  
+            </plugin>  
+
+        </plugins>
+    </build>
+
+</project>

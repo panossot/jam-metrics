@@ -6,5 +6,6 @@
     <interceptors>
         <class>org.jboss.metrics.automatedmetrics.MetricInterceptor</class>
         <class>org.jboss.metrics.automatedmetrics.DBStoreInterceptor</class>
+        <class>org.jboss.metrics.automatedmetrics.DBStoreSyncInterceptor</class>
     </interceptors>
 </beans>

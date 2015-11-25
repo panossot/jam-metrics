@@ -19,7 +19,6 @@ package org.jboss.metrics.automatedmetricsapi;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import java.lang.annotation.Inherited;
-import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
@@ -41,4 +40,6 @@ public @interface DBStore {
     String statementName() default "";
     @Nonbinding
     String[] queryUpdateDB() default {};
+    @Nonbinding
+    boolean sync() default false;
 }

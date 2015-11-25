@@ -81,7 +81,7 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.setCacheStore("true");
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
-        metricProperties.setDatabaseStore("true");
+        metricProperties.setDatabaseStore("false");
         try {
             Connection  connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "panos");
             Statement stmt = connection.createStatement();

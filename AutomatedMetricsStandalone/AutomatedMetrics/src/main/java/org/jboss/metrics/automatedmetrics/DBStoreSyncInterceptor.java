@@ -17,7 +17,6 @@
 
 package org.jboss.metrics.automatedmetrics;
 
-import com.rits.cloning.Cloner;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -38,26 +37,26 @@ import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
  */
 @DBStore
 @Interceptor
-public class DBStoreInterceptor {
+public class DBStoreSyncInterceptor {
 
     private Map<String, Field> metricFields = new HashMap();
     private final static Object dbLock = new Object();
 
     @AroundInvoke
-    public Object dbStoreInterceptor(InvocationContext ctx) throws Exception {
+    public Object dbStoreSyncInterceptor(InvocationContext ctx) throws Exception {
         Object result = ctx.proceed();
         Method method = ctx.getMethod();
         final Object target = ctx.getTarget();
             
         try {
-            final DBStore dbStoreAnnotation = method.getAnnotation(DBStore.class);
+            DBStore dbStoreAnnotation = method.getAnnotation(DBStore.class);
             if (dbStoreAnnotation != null) {  
-                final String group = dbStoreAnnotation.groupName();
+                String group = dbStoreAnnotation.groupName();
                 boolean sync = dbStoreAnnotation.sync();
                 MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
                 String dataBaseStorage = properties.getDatabaseStore();
-                if (dataBaseStorage != null && Boolean.parseBoolean(dataBaseStorage) && !sync) {
-                    final HashMap<String, Object> metricValues = new HashMap();
+                if (dataBaseStorage != null && Boolean.parseBoolean(dataBaseStorage) && sync) {
+                    HashMap<String, Object> metricValues = new HashMap();
                     int queryUpdateDBSize = dbStoreAnnotation.queryUpdateDB().length;
                             
                     for (int i = 1; i < queryUpdateDBSize; i++) {
@@ -81,27 +80,20 @@ public class DBStoreInterceptor {
                         // Probably the metric user is not defined. Go on with the execution of the database storage.
                     }
                     
-                    final String user = mUser;
-                    Cloner cloner = new Cloner();
-                    final CodeParams cParams = cloner.deepClone(cp);
-                    new Thread() {
-                        public void run() {
-                            DBStoreInstance dBStoreInstance;
-                            synchronized(dbLock) {
-                                dBStoreInstance = DBStoreCollection.getDBStoreCollection().getDbStoreInstance(group);
-                                if (dBStoreInstance == null) {
-                                    dBStoreInstance = new DBStoreInstance();
-                                    DBStoreCollection.getDBStoreCollection().addDbStoreInstance(group, dBStoreInstance);
-                                }
-                            }
-
-                            try {
-                                dBStoreInstance.dbStore(dbStoreAnnotation, target, metricValues, group, cParams, user);
-                            } catch (IllegalArgumentException | IllegalAccessException | SQLException ex) {
-                                ex.printStackTrace();
-                            }
+                    DBStoreInstance dBStoreInstance;
+                    synchronized(dbLock) {
+                        dBStoreInstance = DBStoreCollection.getDBStoreCollection().getDbStoreInstance(group);
+                        if (dBStoreInstance == null) {
+                            dBStoreInstance = new DBStoreInstance();
+                            DBStoreCollection.getDBStoreCollection().addDbStoreInstance(group, dBStoreInstance);
                         }
-                    }.start();
+                    }
+
+                    try {
+                        dBStoreInstance.dbStore(dbStoreAnnotation, target, metricValues, group, cp, mUser);
+                    } catch (IllegalArgumentException | IllegalAccessException | SQLException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         } catch(Exception e) {
