@@ -16,6 +16,7 @@
  */
 package org.jboss.metrics.automatedmetricsapi;
 
+import com.rits.cloning.Cloner;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -72,6 +73,34 @@ public class MetricsCacheApi {
         }
         
         return output;
+    }
+    
+    public static synchronized ArrayList<Object> getMetricsCacheValuesByKey(String deployment, String key) {
+        ArrayList<Object> cacheValues;
+        cacheValues = getMetricsCache(deployment).get(key);
+        
+        return cacheValues;
+    }
+    
+    // Dummy comparison for test cases.
+    public static synchronized boolean compareMetricsCacheValuesByKey(String deployment, String key, ArrayList<Object> valuesToCompare) {
+        boolean isEqual = true;
+        ArrayList<Object> cacheValues;
+        Cloner cloner = new Cloner();
+        cacheValues = cloner.deepClone(getMetricsCache(deployment).get(key));
+        
+        for (Object valueComp : valuesToCompare) {
+            for (Object value : cacheValues) {
+                if (value.toString().compareTo(valueComp.toString()) == 0) {
+                    isEqual = true;
+                    cacheValues.remove(value);
+                    break;
+                }
+                isEqual = false;
+            }
+        }
+        
+        return isEqual;
     }
     
     public static synchronized void cleanMetricsCache(String group)

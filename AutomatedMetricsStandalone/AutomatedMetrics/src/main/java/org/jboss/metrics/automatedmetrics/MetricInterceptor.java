@@ -45,7 +45,6 @@ public class MetricInterceptor {
 
     private Map<String, Field> metricFields = new HashMap();
     private final static Object rhqLock = new Object();
-    private final static Object dbLock = new Object();
     private final static Object cacheLock = new Object();
 
     @AroundInvoke
