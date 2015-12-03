@@ -17,7 +17,6 @@
 
 package org.jboss.metrics.automatedmetrics;
 
-import com.rits.cloning.Cloner;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -82,8 +81,7 @@ public class DBStoreInterceptor {
                     }
                     
                     final String user = mUser;
-                    Cloner cloner = new Cloner();
-                    final CodeParams cParams = cloner.deepClone(cp);
+                    final CodeParams cParams = cp.deepClone();
                     new Thread() {
                         public void run() {
                             DBStoreInstance dBStoreInstance;

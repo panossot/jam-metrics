@@ -17,6 +17,7 @@ package org.jboss.metrics.jbossautomatedmetricslibrary2;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -80,7 +81,7 @@ public class CodeParams {
         this.integerCodeParams.put(name, value);
     }
     
-    public synchronized void putDoubleCodeParams(String name, double value) {
+    public synchronized void putDoubleCodeParam(String name, double value) {
         this.doubleCodeParams.put(name, value);
     }
 
@@ -107,4 +108,25 @@ public class CodeParams {
         this.filterParams.put(name,new AtomicBoolean(allow));
     }
 
+    public synchronized CodeParams deepClone() {
+        CodeParams newCodeParams = new CodeParams();
+        
+        Set<String> keys = this.getFilterParams().keySet();
+        for (String key : keys)
+            newCodeParams.putFilterParam(key,this.getFilterParam(key));
+        
+        keys = this.getIntegerCodeParams().keySet();
+        for (String key : keys)
+            newCodeParams.putIntegerCodeParam(key,this.getIntegerCodeParam(key));
+        
+        keys = this.getDoubleCodeParams().keySet();
+        for (String key : keys)
+            newCodeParams.putDoubleCodeParam(key,this.getDoubleCodeParam(key));
+        
+        keys = this.getStringCodeParams().keySet();
+        for (String key : keys)
+            newCodeParams.putStringCodeParam(key,this.getStringCodeParam(key));
+        
+        return newCodeParams;
+    }
 }
