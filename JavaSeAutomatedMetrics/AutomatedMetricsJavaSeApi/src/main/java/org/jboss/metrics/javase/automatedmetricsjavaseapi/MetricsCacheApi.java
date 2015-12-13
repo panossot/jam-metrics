@@ -74,6 +74,32 @@ public class MetricsCacheApi {
         return output;
     }
     
+    public static synchronized ArrayList<Object> getMetricsCacheValuesByKey(String deployment, String key) {
+        ArrayList<Object> cacheValues;
+        cacheValues = getMetricsCache(deployment).get(key);
+        
+        return cacheValues;
+    }
+    
+    // Dummy comparison for test cases.
+    public static synchronized boolean compareMetricsCacheValuesByKey(String deployment, String key, ArrayList<Object> valuesToCompare) {
+        boolean isEqual = true;
+        ArrayList<Object> cacheValues;
+        cacheValues = getMetricsCache(deployment).get(key);
+        
+        for (Object valueComp : valuesToCompare) {
+            for (Object value : cacheValues) {
+                if (value.toString().compareTo(valueComp.toString()) == 0) {
+                    isEqual = true;
+                    break;
+                }
+                isEqual = false;
+            }
+        }
+        
+        return isEqual;
+    }
+    
     public static synchronized void cleanMetricsCache(String group)
     {
         MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group).getMetricCache().clear();

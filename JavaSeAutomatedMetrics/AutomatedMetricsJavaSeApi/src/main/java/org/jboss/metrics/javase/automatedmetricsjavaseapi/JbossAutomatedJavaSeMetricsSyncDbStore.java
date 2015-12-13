@@ -16,7 +16,6 @@
  */
 package org.jboss.metrics.javase.automatedmetricsjavaseapi;
 
-import com.rits.cloning.Cloner;
 import java.sql.SQLException;
 import org.jboss.metrics.automatedmetricsjavase.DBStoreCollection;
 import org.jboss.metrics.automatedmetricsjavase.DBStoreInstance;

@@ -16,7 +16,6 @@
  */
 package org.jboss.metrics.javase.automatedmetricsjavaseapi;
 
-import com.rits.cloning.Cloner;
 import java.sql.SQLException;
 import org.jboss.metrics.automatedmetricsjavase.DBStoreCollection;
 import org.jboss.metrics.automatedmetricsjavase.DBStoreInstance;
@@ -48,9 +47,7 @@ public class JbossAutomatedJavaSeMetricsDbStore {
                     cp = CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(mUser);
                 }
                     
-                Cloner cloner = new Cloner();
-                final CodeParams cParams = cloner.deepClone(cp);
-                    
+                final CodeParams cParams = cp.deepClone();    
                 new Thread() {
                     public void run() {
                         DBStoreInstance dBStoreInstance;
