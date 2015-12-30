@@ -9,8 +9,8 @@
     </parent>
 
     <groupId>org.jboss.metrics</groupId>
-    <artifactId>JBossAutomatedMetricsProperties</artifactId>
-    <version>1.0.3.Final-SNAPSHOT</version>
+    <artifactId>jboss-automated-metrics-properties</artifactId>
+    <version>1.0.3.Final</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>

@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-    <artifactId>AutomatedMetricsApiTest5</artifactId>
+    <artifactId>AutomatedMetricsApiTest10</artifactId>
     <groupId>org.jboss.metrics</groupId>
-    <version>1.0.3.Final-SNAPSHOT</version>
+    <version>1.0.3.Final</version>
   </parent>
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>AutomatedMetricsApiTest10-web</artifactId>
-    <version>1.0.3.Final-SNAPSHOT</version>
+    <version>1.0.3.Final</version>
     <packaging>war</packaging>
 
     <name>AutomatedMetricsApiTest10-web</name>
@@ -22,18 +22,18 @@
     <dependencies>
         <dependency>
             <groupId>org.jboss.metrics</groupId>
-            <artifactId>AutomatedMetricsApi</artifactId>
+            <artifactId>automated-metrics-api</artifactId>
             <version>${project.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.jboss.metrics</groupId>
-            <artifactId>JBossAutomatedMetricsProperties</artifactId>
+            <artifactId>jboss-automated-metrics-properties</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.metrics</groupId>
-            <artifactId>AutomatedMetricsApiTest5-ejb</artifactId>
+            <artifactId>AutomatedMetricsApiTest10-ejb</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

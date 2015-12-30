@@ -8,8 +8,8 @@
     </parent>
 
     <groupId>org.jboss.metrics</groupId>
-    <artifactId>AutomatedMetrics</artifactId>
-    <version>1.0.3.Final-SNAPSHOT</version>
+    <artifactId>automated-metrics</artifactId>
+    <version>1.0.3.Final</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -54,7 +54,7 @@
     <dependencies>
         <dependency>
             <groupId>org.jboss.metrics</groupId>
-            <artifactId>AutomatedMetricsApi</artifactId>
+            <artifactId>automated-metrics-api</artifactId>
             <version>${project.version}</version>
             <type>jar</type>
         </dependency>

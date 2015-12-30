@@ -9,8 +9,8 @@
     </parent>
 
     <groupId>org.jboss.metrics</groupId>
-    <artifactId>AutomatedMetricsJavaSe</artifactId>
-    <version>1.0.3.Final-SNAPSHOT</version>
+    <artifactId>automated-metrics-javase</artifactId>
+    <version>1.0.3.Final</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -60,17 +60,17 @@
         </dependency>
         <dependency>
             <groupId>org.jboss.metrics</groupId>
-            <artifactId>JBossAutomatedMetricsLibrary</artifactId>
+            <artifactId>jboss-automated-metrics-library</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.metrics</groupId>
-            <artifactId>JBossAutomatedMetricsLibrary2</artifactId>
+            <artifactId>jboss-automated-metrics-library2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.metrics</groupId>
-            <artifactId>JBossAutomatedMetricsProperties</artifactId>
+            <artifactId>jboss-automated-metrics-properties</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

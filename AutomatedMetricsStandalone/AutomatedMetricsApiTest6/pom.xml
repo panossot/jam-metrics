@@ -5,12 +5,12 @@
   <parent>
       <groupId>org.jboss.as</groupId>
       <artifactId>jboss-as-automated-metrics-standalone</artifactId>
-      <version>1.0.3.Final-SNAPSHOT</version>
+      <version>1.0.3.Final</version>
   </parent>
 
   <groupId>org.jboss.metrics</groupId>
   <artifactId>AutomatedMetricsApiTest6</artifactId>
-  <version>1.0.3.Final-SNAPSHOT</version>
+  <version>1.0.3.Final</version>
   <packaging>pom</packaging>
 
   <name>AutomatedMetricsApiTest6 --Standalone--</name>
