@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -28,12 +29,14 @@ public class CodeParams {
     private Map<String,String> stringCodeParams;
     private Map<String,Integer> integerCodeParams;
     private Map<String,Double> doubleCodeParams;
+    private Map<String,AtomicInteger> atomicIntegerCodeParams;
     private Map<String,AtomicBoolean> filterParams;
 
     public CodeParams() {
         stringCodeParams =  new HashMap<>();
         integerCodeParams = new HashMap<>();
         doubleCodeParams = new HashMap<>();
+        atomicIntegerCodeParams = new HashMap<>();
         filterParams = new HashMap<>();
     }
 
@@ -60,6 +63,18 @@ public class CodeParams {
     public synchronized void setIntegerCodeParams(Map<String, Integer> integerCodeParams) {
         this.integerCodeParams = integerCodeParams;
     }
+    
+    public synchronized Map<String, AtomicInteger> getAtomicIntegerCodeParams() {
+        return atomicIntegerCodeParams;
+    }
+    
+    public synchronized AtomicInteger getAtomicIntegerCodeParam(String name) {
+        return atomicIntegerCodeParams.get(name);
+    }
+
+    public synchronized void setAtomicIntegerCodeParams(Map<String, AtomicInteger> atomicIntegerCodeParams) {
+        this.atomicIntegerCodeParams = atomicIntegerCodeParams;
+    }
 
     public synchronized Map<String, Double> getDoubleCodeParams() {
         return doubleCodeParams;
@@ -79,6 +94,10 @@ public class CodeParams {
     
     public synchronized void putIntegerCodeParam(String name, int value) {
         this.integerCodeParams.put(name, value);
+    }
+    
+    public synchronized void putAtomicIntegerCodeParam(String name, AtomicInteger value) {
+        this.atomicIntegerCodeParams.put(name, value);
     }
     
     public synchronized void putDoubleCodeParam(String name, double value) {
@@ -118,6 +137,10 @@ public class CodeParams {
         keys = this.getIntegerCodeParams().keySet();
         for (String key : keys)
             newCodeParams.putIntegerCodeParam(key,this.getIntegerCodeParam(key));
+        
+        keys = this.getAtomicIntegerCodeParams().keySet();
+        for (String key : keys)
+            newCodeParams.putAtomicIntegerCodeParam(key,this.getAtomicIntegerCodeParam(key));
         
         keys = this.getDoubleCodeParams().keySet();
         for (String key : keys)
