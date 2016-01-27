@@ -4,12 +4,12 @@
     <parent>
     <artifactId>AutomatedMetricsApiTest8</artifactId>
     <groupId>org.jboss.metrics</groupId>
-    <version>1.0.3.Final</version>
+    <version>1.0.4.Final-SNAPSHOT</version>
   </parent>
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>AutomatedMetricsApiTest8-ejb</artifactId>
-    <version>1.0.3.Final</version>
+    <version>1.0.4.Final-SNAPSHOT</version>
     <packaging>ejb</packaging>
 
     <name>AutomatedMetricsApiTest8-ejb</name>
