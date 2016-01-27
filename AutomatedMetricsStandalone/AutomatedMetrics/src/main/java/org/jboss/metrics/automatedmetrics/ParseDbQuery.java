@@ -80,7 +80,8 @@ public class ParseDbQuery {
                         query = query.replaceAll(stringParam, "NULL");
                 }
                 
-                query = query.replace("{instance}", target.toString());
+                if(target!=null)
+                    query = query.replace("{instance}", target.toString());
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 GregorianCalendar calendar = new GregorianCalendar();
                 String time = format.format(calendar.getTime());

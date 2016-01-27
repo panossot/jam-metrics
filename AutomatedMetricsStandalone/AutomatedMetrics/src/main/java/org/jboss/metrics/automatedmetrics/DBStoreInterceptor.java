@@ -81,7 +81,13 @@ public class DBStoreInterceptor {
                     }
                     
                     final String user = mUser;
-                    final CodeParams cParams = cp.deepClone();
+                    final CodeParams cParams;
+
+                    if (cp!=null)
+                        cParams = cp.deepClone();
+                    else
+                        cParams = null;
+
                     new Thread() {
                         public void run() {
                             DBStoreInstance dBStoreInstance;

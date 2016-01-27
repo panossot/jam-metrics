@@ -47,7 +47,13 @@ public class JbossAutomatedJavaSeMetricsDbStore {
                     cp = CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(mUser);
                 }
                     
-                final CodeParams cParams = cp.deepClone();    
+                final CodeParams cParams;
+
+                if (cp!=null)
+                    cParams = cp.deepClone();
+                else
+                    cParams = null; 
+
                 new Thread() {
                     public void run() {
                         DBStoreInstance dBStoreInstance;
