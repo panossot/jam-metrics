@@ -100,6 +100,10 @@ public class CodeParams {
         this.atomicIntegerCodeParams.put(name, value);
     }
     
+    public synchronized int increaseAndGetAtomicIntegerCodeParam(String name) {
+        return atomicIntegerCodeParams.get(name).incrementAndGet();
+    }
+    
     public synchronized void putDoubleCodeParam(String name, double value) {
         this.doubleCodeParams.put(name, value);
     }
