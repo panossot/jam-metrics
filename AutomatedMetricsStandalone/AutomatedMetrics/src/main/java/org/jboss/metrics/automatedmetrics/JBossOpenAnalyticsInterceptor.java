@@ -19,10 +19,7 @@ package org.jboss.metrics.automatedmetrics;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.sql.SQLException;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
@@ -55,6 +52,7 @@ public class JBossOpenAnalyticsInterceptor {
                 final boolean locationRecord = jbossOpenAnalyticsAnnotation.serverLocationRecord();
                 final boolean numAccessRecord = jbossOpenAnalyticsAnnotation.numAccessRecord();
                 final boolean timeAccessRecord = jbossOpenAnalyticsAnnotation.timeAccessRecord();
+                final boolean date = jbossOpenAnalyticsAnnotation.dateRecord();
                 final boolean userRecord = jbossOpenAnalyticsAnnotation.userRecord();
                 final String methodName = jbossOpenAnalyticsAnnotation.methodName();
                 final String className = jbossOpenAnalyticsAnnotation.className();
@@ -89,7 +87,7 @@ public class JBossOpenAnalyticsInterceptor {
                                     }
                                 }
                                 
-                                jbossOpenAnalyticsInstance.dbStoreAnalytics(ipRecord, locationRecord, numAccessRecord, timeAccessRecord, time, methodName, className, instance, user, recordDbName, recordTableName, statementName, group);
+                                jbossOpenAnalyticsInstance.dbStoreAnalytics(ipRecord, locationRecord, numAccessRecord, timeAccessRecord, date, time, methodName, className, instance, user, recordDbName, recordTableName, statementName, group);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

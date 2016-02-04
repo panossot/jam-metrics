@@ -26,8 +26,10 @@ import java.net.NetworkInterface;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.jboss.logging.Logger;
 import org.jboss.metrics.automatedmetrics.utils.DbTableUtils;
@@ -47,11 +49,11 @@ public class JBossOpenAnalyticsInstance {
     public JBossOpenAnalyticsInstance() {
     }
 
-    public void dbStoreAnalytics(boolean ipRecord, boolean locationRecord, boolean numAccessRecord, boolean timeAccessRecord, int time, String methodName, String className, Object instance, String user, String recordDbName,
-            String recordTableName, String statementName, String group) throws IllegalArgumentException, IllegalAccessException, SQLException {
+    public void dbStoreAnalytics(boolean ipRecord, boolean locationRecord, boolean numAccessRecord, boolean timeAccessRecord, boolean date, int time, String methodName, 
+            String className, Object instance, String user, String recordDbName, String recordTableName, String statementName, String group) throws IllegalArgumentException, IllegalAccessException, SQLException {
         MetricProperties mProperties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
         Statement stmt = mProperties.getDatabaseStatement().get(statementName);
-        String query = "INSERT INTO " + recordDbName + "." + recordTableName + "(IP_RECORD,LOCATION_RECORD,NUMACCESS_RECORD,TIMEACCESS_RECORD,METHOD_NAME,CLASS_NAME,INSTANCE,USER_NAME) VALUES('[1]', '[2]', '[3]', '[4]', '[5]', '[6]', '[7]', '[8]');";
+        String query = "INSERT INTO " + recordDbName + "." + recordTableName + "(IP_RECORD,LOCATION_RECORD,NUMACCESS_RECORD,TIMEACCESS_RECORD,METHOD_NAME,CLASS_NAME,INSTANCE,USER_NAME,RECORD_TIME) VALUES('[1]', '[2]', [3], '[4]', '[5]', '[6]', '[7]', '[8]', '[9]');";
 
         try {
             if (!DbTableUtils.existsDbTable(recordDbName, recordTableName, stmt)) {
@@ -64,8 +66,8 @@ public class JBossOpenAnalyticsInstance {
                 }
 
                 String sql = "CREATE TABLE " + recordDbName + "." + recordTableName + "(ID int NOT NULL AUTO_INCREMENT, IP_RECORD varchar(255),"
-                        + " LOCATION_RECORD varchar(255), NUMACCESS_RECORD varchar(255), TIMEACCESS_RECORD varchar(255), METHOD_NAME varchar(255),"
-                        + " , CLASS_NAME varchar(255), INSTANCE varchar(255), USER_NAME varchar(255), PRIMARY KEY(ID));";
+                        + " LOCATION_RECORD varchar(255), NUMACCESS_RECORD int(10), TIMEACCESS_RECORD varchar(255), METHOD_NAME varchar(255),"
+                        + " , CLASS_NAME varchar(255), INSTANCE varchar(255), USER_NAME varchar(255), RECORD_TIME DATETIME, PRIMARY KEY(ID));";
 
                 stmt.executeUpdate(sql);
                 logger.info("Table " + recordDbName + "." + recordTableName + " created successfully...");
@@ -110,7 +112,7 @@ public class JBossOpenAnalyticsInstance {
                 if (countAccess != null)
                     query = query.replaceAll("[3]", countAccess.toString());
             } else
-                query = query.replaceAll("[3]", "");
+                query = query.replaceAll("[3]", null);
             
             if (timeAccessRecord) {  
                 query = query.replaceAll("[4]", String.valueOf(time));
@@ -136,6 +138,15 @@ public class JBossOpenAnalyticsInstance {
                 query = query.replaceAll("[8]", String.valueOf(user));
             } else
                 query = query.replaceAll("[8]", "");
+            
+            if (date) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                GregorianCalendar calendar = new GregorianCalendar();
+                String dateRecord = format.format(calendar.getTime());
+                query = query.replaceAll("[9]", dateRecord);
+            } else {
+                query = query.replaceAll("[9]", "");
+            }
 
             stmt.executeUpdate(query);
         } catch (Exception e) {

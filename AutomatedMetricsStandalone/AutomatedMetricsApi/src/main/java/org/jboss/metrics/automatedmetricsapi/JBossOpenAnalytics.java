@@ -43,6 +43,8 @@ public @interface JBossOpenAnalytics {
     @Nonbinding
     boolean timeAccessRecord() default false;
     @Nonbinding
+    boolean dateRecord() default true;
+    @Nonbinding
     boolean userRecord() default false;
     @Nonbinding
     String className() default "className";
