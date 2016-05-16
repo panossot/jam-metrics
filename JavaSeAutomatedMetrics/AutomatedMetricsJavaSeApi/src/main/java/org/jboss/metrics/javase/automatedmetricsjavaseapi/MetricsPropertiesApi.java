@@ -25,8 +25,12 @@ import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
  * @author Panagiotis Sotiropoulos
  */
 public class MetricsPropertiesApi {
-     public static void storeProperties(String group, MetricProperties metricsProperties){
+    public static void storeProperties(String group, MetricProperties metricsProperties){
         DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentProperties(group, metricsProperties);
         DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentInternalParameters(group, new MetricInternalParameters());
+    }
+
+    public static synchronized void clearProperties(){
+        DeploymentMetricProperties.getDeploymentMetricProperties().clearDeploymentProperties();
     }
 }

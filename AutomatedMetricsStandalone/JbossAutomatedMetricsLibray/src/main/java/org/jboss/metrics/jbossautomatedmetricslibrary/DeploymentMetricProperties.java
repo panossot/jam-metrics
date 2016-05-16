@@ -53,6 +53,10 @@ public class DeploymentMetricProperties {
         this.deploymentProperties.remove(name);
     }
 
+    public synchronized void clearDeploymentProperties() {
+        this.deploymentProperties.clear();
+    }
+
     public synchronized MetricInternalParameters getDeploymentInternalParameters(String name) {
         return  deploymentInternalParameters.get(name);
     }
