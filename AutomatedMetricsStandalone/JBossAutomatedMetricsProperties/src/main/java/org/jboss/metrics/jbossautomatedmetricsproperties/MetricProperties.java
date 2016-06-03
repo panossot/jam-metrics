@@ -30,6 +30,7 @@ public class MetricProperties {
  
     private String rhqMonitoring = "false";
     private String cacheStore = "false";
+    private String jbossOpenAnalytics = "false";
     private int cacheMaxSize = Integer.MAX_VALUE;
     private String databaseStore = "false";
     private String filterMetrics = "false";
@@ -132,6 +133,14 @@ public class MetricProperties {
     
     public synchronized void removeRhqScheduleId(String name) {
         this.rhqScheduleIds.remove(name);
+    }
+
+    public String getJBossOpenAnalytics() {
+        return jbossOpenAnalytics;
+    }
+
+    public void setJBossOpenAnalytics(String jbossOpenAnalytics) {
+        this.jbossOpenAnalytics = jbossOpenAnalytics;
     }
 
     public synchronized String getDatabaseStore() {
