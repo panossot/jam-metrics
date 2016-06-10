@@ -58,7 +58,10 @@ public class JBossOpenAnalyticsInterceptor {
                 final String className = jbossOpenAnalyticsAnnotation.className();
                 final String recordTableName = jbossOpenAnalyticsAnnotation.recordTableName();
                 final String recordDbName = jbossOpenAnalyticsAnnotation.recordDbName();
+                final String locationTableName = jbossOpenAnalyticsAnnotation.locationTableName();
+                final String locationDbName = jbossOpenAnalyticsAnnotation.locationDbName();
                 final String statementName = jbossOpenAnalyticsAnnotation.dbStatement();
+                final String locationStatementName = jbossOpenAnalyticsAnnotation.locationDbStatement();
                 final String group = jbossOpenAnalyticsAnnotation.groupName();
                 String userName = null;
                 final int time = (int)(millisFinish - millisStart);
@@ -87,7 +90,7 @@ public class JBossOpenAnalyticsInterceptor {
                                     }
                                 }
                                 
-                                jbossOpenAnalyticsInstance.dbStoreAnalytics(idRecord, locationRecord, numAccessRecord, timeAccessRecord, date, time, methodName, className, instance, user, recordDbName, recordTableName, statementName, group);
+                                jbossOpenAnalyticsInstance.dbStoreAnalytics(idRecord, locationRecord, numAccessRecord, timeAccessRecord, date, time, methodName, className, instance, user, recordDbName, recordTableName, locationDbName, locationTableName, statementName, locationStatementName, group);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

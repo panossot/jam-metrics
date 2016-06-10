@@ -57,7 +57,13 @@ public @interface JBossOpenAnalytics {
     @Nonbinding
     String recordTableName() default "Analytics";
     @Nonbinding
-    String dbStatement() default "";
+    String locationDbName() default "JBossOpenAnalytics";
+    @Nonbinding
+    String locationTableName() default "LocationData";
+    @Nonbinding
+    String dbStatement() default "jboss_analytics_statement";
+    @Nonbinding
+    String locationDbStatement() default "jboss_analytics_location_data_statement";
     @Nonbinding
     String groupName() default "testGroup";
 }

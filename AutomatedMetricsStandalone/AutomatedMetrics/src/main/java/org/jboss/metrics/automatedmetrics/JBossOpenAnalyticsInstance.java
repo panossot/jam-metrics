@@ -16,17 +16,13 @@
  */
 package org.jboss.metrics.automatedmetrics;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.file.Paths;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
 import org.jboss.logging.Logger;
 import org.jboss.metrics.automatedmetricsapi.CodeParamsApi;
 import org.jboss.metrics.jbossautomatedmetricslibrary.DeploymentMetricProperties;
@@ -44,10 +40,12 @@ public class JBossOpenAnalyticsInstance {
     }
 
     public void dbStoreAnalytics(boolean idRecord, boolean locationRecord, boolean numAccessRecord, boolean timeAccessRecord, boolean date, int time, String methodName, 
-        String className, Object instance, String user, String recordDbName, String recordTableName, String statementName, String group) throws IllegalArgumentException, IllegalAccessException, SQLException {
+        String className, Object instance, String user, String recordDbName, String recordTableName, String locationDbName, String locationTableName, String statementName, String locationStatementName, String group) throws IllegalArgumentException, IllegalAccessException, SQLException {
         MetricProperties mProperties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
         Statement stmt = mProperties.getDatabaseStatement().get(statementName);
+        Statement locationStmt = mProperties.getDatabaseStatement().get(locationStatementName);
         String query = "INSERT INTO " + recordDbName + "." + recordTableName + "(IP_RECORD,LOCATION_RECORD,NUMACCESS_RECORD,TIMEACCESS_RECORD,METHOD_NAME,CLASS_NAME,INSTANCE,USER_NAME,RECORD_TIME) VALUES('[1]', '[2]', '[3]', '[4]', '[5]', '[6]', '[7]', '[8]', '[9]');";
+        String query2 = "SELECT * FROM " + locationDbName + "." + locationTableName;
 
         try {
             String serverId = "";
@@ -58,7 +56,7 @@ public class JBossOpenAnalyticsInstance {
                 query = query.replace("[1]", "");
 
             if (idRecord && locationRecord && serverId.compareTo("")!=0) {
-	        String location = getLocation(serverId);
+	        String location = getLocation(locationStmt,query2,serverId);
                 query = query.replace("[2]", (location!=null?location:"Not found"));
             } else
                 query = query.replace("[2]", "");
@@ -109,9 +107,17 @@ public class JBossOpenAnalyticsInstance {
         }
     }
 
-    private String getLocation(String serverId) {
+    private String getLocation(Statement locationStmt, String query, String serverId) {
 
-        String serverLocation = "To be done ...";
+        String serverLocation = null;
+        
+        try {
+            ResultSet rs = locationStmt.executeQuery(query);
+            rs.next();
+            serverLocation = rs.getString(2);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
 
         return serverLocation;
 

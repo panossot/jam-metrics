@@ -40,7 +40,8 @@ public class MetricsApiSessionBean {
     }
 
     @JBossOpenAnalytics(userRecord=true,className="MetricsApiSessionBean",methodName="countMethod",userName="username",recordDbName="MyMETRICS", 
-            recordTableName="openAnalyticsValues",dbStatement="jboss_analytics_statement",groupName="myTestGroup")
+            recordTableName="openAnalyticsValues",locationDbName="MyMETRICS", locationTableName="openAnalyticsLocationData",
+            dbStatement="jboss_analytics_statement", locationDbStatement="jboss_analytics_location_data_statement", groupName="myTestGroup")
     public int countMethod() {
         count++;
         count2 += 2;

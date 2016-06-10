@@ -32,7 +32,6 @@ import org.jboss.metrics.automatedmetricsapi.CodeParamsApi;
 import org.jboss.metrics.automatedmetricsapi.MetricsPropertiesApi;
 import org.jboss.metrics.jbossautomatedmetricsproperties.MetricProperties;
 
-
 /**
  *
  * @author Panagiotis Sotiropoulos
@@ -49,19 +48,19 @@ public class PrintMetrics extends HttpServlet {
      */
     @EJB
     private MetricsApiSessionBean metricsApiSessionBean;
-    
+
     private String groupName = "myTestGroup";
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         initializeMetricProperties();
-        
+
         try (PrintWriter out = response.getWriter()) {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet PrintMetrics</title>");            
+            out.println("<title>Servlet PrintMetrics</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet PrintMetrics : </h1>");
@@ -71,50 +70,65 @@ public class PrintMetrics extends HttpServlet {
             out.println("</html>");
         }
     }
-    
+
     private void initializeMetricProperties() {
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setJBossOpenAnalytics("true");
         CodeParamsApi.addUserName("Niki");
         try {
-            Connection  connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "panos");
+            Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "panos");
             Statement stmt = connection.createStatement();
             createDbTable(stmt);
-            HashMap<String,Statement> dbStmt = new HashMap<String,Statement>();
+            HashMap<String, Statement> dbStmt = new HashMap<String, Statement>();
             dbStmt.put("jboss_analytics_statement", stmt);
+            dbStmt.put("jboss_analytics_location_data_statement", stmt);
             metricProperties.setDatabaseStatement(dbStmt);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
     }
-    
+
     private void createDbTable(Statement stmt) {
         try {
             String query = "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'MyMETRICS' AND table_name = 'openAnalyticsValues'";
-            ResultSet rs = stmt.executeQuery(query);                  
+            ResultSet rs = stmt.executeQuery(query);
             rs.next();
             boolean exists = rs.getInt("COUNT(*)") > 0;
-            
+
             if (!exists) {
                 String sql = "CREATE DATABASE MyMETRICS";
                 try {
                     stmt.executeUpdate(sql);
                     System.out.println("Database created successfully...");
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     System.out.println("Database already exists...");
                 }
-                sql = "CREATE TABLE MyMETRICS.openAnalyticsValues(ID int NOT NULL AUTO_INCREMENT, IP_RECORD varchar(255)," +
-                      "LOCATION_RECORD varchar(255),NUMACCESS_RECORD varchar(255),TIMEACCESS_RECORD varchar(255),METHOD_NAME varchar(255)," +
-                      "CLASS_NAME varchar(255),INSTANCE varchar(255),USER_NAME varchar(255),RECORD_TIME DATETIME,PRIMARY KEY(ID));";
-                
+                sql = "CREATE TABLE MyMETRICS.openAnalyticsValues(ID int NOT NULL AUTO_INCREMENT, IP_RECORD varchar(255),"
+                        + "LOCATION_RECORD varchar(255),NUMACCESS_RECORD varchar(255),TIMEACCESS_RECORD varchar(255),METHOD_NAME varchar(255),"
+                        + "CLASS_NAME varchar(255),INSTANCE varchar(255),USER_NAME varchar(255),RECORD_TIME DATETIME,PRIMARY KEY(ID));";
+
                 stmt.executeUpdate(sql);
             }
-        } catch(Exception e){
+
+            query = "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'MyMETRICS' AND table_name = 'openAnalyticsLocationData'";
+            rs = stmt.executeQuery(query);
+            rs.next();
+            exists = rs.getInt("COUNT(*)") > 0;
+
+            if (!exists) {
+                String sql = "CREATE TABLE MyMETRICS.openAnalyticsLocationData(SERVER_INSTANCE_NAME varchar(255) NOT NULL,"
+                        + "SERVER_INSTANCELOCATION varchar(255),PRIMARY KEY(SERVER_INSTANCE_NAME));";
+
+                stmt.executeUpdate(sql);
+                
+                sql = "INSERT INTO MyMETRICS.openAnalyticsLocationData(SERVER_INSTANCE_NAME,SERVER_INSTANCELOCATION) VALUES('testing-instance','CZ, Brno, Red Hat Office, TPB, 2nd Floor, South');";
+                stmt.executeUpdate(sql);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
