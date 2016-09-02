@@ -19,6 +19,7 @@ package org.jboss.metrics;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.jboss.metrics.automatedmetricsapi.DBStore;
 import org.jboss.metrics.automatedmetricsapi.Metric;
+import org.jboss.metrics.jbossautomatedmetricslibrary2.CodeParamsCollection;
 
 /**
  *
@@ -30,20 +31,26 @@ public class MetricsClass {
     
     private static int count2 = 0;
 
+    private static AtomicInteger i;
+    private String metricUser="Niki";
+
     public MetricsClass(){
         countAtomic = new AtomicInteger(1);
+        i = new AtomicInteger(1);
     }
     
     @Metric(fieldName = {"count"}, groupName = "myTestGroup")
     @DBStore(groupName = "myTestGroup", queryUpdateDB = {"StoreDBMetric","count"}, statementName = "statement_1")
     public synchronized void getAndSetCountIncreased() {
         count = this.countAtomic.getAndIncrement();
+        CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(metricUser).putIntegerCodeParam("metricSeq", i.getAndIncrement());
     }
 
     @Metric(fieldName = {"count2"}, groupName = "myTestGroup")
     @DBStore(groupName = "myTestGroup", queryUpdateDB = {"StoreDBMetric","count2"}, statementName = "statement_1")
     public synchronized void getAndSetCount2Increased() {
         count2 = this.count2+2;
+        CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(metricUser).putIntegerCodeParam("metricSeq", i.getAndIncrement());
     }
     
 }

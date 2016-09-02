@@ -60,6 +60,8 @@ public class MetricInterceptor {
                 final MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
                 String cacheStore = properties.getCacheStore();
                 String rhqMonitoring = properties.getRhqMonitoring();
+                String hawkularMonitoring = properties.getHawkularMonitoring();
+                final String hawkularTenant = properties.getHawkularTenant();
                 String metricPlot = properties.getMetricPlot();
                 final int refreshRate = properties.getPlotRefreshRate();
 
@@ -96,6 +98,28 @@ public class MetricInterceptor {
 
                                 try {
                                     mrhqInstance.rhqMonitoring(target, fieldName, group);
+                                } catch (IllegalArgumentException | IllegalAccessException ex) {
+                                   ex.printStackTrace();
+                                }
+                                
+                            }
+                        }.start();
+                    }
+                    
+                    if (hawkularMonitoring != null && Boolean.parseBoolean(hawkularMonitoring)) {
+                        new Thread() {
+                            public void run() {
+                                MonitoringHawkular mhawkularInstance;
+                                synchronized(rhqLock) {
+                                    mhawkularInstance = MonitoringHawkularCollection.getHawkularCollection().getMonitoringHawkularInstance(group);
+                                    if (mhawkularInstance == null) {
+                                        mhawkularInstance = new MonitoringHawkular(group);
+                                        MonitoringHawkularCollection.getHawkularCollection().addMonitoringHawkularInstance(group, mhawkularInstance);
+                                    }
+                                }
+
+                                try {
+                                    mhawkularInstance.hawkularMonitoring(target, fieldName, hawkularTenant, group);
                                 } catch (IllegalArgumentException | IllegalAccessException ex) {
                                    ex.printStackTrace();
                                 }

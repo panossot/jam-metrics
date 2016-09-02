@@ -82,8 +82,8 @@ public class PrintMetrics extends HttpServlet {
 
     private void initializeMetricProperties() {
         HashMap<String, String> rhqScheduleIds = new HashMap<String, String>();
-        rhqScheduleIds.put("count", "11401");
-        rhqScheduleIds.put("count2", "11402");
+        rhqScheduleIds.put("count", "11761");
+        rhqScheduleIds.put("count2", "11762");
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setRhqMonitoring("false");
         metricProperties.setCacheStore("true");
@@ -96,7 +96,7 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.addColor("blue", Color.BLUE);
         metricProperties.addColor("green", Color.GREEN);
         metricProperties.setPlotRefreshRate(1);
-        metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
+     //   metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
         DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot1", false);

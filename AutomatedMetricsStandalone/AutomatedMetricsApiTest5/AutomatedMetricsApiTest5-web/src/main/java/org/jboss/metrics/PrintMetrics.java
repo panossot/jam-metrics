@@ -96,16 +96,16 @@ public class PrintMetrics extends HttpServlet {
         metricsBean2 = new MetricsApiSessionBean(metricsClass);
         
         HashMap<String,String> rhqScheduleIds = new HashMap<String,String>();
-        rhqScheduleIds.put("count", "11391");
-        rhqScheduleIds.put("count2", "11392");
+        rhqScheduleIds.put("count", "11761");
+        rhqScheduleIds.put("count2", "11762");
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setRhqMonitoring("false");
         metricProperties.setRhqMonitoringRefreshRate(100);
         metricProperties.setCacheStore("true");
         metricProperties.setCacheMaxSize(10000);
-        metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
+       // metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
-        metricProperties.setDatabaseStore("false");
+        metricProperties.setDatabaseStore("true");
         HashMap<String,Integer> dbUpdateRates = new HashMap<>();
         dbUpdateRates.put("StoreDBMetric", 300);
         metricProperties.setUpdateRateOfDbQueries(dbUpdateRates);
@@ -129,19 +129,32 @@ public class PrintMetrics extends HttpServlet {
     private void createDbTable(Statement stmt) {
         try {
             String query = "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'MyMETRICS' AND table_name = 'metricValues'";
-            ResultSet rs = stmt.executeQuery(query);                  
-            rs.next();
-            boolean exists = rs.getInt("COUNT(*)") > 0;
-            
-            if (!exists) {
-                String sql = "CREATE DATABASE MyMETRICS";
-                stmt.executeUpdate(sql);
-                System.out.println("Database created successfully...");
+            ResultSet rs = stmt.executeQuery(query);   
+            try {               
+		    rs.next();
+		    boolean exists = rs.getInt("COUNT(*)") > 0;
+		    
+		    if (!exists) {
+		        String sql = "CREATE DATABASE MyMETRICS";
+		        stmt.executeUpdate(sql);
+		        System.out.println("Database created successfully...");
 
-                sql = "CREATE TABLE MyMETRICS.metricValues(ID int NOT NULL AUTO_INCREMENT, SEQUENCE_NUM int, METRIC_NAME varchar(255) NOT NULL," +
+		        sql = "CREATE TABLE MyMETRICS.metricValues(ID int NOT NULL AUTO_INCREMENT, SEQUENCE_NUM int, METRIC_NAME varchar(255) NOT NULL," +
+		              " METRIC_VALUE varchar(255) NOT NULL, METRIC_INSTANCE varchar(255), RECORD_TIME DATETIME, PRIMARY KEY(ID));"; 
+		        
+		        stmt.executeUpdate(sql);
+		    }
+            } catch (Exception e) {
+                 String sql = "DROP DATABASE MyMETRICS";
+                 stmt.executeUpdate(sql);
+                 sql = "CREATE DATABASE MyMETRICS";
+                 stmt.executeUpdate(sql);
+                 System.out.println("Database created successfully...");
+
+                 sql = "CREATE TABLE MyMETRICS.metricValues(ID int NOT NULL AUTO_INCREMENT, SEQUENCE_NUM int, METRIC_NAME varchar(255) NOT NULL," +
                       " METRIC_VALUE varchar(255) NOT NULL, METRIC_INSTANCE varchar(255), RECORD_TIME DATETIME, PRIMARY KEY(ID));"; 
                 
-                stmt.executeUpdate(sql);
+                 stmt.executeUpdate(sql);
             }
         } catch(Exception e){
             e.printStackTrace();

@@ -29,6 +29,7 @@ import org.math.plot.Plot2DPanel;
 public class MetricProperties {
  
     private String rhqMonitoring = "false";
+    private String hawkularMonitoring = "false";
     private String cacheStore = "false";
     private String jbossOpenAnalytics = "false";
     private int cacheMaxSize = Integer.MAX_VALUE;
@@ -48,6 +49,12 @@ public class MetricProperties {
     private String rhqServerUsername = "rhqadmin";
     private String rhqServerPassword = "rhqadmin";
     private HashMap<String,String> rhqScheduleIds;
+    private int hawkularMonitoringRefreshRate = 1;
+    private String hawkularServerUrl = "localhost";
+    private String hawkularServerPort = "8080";
+    private String hawkularServerUsername = "hawkularadmin";
+    private String hawkularServerPassword = "hawkularadmin";
+    private String hawkularTenant = "hawkular";
 
     public MetricProperties() {
         rhqScheduleIds = new HashMap<>();
@@ -57,6 +64,70 @@ public class MetricProperties {
         plots = new HashMap<>();
         colors = new HashMap<>();
         frames = new HashMap<>();
+    }
+
+    public synchronized String getHawkularMonitoring() {
+        return hawkularMonitoring;
+    }
+
+    public synchronized void setHawkularMonitoring(String hawkularMonitoring) {
+        this.hawkularMonitoring = hawkularMonitoring;
+    }
+
+    public synchronized String getJbossOpenAnalytics() {
+        return jbossOpenAnalytics;
+    }
+
+    public synchronized void setJbossOpenAnalytics(String jbossOpenAnalytics) {
+        this.jbossOpenAnalytics = jbossOpenAnalytics;
+    }
+
+    public synchronized int getHawkularMonitoringRefreshRate() {
+        return hawkularMonitoringRefreshRate;
+    }
+
+    public synchronized void setHawkularMonitoringRefreshRate(int hawkularMonitoringRefreshRate) {
+        this.hawkularMonitoringRefreshRate = hawkularMonitoringRefreshRate;
+    }
+
+    public synchronized String getHawkularServerUrl() {
+        return hawkularServerUrl;
+    }
+
+    public synchronized void setHawkularServerUrl(String hawkularServerUrl) {
+        this.hawkularServerUrl = hawkularServerUrl;
+    }
+
+    public synchronized String getHawkularServerPort() {
+        return hawkularServerPort;
+    }
+
+    public synchronized void setHawkularServerPort(String hawkularServerPort) {
+        this.hawkularServerPort = hawkularServerPort;
+    }
+
+    public synchronized String getHawkularServerUsername() {
+        return hawkularServerUsername;
+    }
+
+    public synchronized void setHawkularServerUsername(String hawkularServerUsername) {
+        this.hawkularServerUsername = hawkularServerUsername;
+    }
+
+    public synchronized String getHawkularServerPassword() {
+        return hawkularServerPassword;
+    }
+
+    public synchronized void setHawkularServerPassword(String hawkularServerPassword) {
+        this.hawkularServerPassword = hawkularServerPassword;
+    }
+
+    public synchronized String getHawkularTenant() {
+        return hawkularTenant;
+    }
+
+    public synchronized void setHawkularTenant(String hawkularTenant) {
+        this.hawkularTenant = hawkularTenant;
     }
     
     public synchronized String getRhqMonitoring() {
@@ -135,7 +206,7 @@ public class MetricProperties {
         this.rhqScheduleIds.remove(name);
     }
 
-    public String getJBossOpenAnalytics() {
+    public synchronized String getJBossOpenAnalytics() {
         return jbossOpenAnalytics;
     }
 

@@ -26,6 +26,7 @@ public class MetricInternalParameters {
     private HashMap<String,Boolean> plotRefreshed;
     private HashMap<MetricOfPlot,Integer> plotedCount;
     private HashMap<String,Integer> rhqMonitoringCount;
+    private HashMap<String,Integer> hawkularMonitoringCount;
     private HashMap<String,HashMap<String,DbQueries>> dbQueries;
 
     public MetricInternalParameters() {
@@ -33,7 +34,36 @@ public class MetricInternalParameters {
         this.plotRefreshed = new HashMap<>();
         this.plotedCount = new HashMap<>();
         this.rhqMonitoringCount = new HashMap<>();
+        this.hawkularMonitoringCount = new HashMap<>();
         this.dbQueries = new HashMap<>();
+    }
+
+    public synchronized HashMap<String, Integer> getHawkularMonitoringCount() {
+        return hawkularMonitoringCount;
+    }
+    
+    public synchronized int getHawkularMonitoringCount(String metric) {
+        return hawkularMonitoringCount.get(metric)!=null?hawkularMonitoringCount.get(metric):0;
+    }
+
+    public synchronized void setHawkularMonitoringCount(HashMap<String, Integer> hawkularMonitoringCount) {
+        this.hawkularMonitoringCount = hawkularMonitoringCount;
+    }
+    
+    public synchronized void putHawkularMonitoringCount(String metric, int value) {
+        this.hawkularMonitoringCount.put(metric, value);
+    }
+    
+    public synchronized void resetHawkularMonitoringCount(String metric) {
+        this.hawkularMonitoringCount.put(metric, 0);
+    }
+
+    public synchronized HashMap<String, HashMap<String, DbQueries>> getDbQueries() {
+        return dbQueries;
+    }
+
+    public synchronized void setDbQueries(HashMap<String, HashMap<String, DbQueries>> dbQueries) {
+        this.dbQueries = dbQueries;
     }
 
     public synchronized HashMap<String, Integer> getPlotHandler() {

@@ -70,13 +70,13 @@ public class PrintMetrics extends HttpServlet {
     
     private void initializeMetricProperties() {
         HashMap<String,String> rhqScheduleIds = new HashMap<String,String>();
-        rhqScheduleIds.put("count", "11391");
-        rhqScheduleIds.put("count2", "11392");
+        rhqScheduleIds.put("count", "11761");
+        rhqScheduleIds.put("count2", "11762");
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setRhqMonitoring("false");
         metricProperties.setCacheStore("true");
         metricProperties.setRhqMonitoringRefreshRate(10);
-        metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
+    //    metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
     }
