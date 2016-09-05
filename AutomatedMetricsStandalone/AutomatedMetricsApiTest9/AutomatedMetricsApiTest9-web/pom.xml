@@ -4,12 +4,12 @@
     <parent>
     <artifactId>AutomatedMetricsApiTest9</artifactId>
     <groupId>org.jboss.metrics</groupId>
-    <version>1.0.4.Final-SNAPSHOT</version>
+    <version>1.0.5.Final-SNAPSHOT</version>
   </parent>
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>AutomatedMetricsApiTest9-web</artifactId>
-    <version>1.0.4.Final-SNAPSHOT</version>
+    <version>1.0.5.Final-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>AutomatedMetricsApiTest9-web</name>

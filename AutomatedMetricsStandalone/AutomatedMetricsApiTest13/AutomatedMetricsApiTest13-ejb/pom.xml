@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-    <artifactId>AutomatedMetricsApiTest</artifactId>
+    <artifactId>AutomatedMetricsApiTest13</artifactId>
     <groupId>org.jboss.metrics</groupId>
-    <version>1.0.4.Final-SNAPSHOT</version>
+    <version>1.0.5.Final-SNAPSHOT</version>
   </parent>
 
     <groupId>org.jboss.metrics</groupId>
     <artifactId>AutomatedMetricsApiTest13-ejb</artifactId>
-    <version>1.0.4.Final-SNAPSHOT</version>
+    <version>1.0.5.Final-SNAPSHOT</version>
     <packaging>ejb</packaging>
 
     <name>AutomatedMetricsApiTest13-ejb</name>
