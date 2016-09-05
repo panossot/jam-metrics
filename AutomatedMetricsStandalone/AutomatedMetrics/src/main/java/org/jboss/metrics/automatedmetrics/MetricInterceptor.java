@@ -40,6 +40,7 @@ public class MetricInterceptor {
 
     private Map<String, Field> metricFields = new HashMap();
     private final static Object rhqLock = new Object();
+    private final static Object hawkularLock = new Object();
     private final static Object cacheLock = new Object();
 
     @AroundInvoke
@@ -110,7 +111,7 @@ public class MetricInterceptor {
                         new Thread() {
                             public void run() {
                                 MonitoringHawkular mhawkularInstance;
-                                synchronized(rhqLock) {
+                                synchronized(hawkularLock) {
                                     mhawkularInstance = MonitoringHawkularCollection.getHawkularCollection().getMonitoringHawkularInstance(group);
                                     if (mhawkularInstance == null) {
                                         mhawkularInstance = new MonitoringHawkular(group);
