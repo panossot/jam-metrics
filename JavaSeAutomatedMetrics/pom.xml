@@ -31,6 +31,7 @@
         <module>AutomatedMetricsJavaSeApiTest6</module>
         <module>AutomatedMetricsJavaSeApiTest7</module>
         <module>AutomatedMetricsJavaSeApiTest8</module>
+        <module>AutomatedMetricsJavaSeApiTest9</module>
     </modules>
 
 </project>

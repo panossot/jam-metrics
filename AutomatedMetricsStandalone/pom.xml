@@ -58,6 +58,7 @@
         <module>AutomatedMetricsApiTest12</module>
         <module>AutomatedMetricsApiTest13</module>
         <module>AutomatedMetricsApiTest14</module>
+        <module>AutomatedMetricsApiTest15</module>
         <module>JbossAutomatedMetricsLibray</module>
         <module>JBossAutomatedMetricsProperties</module>
         <module>JBossAutomatedMetricsLibrary2</module>
