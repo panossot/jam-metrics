@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
     <artifactId>FreeDiskSpaceMetric</artifactId>
-    <groupId>org.jboss.metrics</groupId>
-    <version>1.0.3.Final-SNAPSHOT</version>
+    <groupId>org.jam.metrics</groupId>
+    <version>1.0.5.Final-SNAPSHOT</version>
   </parent>
 
-    <groupId>org.jboss.metrics</groupId>
+    <groupId>org.jam.metrics</groupId>
     <artifactId>FreeDiskSpaceMetric-web</artifactId>
-    <version>1.0.3.Final-SNAPSHOT</version>
+    <version>1.0.5.Final-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>FreeDiskSpaceMetric-web</name>
@@ -26,9 +26,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.jboss.metrics</groupId>
-            <artifactId>JBossAutomatedMetricsProperties</artifactId>
-            <version>1.0.2.Final</version>
+            <groupId>org.jam.metrics</groupId>
+            <artifactId>jam-metrics-properties</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>

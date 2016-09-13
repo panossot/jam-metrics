@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org.OM/4.0.0" xmlns:xsi="http://www.w3.org.001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org.OM/4.0.0 http://maven.apache.org.sd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.jam.metrics</groupId>
+    <artifactId>jam-metrics-standalone</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.5.Final-SNAPSHOT</version>
+
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>JAM-Metrics Wildfly-Standalone-Version</description>
+    <url>https://developer..org.iki/JAM-MetricsEverythingIsAPotentialMetric</url>
+
+    
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org.icenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Panagiotis Sotiropoulos</name>
+            <email>psotirop@redhat.com</email>
+            <organization>Red Hat</organization>
+            <organizationUrl>http://www.redhat.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:panossot/jam-metrics.git</connection>
+        <developerConnection>scm:git:git@github.com:panossot/jam-metrics.git</developerConnection>
+        <url>https://github.com/panossot/jam-metrics/tree/master/ApplicationMetricsStandalone</url>
+  </scm>
+    
+    <modules>
+        <module>ApplicationMetricsApi</module>
+        <module>ApplicationMetrics</module>
+        <module>ApplicationMetricsApiTest</module>
+        <module>ApplicationMetricsApiTest2</module>
+        <module>ApplicationMetricsApiTest3</module>
+        <module>ApplicationMetricsApiTest4</module>
+        <module>ApplicationMetricsApiTest5</module>
+        <module>ApplicationMetricsApiTest6</module>
+        <module>ApplicationMetricsApiTest7</module>
+        <module>ApplicationMetricsApiTest8</module>
+        <module>ApplicationMetricsApiTest9</module>
+        <module>ApplicationMetricsApiTest10</module>
+        <module>ApplicationMetricsApiTest11</module>
+        <module>ApplicationMetricsApiTest12</module>
+        <module>ApplicationMetricsApiTest13</module>
+        <module>ApplicationMetricsApiTest14</module>
+        <module>ApplicationMetricsApiTest15</module>
+        <module>ApplicationMetricsLibray</module>
+        <module>ApplicationMetricsProperties</module>
+        <module>ApplicationMetricsLibrary2</module>
+    </modules>
+    
+</project>

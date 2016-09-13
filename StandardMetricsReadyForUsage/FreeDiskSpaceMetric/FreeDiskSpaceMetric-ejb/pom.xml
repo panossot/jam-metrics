@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
     <artifactId>FreeDiskSpaceMetric</artifactId>
-    <groupId>org.jboss.metrics</groupId>
-    <version>1.0.3.Final-SNAPSHOT</version>
+    <groupId>org.jam.metrics</groupId>
+    <version>1.0.5.Final-SNAPSHOT</version>
   </parent>
 
-    <groupId>org.jboss.metrics</groupId>
+    <groupId>org.jam.metrics</groupId>
     <artifactId>FreeDiskSpaceMetric-ejb</artifactId>
-    <version>1.0.3.Final-SNAPSHOT</version>
+    <version>1.0.5.Final-SNAPSHOT</version>
     <packaging>ejb</packaging>
 
     <name>FreeDiskSpaceMetric-ejb</name>
@@ -21,15 +21,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.jboss.metrics</groupId>
-            <artifactId>AutomatedMetrics</artifactId>
-            <version>1.0.2.Final</version>
+            <groupId>org.jam.metrics</groupId>
+            <artifactId>jam-metrics</artifactId>
+            <version>${project.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.jboss.metrics</groupId>
-            <artifactId>AutomatedMetricsApi</artifactId>
-            <version>1.0.2.Final</version>
+            <groupId>org.jam.metrics</groupId>
+            <artifactId>jam-metrics-api</artifactId>
+            <version>${project.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.jam.metrics</groupId>
+    <artifactId>jam-metrics-javase-standalone</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.5.Final-SNAPSHOT</version>
+
+    <name> Application Metrics Java SE</name>
+    
+    
+    <modules>
+        <module>ApplicationMetricsJavaSe</module>
+        <module>ApplicationMetricsJavaSeApi</module>
+        <module>ApplicationMetricsJavaSeApiTest</module>
+        <module>ApplicationMetricsJavaSeApiTest2</module>
+        <module>ApplicationMetricsJavaSeApiTest3</module>
+        <module>ApplicationMetricsJavaSeApiTest4</module>
+        <module>ApplicationMetricsJavaSeApiTest5</module>
+        <module>ApplicationMetricsJavaSeApiTest6</module>
+        <module>ApplicationMetricsJavaSeApiTest7</module>
+        <module>ApplicationMetricsJavaSeApiTest8</module>
+        <module>ApplicationMetricsJavaSeApiTest9</module>
+    </modules>
+
+</project>

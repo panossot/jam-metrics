@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org.OM/4.0.0" xmlns:xsi="http://www.w3.org.001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org.OM/4.0.0 http://maven.apache.org.sd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+      <groupId>org.jam.metrics</groupId>
+      <artifactId>jam-metrics-standalone</artifactId>
+      <version>1.0.5.Final-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.jam.metrics</groupId>
+  <artifactId>ApplicationMetricsApiTest6</artifactId>
+  <version>1.0.5.Final-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>ApplicationMetricsApiTest6 --Standalone--</name>
+
+  <modules>
+    <module>ApplicationMetricsApiTest6-web</module>
+    <module>ApplicationMetricsApiTest6-ejb</module>
+  </modules>
+</project>

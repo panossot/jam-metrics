@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.jam.metrics</groupId>
+    <artifactId>wildfly-jam-metrics-extension-subsystem</artifactId>
+    <version>1.0.1.Final</version>
+    <packaging>jar</packaging>
+    
+    <name>WildFly: Addition of Application Metrics Extension Subsystem</name>
+    
+    <properties>
+        <Home>/home/panos/NetBeansProjects/gitOfficial/wildflyMetricsStandalone5/build/target/wildfly-10.0.0.Alpha1-SNAPSHOT</Home>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>compile</phase>
+                            <configuration>
+                            <tasks>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetrics/main/module.xml" tofile="${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetrics/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetrics/main/ApplicationMetrics-1.0.1.Final.jar" tofile="${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetrics/main/ApplicationMetrics-1.0.1.Final.jar"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetricsApi/main/module.xml" tofile="${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetricsApi/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetricsApi/main/ApplicationMetricsApi-1.0.1.Final.jar" tofile="${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetricsApi/main/ApplicationMetricsApi-1.0.1.Final.jar"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetricsLibrary/main/module.xml" tofile="/${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetricsLibrary/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetricsLibrary/main/ApplicationMetricsLibrary-1.0.1.Final.jar" tofile="/${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetricsLibrary/main/ApplicationMetricsLibrary-1.0.1.Final.jar"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetricsProperties/main/module.xml" tofile="${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetricsProperties/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetricsProperties/main/ApplicationMetricsProperties-1.0.1.Final.jar" tofile="${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetricsProperties/main/ApplicationMetricsProperties-1.0.1.Final.jar"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/jboss.as.applicationmetrics/main/module.xml" tofile="${Home}/modules/system/layers/base/org.jam.metrics/applicationmetrics/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/metrics/jboss.as.applicationmetrics/main/wildfly-jam-metrics-10.0.0.Alpha1-SNAPSHOT.jar" tofile="${Home}/modules/system/layers/base/org.jam.metrics/applicationmetrics/main/wildfly-jam-metrics-10.0.0.Alpha1-SNAPSHOT.jar"/>
+                             </tasks>
+                          </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution> 
+                </executions>
+            </plugin>
+    
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-extension-maven-plugin</artifactId>
+                <version>0.7.0</version>
+                <configuration>
+                    <moduleZip>${basedir}/src/main/resources/wildfly-jam-metrics-10.0.0.Alpha1-SNAPSHOT-module.zip</moduleZip>
+                    <Home>${Home}</Home>
+                    <modulesHome>modules/system/layers/base</modulesHome>
+                    <serverConfig>standalone/configuration/standalone.xml</serverConfig>
+                    <subsystem>${basedir}/src/main/resources/scripts/standalone-subsystem.xml</subsystem>
+                </configuration>
+                
+                <executions>
+                    <execution>
+                        <id>build-dist</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                         
+            </plugin>
+                    
+        </plugins>
+    </build>
+</project>

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.metrics;
+package org.jam.metrics;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
-import org.jboss.metrics.automatedmetricsapi.Metric;
+import org.jam.metrics.applicationmetricsapi.Metric;
 
 /**
  *
