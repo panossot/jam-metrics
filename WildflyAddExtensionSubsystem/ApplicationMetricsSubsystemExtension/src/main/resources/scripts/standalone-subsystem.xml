@@ -23,6 +23,6 @@
   ~ */
   -->
 
-<subsystem xmlns="urn::domain:ApplicationMetrics:1.0"/>
+<subsystem xmlns="urn:jboss:domain:jam-metrics:1.0"/>
 
 

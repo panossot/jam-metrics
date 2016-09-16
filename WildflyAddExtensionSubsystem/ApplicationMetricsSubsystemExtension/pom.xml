@@ -4,13 +4,13 @@
 
     <groupId>org.jam.metrics</groupId>
     <artifactId>wildfly-jam-metrics-extension-subsystem</artifactId>
-    <version>1.0.1.Final</version>
+    <version>1.0.5.Final-SNAPSHOT</version>
     <packaging>jar</packaging>
     
     <name>WildFly: Addition of Application Metrics Extension Subsystem</name>
     
     <properties>
-        <Home>/home/panos/NetBeansProjects/gitOfficial/wildflyMetricsStandalone5/build/target/wildfly-10.0.0.Alpha1-SNAPSHOT</Home>
+        <Home>${jbossHome}</Home>
     </properties>
 
     <build>
@@ -24,16 +24,18 @@
                         <phase>compile</phase>
                             <configuration>
                             <tasks>
-                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetrics/main/module.xml" tofile="${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetrics/main/module.xml"/>
-                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetrics/main/ApplicationMetrics-1.0.1.Final.jar" tofile="${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetrics/main/ApplicationMetrics-1.0.1.Final.jar"/>
-                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetricsApi/main/module.xml" tofile="${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetricsApi/main/module.xml"/>
-                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetricsApi/main/ApplicationMetricsApi-1.0.1.Final.jar" tofile="${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetricsApi/main/ApplicationMetricsApi-1.0.1.Final.jar"/>
-                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetricsLibrary/main/module.xml" tofile="/${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetricsLibrary/main/module.xml"/>
-                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetricsLibrary/main/ApplicationMetricsLibrary-1.0.1.Final.jar" tofile="/${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetricsLibrary/main/ApplicationMetricsLibrary-1.0.1.Final.jar"/>
-                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetricsProperties/main/module.xml" tofile="${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetricsProperties/main/module.xml"/>
-                                <copy file="${basedir}/src/main/resources/modules/metrics/ApplicationMetricsProperties/main/ApplicationMetricsProperties-1.0.1.Final.jar" tofile="${Home}/modules/system/layers/base/org.jam.metrics/ApplicationMetricsProperties/main/ApplicationMetricsProperties-1.0.1.Final.jar"/>
-                                <copy file="${basedir}/src/main/resources/modules/metrics/jboss.as.applicationmetrics/main/module.xml" tofile="${Home}/modules/system/layers/base/org.jam.metrics/applicationmetrics/main/module.xml"/>
-                                <copy file="${basedir}/src/main/resources/modules/metrics/jboss.as.applicationmetrics/main/wildfly-jam-metrics-10.0.0.Alpha1-SNAPSHOT.jar" tofile="${Home}/modules/system/layers/base/org.jam.metrics/applicationmetrics/main/wildfly-jam-metrics-10.0.0.Alpha1-SNAPSHOT.jar"/>
+                                <copy file="${basedir}/src/main/resources/modules/jam/metrics/jam-metrics/main/module.xml" tofile="${Home}/modules/system/layers/base/org/jam/metrics/jam-metrics/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/jam/metrics/jam-metrics/main/jam-metrics-1.0.5.Final-SNAPSHOT.jar" tofile="${Home}/modules/system/layers/base/org/jam/metrics/jam-metrics/main/jam-metrics-1.0.5.Final-SNAPSHOT.jar"/>
+                                <copy file="${basedir}/src/main/resources/modules/jam/metrics/jam-metrics-api/main/module.xml" tofile="${Home}/modules/system/layers/base/org/jam/metrics/jam-metrics-api/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/jam/metrics/jam-metrics-api/main/jam-metrics-api-1.0.5.Final-SNAPSHOT.jar" tofile="${Home}/modules/system/layers/base/org/jam/metrics/jam-metrics-api/main/jam-metrics-api-1.0.5.Final-SNAPSHOT.jar"/>
+                                <copy file="${basedir}/src/main/resources/modules/jam/metrics/jam-metrics-library/main/module.xml" tofile="/${Home}/modules/system/layers/base/org/jam/metrics/jam-metrics-library/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/jam/metrics/jam-metrics-library/main/jam-metrics-library-1.0.5.Final-SNAPSHOT.jar" tofile="/${Home}/modules/system/layers/base/org/jam/metrics/jam-metrics-library/main/jam-metrics-library-1.0.5.Final-SNAPSHOT.jar"/>
+                                <copy file="${basedir}/src/main/resources/modules/jam/metrics/jam-metrics-library2/main/module.xml" tofile="/${Home}/modules/system/layers/base/org/jam/metrics/jam-metrics-library2/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/jam/metrics/jam-metrics-library2/main/jam-metrics-library2-1.0.5.Final-SNAPSHOT.jar" tofile="/${Home}/modules/system/layers/base/org/jam/metrics/jam-metrics-library2/main/jam-metrics-library2-1.0.5.Final-SNAPSHOT.jar"/>
+                                <copy file="${basedir}/src/main/resources/modules/jam/metrics/jam-metrics-properties/main/module.xml" tofile="${Home}/modules/system/layers/base/org/jam/metrics/jam-metrics-properties/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/jam/metrics/jam-metrics-properties/main/jam-metrics-properties-1.0.5.Final-SNAPSHOT.jar" tofile="${Home}/modules/system/layers/base/org/jam/metrics/jam-metrics-properties/main/jam-metrics-properties-1.0.5.Final-SNAPSHOT.jar"/>
+                                <copy file="${basedir}/src/main/resources/modules/jam-metrics/main/module.xml" tofile="${Home}/modules/system/layers/base/org/jboss/as/jam-metrics/main/module.xml"/>
+                                <copy file="${basedir}/src/main/resources/modules/jam-metrics/main/wildfly-jam-metrics-10.1.0.Final.jar" tofile="${Home}/modules/system/layers/base/org/jboss/as/jam-metrics/main/wildfly-jam-metrics-10.1.0.Final.jar"/>
                              </tasks>
                           </configuration>
                         <goals>
@@ -48,8 +50,8 @@
                 <artifactId>wildfly-extension-maven-plugin</artifactId>
                 <version>0.7.0</version>
                 <configuration>
-                    <moduleZip>${basedir}/src/main/resources/wildfly-jam-metrics-10.0.0.Alpha1-SNAPSHOT-module.zip</moduleZip>
-                    <Home>${Home}</Home>
+                    <moduleZip>${basedir}/src/main/resources/wildfly-jam-metrics-10.1.0.Final-bundle.zip</moduleZip>
+                    <jbossHome>${Home}</jbossHome>
                     <modulesHome>modules/system/layers/base</modulesHome>
                     <serverConfig>standalone/configuration/standalone.xml</serverConfig>
                     <subsystem>${basedir}/src/main/resources/scripts/standalone-subsystem.xml</subsystem>
