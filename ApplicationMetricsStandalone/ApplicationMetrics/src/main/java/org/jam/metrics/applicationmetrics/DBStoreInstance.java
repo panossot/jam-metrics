@@ -15,6 +15,10 @@
  * limitations under the License.
  */
 
+/*
+ *  ΙΔΕΑ : Everything is a potential metric .
+ */
+
 package org.jam.metrics.applicationmetrics;
 
 import java.sql.SQLException;

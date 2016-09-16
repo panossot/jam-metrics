@@ -1,5 +1,5 @@
 /*
- * Copyright 2015  by Red Hat.
+ * Copyleft 2015  by Red Hat.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ *  ΙΔΕΑ : Everything is a potential metric .
+ */
+
 package org.jam.metrics.applicationmetricslibrary2;
 
 import java.util.HashMap;

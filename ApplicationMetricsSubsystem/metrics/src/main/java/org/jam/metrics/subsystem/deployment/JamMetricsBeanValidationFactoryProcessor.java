@@ -15,6 +15,10 @@
  * limitations under the License.
  */
 
+/*
+ *  ΙΔΕΑ : Everything is a potential metric .
+ */
+
 package org.jam.metrics.subsystem.deployment;
 
 import static javax.faces.validator.BeanValidator.VALIDATOR_FACTORY_KEY;

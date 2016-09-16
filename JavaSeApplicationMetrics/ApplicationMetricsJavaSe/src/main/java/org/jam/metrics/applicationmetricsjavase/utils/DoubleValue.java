@@ -14,6 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ *  ΙΔΕΑ : Everything is a potential metric .
+ */
+
 package org.jam.metrics.applicationmetrics.utils;
 
 import javax.xml.bind.annotation.XmlAttribute;
