@@ -35,9 +35,23 @@ public class MetricObject {
 
     private List<Object> metric;
     private String name;
+    private int metricCacheObjectDeleted;
 
     public MetricObject() {
         metric = Collections.synchronizedList(new ArrayList<Object>());
+        metricCacheObjectDeleted = 0;
+    }
+    
+    public synchronized int getMetricCacheObjectDeleted() {
+        return metricCacheObjectDeleted;
+    }
+
+    public synchronized void setMetricCacheObjectDeleted(int metricCacheObjectDeleted) {
+        this.metricCacheObjectDeleted = metricCacheObjectDeleted;
+    }
+    
+    public synchronized void increaseMetricCacheObjectDeleted() {
+        this.metricCacheObjectDeleted = this.metricCacheObjectDeleted + 1;
     }
 
     public synchronized List<Object> getMetric() {

@@ -18,7 +18,6 @@
 /*
  *  ΙΔΕΑ : Everything is a potential metric .
  */
-
 package org.jam.metrics.applicationmetrics;
 
 import java.lang.reflect.Field;
@@ -28,6 +27,8 @@ import java.util.Map;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import org.hawkular.apm.api.model.Property;
+import org.hawkular.apm.api.model.trace.Trace;
 import org.jam.metrics.applicationmetricsapi.Metric;
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
 import org.jam.metrics.applicationmetricslibrary.MetricsCache;
@@ -45,14 +46,15 @@ public class MetricInterceptor {
     private Map<String, Field> metricFields = new HashMap();
     private final static Object rhqLock = new Object();
     private final static Object hawkularLock = new Object();
+    private final static Object hawkularApmLock = new Object();
     private final static Object cacheLock = new Object();
 
     @AroundInvoke
     public Object metricsInterceptor(InvocationContext ctx) throws Exception {
-        Object result = ctx.proceed();
+        Object result = null;
         Method method = ctx.getMethod();
         final Object target = ctx.getTarget();
-            
+
         try {
             final Metric metricAnnotation = method.getAnnotation(Metric.class);
             MetricsCache metricsCacheInstance = null;
@@ -61,39 +63,49 @@ public class MetricInterceptor {
                 int fieldNameSize = metricAnnotation.fieldName().length;
                 final int dataSize = metricAnnotation.data().length;
                 final String group = metricAnnotation.groupName();
+                final String ampTrace = metricAnnotation.apmTraceName();
 
                 final MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
                 String cacheStore = properties.getCacheStore();
                 String rhqMonitoring = properties.getRhqMonitoring();
                 String hawkularMonitoring = properties.getHawkularMonitoring();
+                String hawkularApm = properties.getHawkularApm();
                 final String hawkularTenant = properties.getHawkularTenant();
                 String metricPlot = properties.getMetricPlot();
                 final int refreshRate = properties.getPlotRefreshRate();
+                Trace trace = null;
+                if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
+                    trace = properties.getHawkularApmTraces().get(ampTrace);
+                    trace.setStartTime(System.currentTimeMillis());
+                }
 
+                result = ctx.proceed();
+                
                 for (int i = 0; i < fieldNameSize; i++) {
 
                     final Field field = accessField(metricAnnotation, method, i);
                     final Object fieldValue = field.get(target);
                     final String fieldName = field.getName();
                     metricValuesInternal.put(metricAnnotation.fieldName()[i], field.get(target));
-                    
-                    
+
                     if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
-                        synchronized(cacheLock) {
+                        synchronized (cacheLock) {
                             metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group);
                             if (metricsCacheInstance == null) {
                                 metricsCacheInstance = new MetricsCache();
                                 MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(group, metricsCacheInstance);
                             }
                             Store.CacheStore(target, fieldName, fieldValue, metricsCacheInstance, properties);
+                            if (hawkularApm != null && Boolean.parseBoolean(hawkularApm) && trace != null && trace.getNodes().get(0) != null)
+                                trace.getNodes().get(0).getProperties().add(new Property(fieldName,String.valueOf(fieldValue)));
                         }
                     }
-                    
+
                     if (rhqMonitoring != null && Boolean.parseBoolean(rhqMonitoring)) {
                         new Thread() {
                             public void run() {
                                 MonitoringRhq mrhqInstance;
-                                synchronized(rhqLock) {
+                                synchronized (rhqLock) {
                                     mrhqInstance = MonitoringRhqCollection.getRhqCollection().getMonitoringRhqInstance(group);
                                     if (mrhqInstance == null) {
                                         mrhqInstance = new MonitoringRhq(group);
@@ -104,18 +116,18 @@ public class MetricInterceptor {
                                 try {
                                     mrhqInstance.rhqMonitoring(target, fieldName, group);
                                 } catch (IllegalArgumentException | IllegalAccessException ex) {
-                                   ex.printStackTrace();
+                                    ex.printStackTrace();
                                 }
-                                
+
                             }
                         }.start();
                     }
-                    
+
                     if (hawkularMonitoring != null && Boolean.parseBoolean(hawkularMonitoring)) {
                         new Thread() {
                             public void run() {
                                 MonitoringHawkular mhawkularInstance;
-                                synchronized(hawkularLock) {
+                                synchronized (hawkularLock) {
                                     mhawkularInstance = MonitoringHawkularCollection.getHawkularCollection().getMonitoringHawkularInstance(group);
                                     if (mhawkularInstance == null) {
                                         mhawkularInstance = new MonitoringHawkular(group);
@@ -126,15 +138,32 @@ public class MetricInterceptor {
                                 try {
                                     mhawkularInstance.hawkularMonitoring(target, fieldName, hawkularTenant, group);
                                 } catch (IllegalArgumentException | IllegalAccessException ex) {
-                                   ex.printStackTrace();
+                                    ex.printStackTrace();
                                 }
-                                
+
                             }
                         }.start();
                     }
-                    
+
                 }
-                
+
+                if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
+                    HawkularApm hawkularApmInstance;
+                    synchronized (hawkularApmLock) {
+                        hawkularApmInstance = HawkularApmCollection.getHawkularApmCollection().getHawkularApmInstance(group);
+                        if (hawkularApmInstance == null) {
+                            hawkularApmInstance = new HawkularApm(group);
+                            HawkularApmCollection.getHawkularApmCollection().addHawkularApmInstance(group, hawkularApmInstance);
+                        }
+                    }
+
+                    try {
+                        hawkularApmInstance.hawkularApm(target, trace, hawkularTenant, group);
+                    } catch (IllegalArgumentException | IllegalAccessException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
                 if (metricPlot != null && Boolean.parseBoolean(metricPlot)) {
                     new Thread() {
                         public void run() {
@@ -154,10 +183,10 @@ public class MetricInterceptor {
                     }.start();
                 }
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return result;
     }
 
@@ -170,15 +199,15 @@ public class MetricInterceptor {
             field.setAccessible(true);
             metricFields.put(metricAnnotation.fieldName()[fieldNum], field);
         }
-        
+
         return field;
     }
-    
+
     private Field getData(Metric metricAnnotation, int fieldNum) throws Exception {
         Field field;
         if (metricFields.containsKey(metricAnnotation.data()[fieldNum])) {
             field = metricFields.get(metricAnnotation.data()[fieldNum]);
-        }else {
+        } else {
             field = null;
         }
         return field;

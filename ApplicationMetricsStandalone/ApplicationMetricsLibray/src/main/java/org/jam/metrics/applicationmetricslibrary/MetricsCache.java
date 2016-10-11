@@ -39,9 +39,6 @@ public class MetricsCache {
         metricCache = new HashSet();
     }
 
-    /**
-     * @return the metricCache
-     */
     public synchronized HashSet<MetricObject> getMetricCache() {
         return metricCache;
     }

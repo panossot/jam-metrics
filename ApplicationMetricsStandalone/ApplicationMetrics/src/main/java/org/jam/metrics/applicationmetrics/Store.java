@@ -21,6 +21,7 @@
 
 package org.jam.metrics.applicationmetrics;
 
+import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
 import org.jam.metrics.applicationmetricslibrary.MetricObject;
 import org.jam.metrics.applicationmetricslibrary.MetricsCache;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
@@ -39,8 +40,10 @@ public class Store {
         if (mo != null) {
             mo.addMetricValue(fieldValue,true);
             
-            if (properties.getCacheMaxSize() < mo.getMetric().size())
+            if (properties.getCacheMaxSize() < mo.getMetric().size()) {
                 mo.getMetric().remove(0);
+                mo.increaseMetricCacheObjectDeleted();
+            }
         } else {
             MetricObject newMo = new MetricObject();
             newMo.addMetricValue(fieldValue,true);

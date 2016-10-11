@@ -26,6 +26,7 @@ import java.util.List;
 import org.jboss.logging.Logger;
 import org.jam.metrics.applicationmetrics.utils.MDataPoint;
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
+import org.jam.metrics.applicationmetricslibrary.MetricObject;
 import org.jam.metrics.applicationmetricslibrary.MetricsCache;
 import org.jam.metrics.applicationmetricslibrary.MetricsCacheCollection;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
@@ -74,7 +75,8 @@ public class MonitoringRhq {
         String metricIdLoaded = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getRhqScheduleId(fieldName);
         int metricsRhqMonitored = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getRhqMonitoringCount(name);
         int refreshRhqRate = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getRhqMonitoringRefreshRate();
-        List<Object> metricValues = metricsCacheInstance.searchMetricObject(name).getMetric();
+        MetricObject mo = metricsCacheInstance.searchMetricObject(name);
+        List<Object> metricValues = mo.getMetric();
         int metricCount = metricValues.size();
                 
         if (metricIdLoaded != null) {
@@ -86,15 +88,17 @@ public class MonitoringRhq {
                     now = nowHistory+1;
             }
 
-            if(metricCount >= metricsRhqMonitored + refreshRhqRate) {
+            if(metricCount >= metricsRhqMonitored - mo.getMetricCacheObjectDeleted() + refreshRhqRate) {
                 List<MDataPoint> points = new ArrayList<>(refreshRhqRate);
                 
-                for (int i=metricsRhqMonitored; i<metricsRhqMonitored+refreshRhqRate; i++) {
-                    MDataPoint dataPoint = new MDataPoint();
-                    dataPoint.setScheduleId(numericScheduleId);
-                    dataPoint.setTimeStamp(now++);
-                    dataPoint.setValue((Double)metricValues.get(i));
-                    points.add(dataPoint);
+                for (int i=metricsRhqMonitored - mo.getMetricCacheObjectDeleted(); i<metricsRhqMonitored - mo.getMetricCacheObjectDeleted() + refreshRhqRate; i++) {
+                    if (metricValues.get(i)!=null) {
+                        MDataPoint dataPoint = new MDataPoint();
+                        dataPoint.setScheduleId(numericScheduleId);
+                        dataPoint.setTimeStamp(now++);
+                        dataPoint.setValue((Double)metricValues.get(i));
+                        points.add(dataPoint);
+                    }
                 }
                 try {
                     postRhq.postArrayDataRhq(points, APPLICATION_JSON);

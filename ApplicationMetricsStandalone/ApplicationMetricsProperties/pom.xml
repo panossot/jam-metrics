@@ -57,6 +57,11 @@
             <artifactId>JMathPlot</artifactId>
             <version>1.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.hawkular.apm</groupId>
+            <artifactId>hawkular-apm-api</artifactId>
+            <version>0.10.0.Final</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -51,4 +51,6 @@ public @interface Metric {
     String[] data() default {};
     @Nonbinding
     String[] color() default {};
+    @Nonbinding
+    String apmTraceName() default "";
 }

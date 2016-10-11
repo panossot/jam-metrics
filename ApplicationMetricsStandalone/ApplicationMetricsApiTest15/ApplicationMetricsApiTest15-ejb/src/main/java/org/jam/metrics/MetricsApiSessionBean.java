@@ -35,7 +35,7 @@ public class MetricsApiSessionBean {
         Callable<Object> applyMetricFeatures1 = new Callable<Object>() {
             public Object call() throws Exception {
                 MetricsClass.setCount(MetricsClass.getCountAtomic().getAndIncrement());
-                CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(metricsClass.getMetricUser()).putIntegerCodeParam("sequenceNum", MetricsClass.getI().getAndIncrement());
+             //   CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(metricsClass.getMetricUser()).putIntegerCodeParam("sequenceNum", MetricsClass.getI().getAndIncrement());
 
                 return null;
             }
@@ -44,7 +44,7 @@ public class MetricsApiSessionBean {
         Callable<Object> applyMetricFeatures2 = new Callable<Object>() {
             public Object call() throws Exception {
                 MetricsClass.setCount2(MetricsClass.getCount2()+2);
-                CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(metricsClass.getMetricUser()).putIntegerCodeParam("sequenceNum", MetricsClass.getI().getAndIncrement());
+            //    CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(metricsClass.getMetricUser()).putIntegerCodeParam("sequenceNum", MetricsClass.getI().getAndIncrement());
 
                 return null;
             }

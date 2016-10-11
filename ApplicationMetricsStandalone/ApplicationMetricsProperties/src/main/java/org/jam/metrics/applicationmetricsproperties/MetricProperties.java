@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.sql.Statement;
 import java.util.HashMap;
 import javax.swing.JFrame;
+import org.hawkular.apm.api.model.trace.Trace;
 import org.math.plot.Plot2DPanel;
 
 /**
@@ -35,6 +36,7 @@ public class MetricProperties {
  
     private String rhqMonitoring = "false";
     private String hawkularMonitoring = "false";
+    private String hawkularApm = "false";
     private String cacheStore = "false";
     private String OpenAnalytics = "false";
     private int cacheMaxSize = Integer.MAX_VALUE;
@@ -44,6 +46,7 @@ public class MetricProperties {
     private HashMap<String,Statement> databaseStatement;
     private HashMap<String,String> updateDbQueries;
     private HashMap<String,Integer> updateRateOfDbQueries;
+    private HashMap<String,Trace> hawkularApmTraces;
     private HashMap<String,Plot2DPanel> plots;
     private HashMap<String,JFrame> frames;
     private HashMap<String,Color> colors;
@@ -60,6 +63,12 @@ public class MetricProperties {
     private String hawkularServerUsername = "hawkularadmin";
     private String hawkularServerPassword = "hawkularadmin";
     private String hawkularTenant = "hawkular";
+    private int hawkularApmRefreshRate = 1;
+    private String hawkularApmServerUrl = "localhost";
+    private String hawkularApmServerPort = "8080";
+    private String hawkularApmServerUsername = "hawkularapmadmin";
+    private String hawkularApmServerPassword = "hawkularapmadmin";
+    private String hawkularApmTenant = "hawkular";
 
     public MetricProperties() {
         rhqScheduleIds = new HashMap<>();
@@ -69,6 +78,75 @@ public class MetricProperties {
         plots = new HashMap<>();
         colors = new HashMap<>();
         frames = new HashMap<>();
+        hawkularApmTraces = new HashMap<>();
+    }
+
+    public HashMap<String, Trace> getHawkularApmTraces() {
+        return hawkularApmTraces;
+    }
+
+    public void setHawkularApmTraces(HashMap<String, Trace> hawkularApmTraces) {
+        this.hawkularApmTraces = hawkularApmTraces;
+    }
+    
+    public void addHawkularApmTraces(String traceName, Trace trace) {
+        this.hawkularApmTraces.put(traceName, trace);
+    }
+
+    public String getHawkularApm() {
+        return hawkularApm;
+    }
+
+    public void setHawkularApm(String hawkularApm) {
+        this.hawkularApm = hawkularApm;
+    }
+
+    public int getHawkularApmRefreshRate() {
+        return hawkularApmRefreshRate;
+    }
+
+    public void setHawkularApmRefreshRate(int hawkularApmRefreshRate) {
+        this.hawkularApmRefreshRate = hawkularApmRefreshRate;
+    }
+
+    public String getHawkularApmServerUrl() {
+        return hawkularApmServerUrl;
+    }
+
+    public void setHawkularApmServerUrl(String hawkularApmServerUrl) {
+        this.hawkularApmServerUrl = hawkularApmServerUrl;
+    }
+
+    public String getHawkularApmServerPort() {
+        return hawkularApmServerPort;
+    }
+
+    public void setHawkularApmServerPort(String hawkularApmServerPort) {
+        this.hawkularApmServerPort = hawkularApmServerPort;
+    }
+
+    public String getHawkularApmServerUsername() {
+        return hawkularApmServerUsername;
+    }
+
+    public void setHawkularApmServerUsername(String hawkularApmServerUsername) {
+        this.hawkularApmServerUsername = hawkularApmServerUsername;
+    }
+
+    public String getHawkularApmServerPassword() {
+        return hawkularApmServerPassword;
+    }
+
+    public void setHawkularApmServerPassword(String hawkularApmServerPassword) {
+        this.hawkularApmServerPassword = hawkularApmServerPassword;
+    }
+
+    public String getHawkularApmTenant() {
+        return hawkularApmTenant;
+    }
+
+    public void setHawkularApmTenant(String hawkularApmTenant) {
+        this.hawkularApmTenant = hawkularApmTenant;
     }
 
     public synchronized String getHawkularMonitoring() {

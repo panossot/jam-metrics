@@ -95,7 +95,7 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.setHawkularMonitoringRefreshRate(100);
         metricProperties.setHawkularTenant("hawkular");
         metricProperties.setCacheStore("true");
-        metricProperties.setCacheMaxSize(10000);
+        metricProperties.setCacheMaxSize(1000);
         CodeParamsApi.addUserName("Niki");
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
     }

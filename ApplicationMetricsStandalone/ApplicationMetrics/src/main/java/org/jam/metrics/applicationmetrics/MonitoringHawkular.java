@@ -1,5 +1,5 @@
 /*
- * Copyleft 2015 Red Hat, Inc. and/or its affiliates
+ * Copyleft 2016 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,7 @@ import java.util.List;
 import org.jboss.logging.Logger;
 import org.jam.metrics.applicationmetrics.utils.DataPoint;
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
+import org.jam.metrics.applicationmetricslibrary.MetricObject;
 import org.jam.metrics.applicationmetricslibrary.MetricsCache;
 import org.jam.metrics.applicationmetricslibrary.MetricsCacheCollection;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
@@ -74,7 +75,8 @@ public class MonitoringHawkular {
         MetricsCache metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group);
         int metricsHawkularMonitored = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getHawkularMonitoringCount(name);
         int refreshHawkularRate = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getHawkularMonitoringRefreshRate();
-        List<Object> metricValues = metricsCacheInstance.searchMetricObject(name).getMetric();
+        MetricObject mo = metricsCacheInstance.searchMetricObject(name);
+        List<Object> metricValues = mo.getMetric();
         int metricCount = metricValues.size();
                 
         long now = System.currentTimeMillis();
@@ -84,12 +86,14 @@ public class MonitoringHawkular {
                 now = nowHistory+1;
         }
 
-        if(metricCount >= metricsHawkularMonitored + refreshHawkularRate) {
+        if(metricCount >= metricsHawkularMonitored - mo.getMetricCacheObjectDeleted() + refreshHawkularRate) {
             List<DataPoint> points = new ArrayList<>(refreshHawkularRate);
                 
-            for (int i=metricsHawkularMonitored; i<metricsHawkularMonitored+refreshHawkularRate; i++) {
-                DataPoint<Double> dataPoint = new DataPoint(now++,(Double)metricValues.get(i),new HashMap<String, String>());
-                points.add(dataPoint);
+            for (int i=metricsHawkularMonitored-mo.getMetricCacheObjectDeleted(); i<metricsHawkularMonitored - mo.getMetricCacheObjectDeleted() + refreshHawkularRate; i++) {
+                if (metricValues.get(i)!=null) {
+                    DataPoint<Double> dataPoint = new DataPoint(now++,(Double)metricValues.get(i),new HashMap<String, String>());
+                    points.add(dataPoint);
+                }
             }
             try {
                 postHawkular.postArrayDataHawkular(points, fieldName, APPLICATION_JSON, tenant);
