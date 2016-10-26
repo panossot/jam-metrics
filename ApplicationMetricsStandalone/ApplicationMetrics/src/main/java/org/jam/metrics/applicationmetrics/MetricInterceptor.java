@@ -28,9 +28,13 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.hawkular.apm.api.model.Property;
+import org.hawkular.apm.api.model.trace.Consumer;
+import org.hawkular.apm.api.model.trace.Producer;
 import org.hawkular.apm.api.model.trace.Trace;
 import org.jam.metrics.applicationmetricsapi.Metric;
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
+import org.jam.metrics.applicationmetricslibrary.MetricInternalParameters;
+import org.jam.metrics.applicationmetricslibrary.MetricObject;
 import org.jam.metrics.applicationmetricslibrary.MetricsCache;
 import org.jam.metrics.applicationmetricslibrary.MetricsCacheCollection;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
@@ -48,10 +52,11 @@ public class MetricInterceptor {
     private final static Object hawkularLock = new Object();
     private final static Object hawkularApmLock = new Object();
     private final static Object cacheLock = new Object();
+    private static int id = 1;
 
     @AroundInvoke
     public Object metricsInterceptor(InvocationContext ctx) throws Exception {
-        Object result = null;
+        Object result = ctx.proceed();
         Method method = ctx.getMethod();
         final Object target = ctx.getTarget();
 
@@ -63,7 +68,6 @@ public class MetricInterceptor {
                 int fieldNameSize = metricAnnotation.fieldName().length;
                 final int dataSize = metricAnnotation.data().length;
                 final String group = metricAnnotation.groupName();
-                final String ampTrace = metricAnnotation.apmTraceName();
 
                 final MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
                 String cacheStore = properties.getCacheStore();
@@ -73,20 +77,15 @@ public class MetricInterceptor {
                 final String hawkularTenant = properties.getHawkularTenant();
                 String metricPlot = properties.getMetricPlot();
                 final int refreshRate = properties.getPlotRefreshRate();
-                Trace trace = null;
-                if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
-                    trace = properties.getHawkularApmTraces().get(ampTrace);
-                    trace.setStartTime(System.currentTimeMillis());
-                }
 
-                result = ctx.proceed();
-                
                 for (int i = 0; i < fieldNameSize; i++) {
 
                     final Field field = accessField(metricAnnotation, method, i);
                     final Object fieldValue = field.get(target);
                     final String fieldName = field.getName();
                     metricValuesInternal.put(metricAnnotation.fieldName()[i], field.get(target));
+                    Trace trace = null;
+                    MetricObject mo = null;
 
                     if (cacheStore != null && Boolean.parseBoolean(cacheStore)) {
                         synchronized (cacheLock) {
@@ -95,9 +94,12 @@ public class MetricInterceptor {
                                 metricsCacheInstance = new MetricsCache();
                                 MetricsCacheCollection.getMetricsCacheCollection().addMetricsCacheInstance(group, metricsCacheInstance);
                             }
-                            Store.CacheStore(target, fieldName, fieldValue, metricsCacheInstance, properties);
-                            if (hawkularApm != null && Boolean.parseBoolean(hawkularApm) && trace != null && trace.getNodes().get(0) != null)
-                                trace.getNodes().get(0).getProperties().add(new Property(fieldName,String.valueOf(fieldValue)));
+
+                            mo = Store.CacheStore(target, fieldName, fieldValue, metricsCacheInstance, properties);
+
+                            if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
+
+                            }
                         }
                     }
 
@@ -145,23 +147,45 @@ public class MetricInterceptor {
                         }.start();
                     }
 
-                }
+                    if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
+                        MetricInternalParameters internalParameters = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group);
+                        trace = new Trace();
+                        trace.setId(fieldName + String.valueOf(id++));
+                        trace.setStartTime(System.currentTimeMillis());
 
-                if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
-                    HawkularApm hawkularApmInstance;
-                    synchronized (hawkularApmLock) {
-                        hawkularApmInstance = HawkularApmCollection.getHawkularApmCollection().getHawkularApmInstance(group);
-                        if (hawkularApmInstance == null) {
-                            hawkularApmInstance = new HawkularApm(group);
-                            HawkularApmCollection.getHawkularApmCollection().addHawkularApmInstance(group, hawkularApmInstance);
+                        Consumer c1 = new Consumer();
+                        c1.getProperties().add(new Property(fieldName, String.valueOf(fieldValue)));
+                        c1.getProperties().add(new Property("method", method.getName()));
+                        c1.getProperties().add(new Property("time", String.valueOf(System.currentTimeMillis())));
+                        c1.setEndpointType("js");
+                        c1.addInteractionCorrelationId(fieldName + "_" + internalParameters.getTraceListProcessed(fieldName));
+
+                        Producer p1 = new Producer();
+                        p1.addInteractionCorrelationId(fieldName + "_" + String.valueOf(internalParameters.getTraceListProcessed(fieldName) + 1));
+
+                        c1.getNodes().add(p1);
+                        trace.getNodes().add(c1);
+                        internalParameters.increaseTraceListProcessed(fieldName);
+
+                        final Trace traceAmp = trace;
+
+                        HawkularApm hawkularApmInstance;
+                        synchronized (hawkularApmLock) {
+                            hawkularApmInstance = HawkularApmCollection.getHawkularApmCollection().getHawkularApmInstance(group);
+                            if (hawkularApmInstance == null) {
+                                hawkularApmInstance = new HawkularApm(group);
+                                HawkularApmCollection.getHawkularApmCollection().addHawkularApmInstance(group, hawkularApmInstance);
+                            }
                         }
+
+                        try {
+                            hawkularApmInstance.hawkularApm(target, fieldName, traceAmp, hawkularTenant, group);
+                        } catch (IllegalArgumentException | IllegalAccessException ex) {
+                            ex.printStackTrace();
+                        }
+
                     }
 
-                    try {
-                        hawkularApmInstance.hawkularApm(target, trace, hawkularTenant, group);
-                    } catch (IllegalArgumentException | IllegalAccessException ex) {
-                        ex.printStackTrace();
-                    }
                 }
 
                 if (metricPlot != null && Boolean.parseBoolean(metricPlot)) {

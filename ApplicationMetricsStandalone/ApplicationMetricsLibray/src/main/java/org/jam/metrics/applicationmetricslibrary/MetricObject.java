@@ -23,9 +23,7 @@ package org.jam.metrics.applicationmetricslibrary;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -35,11 +33,25 @@ public class MetricObject {
 
     private List<Object> metric;
     private String name;
+    private int sequenceNum;
     private int metricCacheObjectDeleted;
 
     public MetricObject() {
         metric = Collections.synchronizedList(new ArrayList<Object>());
         metricCacheObjectDeleted = 0;
+        sequenceNum = 0;
+    }
+
+    public int getSequenceNum() {
+        return sequenceNum;
+    }
+
+    public void setSequenceNum(int sequenceNum) {
+        this.sequenceNum = sequenceNum;
+    }
+    
+    public void increaseSequenceNum() {
+        this.sequenceNum++;
     }
     
     public synchronized int getMetricCacheObjectDeleted() {

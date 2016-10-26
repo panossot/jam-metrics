@@ -21,6 +21,8 @@
 package org.jam.metrics.applicationmetricslibrary;
 
 import java.util.HashMap;
+import java.util.List;
+import org.hawkular.apm.api.model.trace.Trace;
 
 /**
  *
@@ -33,6 +35,10 @@ public class MetricInternalParameters {
     private HashMap<String,Integer> rhqMonitoringCount;
     private HashMap<String,Integer> hawkularMonitoringCount;
     private HashMap<String,HashMap<String,DbQueries>> dbQueries;
+    private HashMap<String,List<Trace>> traceLists;
+    private HashMap<String,Integer> traceListRefreshed;
+    private HashMap<String,Integer> traceListProcessed;
+    private HashMap<String,Integer> hawkularAmpTimestampUpdate;
 
     public MetricInternalParameters() {
         this.plotHandler = new HashMap<>();
@@ -41,8 +47,106 @@ public class MetricInternalParameters {
         this.rhqMonitoringCount = new HashMap<>();
         this.hawkularMonitoringCount = new HashMap<>();
         this.dbQueries = new HashMap<>();
+        this.traceLists = new HashMap<>();
+        this.traceListRefreshed = new HashMap<>();
+        this.traceListProcessed = new HashMap<>();
+        this.hawkularAmpTimestampUpdate = new HashMap<>();
     }
 
+    public synchronized int getHawkularAmpTimestampUpdate(String metricName) {
+        if (hawkularAmpTimestampUpdate.get(metricName) == null)
+            hawkularAmpTimestampUpdate.put(metricName, 1);
+        
+        return hawkularAmpTimestampUpdate.get(metricName);
+    }
+
+    public synchronized void setHawkularAmpTimestampUpdate(HashMap<String, Integer> hawkularampTimestampUpdate) {
+        this.hawkularAmpTimestampUpdate = traceListProcessed;
+    }
+    
+    public synchronized void putHawkularAmpTimestampUpdate(String metricName, int hawkularampTimestampUpdate) {
+        this.hawkularAmpTimestampUpdate.put(metricName, hawkularampTimestampUpdate);
+    }
+    
+    public synchronized void increaseHawkularAmpTimestampUpdate(String metricName) {
+        if (this.hawkularAmpTimestampUpdate.get(metricName)==null)
+            this.hawkularAmpTimestampUpdate.put(metricName, 1);
+        else
+            this.hawkularAmpTimestampUpdate.put(metricName, this.hawkularAmpTimestampUpdate.get(metricName)+1);
+    }
+    
+    public synchronized HashMap<String, List<Trace>> getTraceLists() {
+        return traceLists;
+    }
+
+    public synchronized void setTraceLists(HashMap<String, List<Trace>> traceLists) {
+        this.traceLists = traceLists;
+    }
+
+    public synchronized HashMap<String, Integer> getTraceListRefreshed() {
+        return traceListRefreshed;
+    }
+
+    public synchronized void setTraceListRefreshed(HashMap<String, Integer> traceListRefreshed) {
+        this.traceListRefreshed = traceListRefreshed;
+    }
+    
+    public synchronized void increaseTraceListRefreshed(String metricName) {
+        if (this.traceListRefreshed.get(metricName)==null)
+            this.traceListRefreshed.put(metricName, 1);
+        else
+            this.traceListRefreshed.put(metricName, this.traceListRefreshed.get(metricName)+1);
+    }
+    
+    public synchronized void decreaseTraceListRefreshed(String metricName) {
+        if (this.traceListRefreshed.get(metricName)==null)
+            this.traceListRefreshed.put(metricName, 0);
+        else
+            this.traceListRefreshed.put(metricName, this.traceListRefreshed.get(metricName)-1);
+    }
+    
+    public synchronized void putTraceListRefreshed(String metricName, int numTracesRefreshed) {
+        this.traceListRefreshed.put(metricName, numTracesRefreshed);
+    }
+
+    public synchronized int getTraceListProcessed(String metricName) {
+        if (traceListProcessed.get(metricName) == null)
+            traceListProcessed.put(metricName, 0);
+        
+        return traceListProcessed.get(metricName);
+    }
+
+    public synchronized void setTraceListProcessed(HashMap<String, Integer> traceListProcessed) {
+        this.traceListProcessed = traceListProcessed;
+    }
+    
+    public synchronized void putTraceListProcessed(String metricName, int numTracesProcessed) {
+        this.traceListProcessed.put(metricName, numTracesProcessed);
+    }
+    
+    public synchronized void increaseTraceListProcessed(String metricName) {
+        if (this.traceListProcessed.get(metricName) != null)
+            this.traceListProcessed.put(metricName, this.traceListProcessed.get(metricName)+1);
+        else
+            this.traceListProcessed.put(metricName, 1);
+    }
+
+    public synchronized List<Trace> getTraceList(String metricName) {
+        return traceLists.get(metricName);
+    }
+
+    public synchronized void putTraceList(String metricName, List<Trace> traceList) {
+        this.traceLists.put(metricName, traceList);
+    }
+
+    public synchronized int getTraceListRefreshed(String metricName) {
+        return traceListRefreshed.get(metricName);
+    }
+
+    public synchronized void setTraceListRefreshed(String metricName, int newTracesNum) {
+        this.traceListRefreshed.put(metricName, newTracesNum);
+    }
+    
     public synchronized HashMap<String, Integer> getHawkularMonitoringCount() {
         return hawkularMonitoringCount;
     }

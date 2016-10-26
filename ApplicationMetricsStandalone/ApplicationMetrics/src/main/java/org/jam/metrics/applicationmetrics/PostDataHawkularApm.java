@@ -33,5 +33,10 @@ public interface PostDataHawkularApm {
     @POST
     @Path("traces/fragments")
     @Consumes("application/json")
-    void postDataHawkularApm(List<Trace> data, @HeaderParam(HttpHeaders.ACCEPT) String accept, @HeaderParam("Hawkular-Tenant") String tenant);
+    void postDataHawkularApm(List<Trace> data, @HeaderParam(HttpHeaders.ACCEPT) String accept, @HeaderParam("Hawkular-Tenant") String tenant, @HeaderParam(HttpHeaders.CONTENT_TYPE) String content, @HeaderParam("Timestamp") long timestamp);
+    
+    @POST
+    @Path("traces/fragments")
+    @Consumes("application/json")
+    void postDataHawkularApm(List<Trace> data, @HeaderParam(HttpHeaders.ACCEPT) String accept, @HeaderParam("Hawkular-Tenant") String tenant, @HeaderParam(HttpHeaders.CONTENT_TYPE) String content);
 }

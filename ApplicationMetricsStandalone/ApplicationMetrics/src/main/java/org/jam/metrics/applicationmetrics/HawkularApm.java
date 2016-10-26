@@ -22,9 +22,11 @@ package org.jam.metrics.applicationmetrics;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.hawkular.apm.api.model.trace.CorrelationIdentifier;
 import org.hawkular.apm.api.model.trace.Trace;
 import org.jboss.logging.Logger;
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
+import org.jam.metrics.applicationmetricslibrary.MetricInternalParameters;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
 import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
@@ -43,10 +45,9 @@ public class HawkularApm {
     private final String REST_SERVER_USERNAME;
     private final String REST_SERVER_PASSWORD;
     private final PostDataHawkularApm postHawkularApm;
+   
 
     private Logger logger = Logger.getLogger(HawkularApm.class);
-    private static long nowHistory = 0;
-    private static Object historyLock = new Object();
 
     public HawkularApm(String deployment) {
 
@@ -64,14 +65,40 @@ public class HawkularApm {
 
     }
 
-    public synchronized boolean hawkularApm(Object target, Trace trace, String tenant, String group) throws IllegalArgumentException, IllegalAccessException {
+    public synchronized boolean hawkularApm(Object target, String fieldName, Trace trace, String tenant, String group) throws IllegalArgumentException, IllegalAccessException {
         boolean dataSent = false;
 
         try {
-            List<Trace> traceList = new ArrayList();
+            MetricInternalParameters internalParameters = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group);
+            List<Trace> traceList = internalParameters.getTraceList(fieldName);
+            int hawkularApmRefreshRate = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getHawkularApmRefreshRate();
+            int hawkularApmVisbleTraces = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getHawkularApmVisibleTraces();
+            
+            if (traceList==null) {
+                traceList = new ArrayList();
+            }
+            if (traceList.size()==hawkularApmVisbleTraces)
+                traceList.remove(0);
+            
             traceList.add(trace);
-            postHawkularApm.postDataHawkularApm(traceList, APPLICATION_JSON, tenant);
-            dataSent = true;
+            internalParameters.increaseTraceListRefreshed(fieldName);
+            internalParameters.putTraceList(fieldName, traceList);
+            
+            if (internalParameters.getTraceListRefreshed(fieldName) == hawkularApmRefreshRate) {
+                traceList.get(0).getNodes().get(0).setCorrelationIds(null);
+                double timestampUpdateRate = hawkularApmVisbleTraces/hawkularApmRefreshRate;
+                
+                if (timestampUpdateRate >= internalParameters.getHawkularAmpTimestampUpdate(fieldName)) {
+                    postHawkularApm.postDataHawkularApm(traceList, APPLICATION_JSON, tenant, APPLICATION_JSON);
+                    internalParameters.increaseHawkularAmpTimestampUpdate(fieldName);
+                } else {
+                    postHawkularApm.postDataHawkularApm(traceList, APPLICATION_JSON, tenant, APPLICATION_JSON, System.currentTimeMillis());
+                    internalParameters.putHawkularAmpTimestampUpdate(fieldName, 1);
+                }
+                    
+                internalParameters.putTraceListRefreshed(fieldName, 0);
+                dataSent = true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

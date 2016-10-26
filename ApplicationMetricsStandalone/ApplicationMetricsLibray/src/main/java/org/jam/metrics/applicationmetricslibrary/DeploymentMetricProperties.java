@@ -62,7 +62,7 @@ public class DeploymentMetricProperties {
         this.deploymentProperties.clear();
     }
 
-    public synchronized MetricInternalParameters getDeploymentInternalParameters(String name) {
+    public MetricInternalParameters getDeploymentInternalParameters(String name) {
         return  deploymentInternalParameters.get(name);
     }
     

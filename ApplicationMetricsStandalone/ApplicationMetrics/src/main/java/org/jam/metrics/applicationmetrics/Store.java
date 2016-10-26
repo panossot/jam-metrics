@@ -33,9 +33,9 @@ import org.jam.metrics.applicationmetricsproperties.MetricProperties;
  */
 public class Store {
 
-    public static void CacheStore(Object target, String fieldName, Object fieldValue, MetricsCache metricsCacheInstance, MetricProperties properties) throws IllegalArgumentException, IllegalAccessException {
+    public static MetricObject CacheStore(Object target, String fieldName, Object fieldValue, MetricsCache metricsCacheInstance, MetricProperties properties) throws IllegalArgumentException, IllegalAccessException {
         String name = fieldName + "_" + target;
-        MetricObject mo;
+        MetricObject mo = null;
         mo = metricsCacheInstance.searchMetricObject(name);
         if (mo != null) {
             mo.addMetricValue(fieldValue,true);
@@ -51,7 +51,10 @@ public class Store {
             if (!metricsCacheInstance.addMetricCacheObject(newMo)) {
                 Store.CacheStore(target, fieldName, fieldValue, metricsCacheInstance, properties);
             }
+            mo = newMo;
         }
+        
+        return mo;
     }
 
 }

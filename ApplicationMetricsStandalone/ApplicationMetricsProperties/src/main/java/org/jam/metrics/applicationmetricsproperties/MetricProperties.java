@@ -63,12 +63,13 @@ public class MetricProperties {
     private String hawkularServerUsername = "hawkularadmin";
     private String hawkularServerPassword = "hawkularadmin";
     private String hawkularTenant = "hawkular";
-    private int hawkularApmRefreshRate = 1;
+    private int hawkularApmRefreshRate = 2;
+    private int hawkularApmVisibleTraces = 4;
     private String hawkularApmServerUrl = "localhost";
     private String hawkularApmServerPort = "8080";
     private String hawkularApmServerUsername = "hawkularapmadmin";
     private String hawkularApmServerPassword = "hawkularapmadmin";
-    private String hawkularApmTenant = "hawkular";
+    private String hawkularApmTenant = "my-tenant";
 
     public MetricProperties() {
         rhqScheduleIds = new HashMap<>();
@@ -79,6 +80,14 @@ public class MetricProperties {
         colors = new HashMap<>();
         frames = new HashMap<>();
         hawkularApmTraces = new HashMap<>();
+    }
+
+    public int getHawkularApmVisibleTraces() {
+        return hawkularApmVisibleTraces;
+    }
+
+    public void setHawkularApmVisibleTraces(int hawkularApmVisibleTraces) {
+        this.hawkularApmVisibleTraces = hawkularApmVisibleTraces;
     }
 
     public HashMap<String, Trace> getHawkularApmTraces() {
