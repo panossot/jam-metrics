@@ -117,6 +117,7 @@ public class ApplicationJavaSeMetrics {
             MetricInternalParameters internalParameters = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(metricGroup);
             Trace trace = new Trace();
             trace.setId(metricName + String.valueOf(id++));
+            trace.setBusinessTransaction(metricName);
             trace.setStartTime(System.currentTimeMillis());
 
             Consumer c1 = new Consumer();

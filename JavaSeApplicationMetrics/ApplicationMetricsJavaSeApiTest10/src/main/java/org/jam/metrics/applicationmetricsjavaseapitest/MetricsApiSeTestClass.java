@@ -38,8 +38,8 @@ public class MetricsApiSeTestClass {
     
     public MetricsApiSeTestClass() {
         metricProperties = new MetricProperties(null, "myTestGroup", null, null);
-        count = new Metric("count7", 0, metricProperties);
-        count2 = new Metric("count8", 0, metricProperties);
+        count = new Metric("count9", 0, metricProperties);
+        count2 = new Metric("count10", 0, metricProperties);
     }
 
     public void countMethod() throws Exception {

@@ -151,6 +151,7 @@ public class MetricInterceptor {
                         MetricInternalParameters internalParameters = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group);
                         trace = new Trace();
                         trace.setId(fieldName + String.valueOf(id++));
+                        trace.setBusinessTransaction(fieldName);
                         trace.setStartTime(System.currentTimeMillis());
 
                         Consumer c1 = new Consumer();
