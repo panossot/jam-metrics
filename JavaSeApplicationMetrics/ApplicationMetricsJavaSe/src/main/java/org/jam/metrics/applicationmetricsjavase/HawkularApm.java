@@ -18,7 +18,7 @@
 /*
  *  ΙΔΕΑ : Everything is a potential metric .
  */
-package org.jam.metrics.applicationmetrics;
+package org.jam.metrics.applicationmetricsjavase;
 
 import java.util.ArrayList;
 import java.util.List;

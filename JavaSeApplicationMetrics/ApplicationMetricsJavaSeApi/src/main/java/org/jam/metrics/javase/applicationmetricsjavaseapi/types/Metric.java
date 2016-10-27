@@ -63,10 +63,10 @@ public class Metric implements MetricInterface {
         this.metricValue = metricValue;
     }
 
-    public synchronized void applyMetricFeatures(Callable<Object> applyMetric) {
+    public synchronized void applyMetricFeatures(Callable<Object> applyMetric, String... args) {
         try {
             applyMetric.call();
-            ApplicationJavaSeMetrics.metric(this,metricValue, metricName,metricProperties.groupName);
+            ApplicationJavaSeMetrics.metric(this,metricValue, metricName,metricProperties.groupName,args);
             ApplicationJavaSeMetricsSyncDbStore.metricsDbStore(this, new Object[]{metricValue}, metricProperties.groupName, metricProperties.statementName, new String[]{metricProperties.queryString, metricName}, metricProperties.userName);
         } catch (Exception ex) {
             ex.printStackTrace();

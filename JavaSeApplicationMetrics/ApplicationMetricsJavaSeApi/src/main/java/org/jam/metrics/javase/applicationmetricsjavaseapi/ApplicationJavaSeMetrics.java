@@ -18,15 +18,21 @@
 /*
  *  ΙΔΕΑ : Everything is a potential metric .
  */
-
 package org.jam.metrics.javase.applicationmetricsjavaseapi;
 
+import org.hawkular.apm.api.model.Property;
+import org.hawkular.apm.api.model.trace.Consumer;
+import org.hawkular.apm.api.model.trace.Producer;
+import org.hawkular.apm.api.model.trace.Trace;
+import org.jam.metrics.applicationmetricsjavase.HawkularApm;
+import org.jam.metrics.applicationmetricsjavase.HawkularApmCollection;
 import org.jam.metrics.applicationmetricsjavase.MonitoringHawkular;
 import org.jam.metrics.applicationmetricsjavase.MonitoringHawkularCollection;
 import org.jam.metrics.applicationmetricsjavase.MonitoringRhq;
 import org.jam.metrics.applicationmetricsjavase.MonitoringRhqCollection;
 import org.jam.metrics.applicationmetricsjavase.Store;
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
+import org.jam.metrics.applicationmetricslibrary.MetricInternalParameters;
 import org.jam.metrics.applicationmetricslibrary.MetricsCache;
 import org.jam.metrics.applicationmetricslibrary.MetricsCacheCollection;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
@@ -40,13 +46,15 @@ public class ApplicationJavaSeMetrics {
     private final static Object cacheStorage = new Object();
     private final static Object rhqLock = new Object();
     private final static Object hawkularLock = new Object();
-    private final static Object cacheLock = new Object();
+    private final static Object hawkularApmLock = new Object();
+    private static int id = 1;
 
-    public static void metric(final Object instance, Object value, final String metricName, final String metricGroup) throws Exception {
+    public static void metric(final Object instance, Object value, final String metricName, final String metricGroup, final String... moreArgs) throws Exception {
         final MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(metricGroup);
         String cacheStore = properties.getCacheStore();
         String rhqMonitoring = properties.getRhqMonitoring();
         String hawkularMonitoring = properties.getHawkularMonitoring();
+        String hawkularApm = properties.getHawkularApm();
         final String hawkularTenant = properties.getHawkularTenant();
 
         synchronized (cacheStorage) {
@@ -103,6 +111,45 @@ public class ApplicationJavaSeMetrics {
 
                 }
             }.start();
+        }
+
+        if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
+            MetricInternalParameters internalParameters = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(metricGroup);
+            Trace trace = new Trace();
+            trace.setId(metricName + String.valueOf(id++));
+            trace.setStartTime(System.currentTimeMillis());
+
+            Consumer c1 = new Consumer();
+            c1.getProperties().add(new Property(metricName, String.valueOf(value)));
+            c1.getProperties().add(new Property("method", moreArgs[0]));
+            c1.getProperties().add(new Property("time", String.valueOf(System.currentTimeMillis())));
+            c1.setEndpointType("js");
+            c1.addInteractionCorrelationId(metricName + "_" + internalParameters.getTraceListProcessed(metricName));
+
+            Producer p1 = new Producer();
+            p1.addInteractionCorrelationId(metricName + "_" + String.valueOf(internalParameters.getTraceListProcessed(metricName) + 1));
+
+            c1.getNodes().add(p1);
+            trace.getNodes().add(c1);
+            internalParameters.increaseTraceListProcessed(metricName);
+
+            final Trace traceAmp = trace;
+
+            HawkularApm hawkularApmInstance;
+            synchronized (hawkularApmLock) {
+                hawkularApmInstance = HawkularApmCollection.getHawkularApmCollection().getHawkularApmInstance(metricGroup);
+                if (hawkularApmInstance == null) {
+                    hawkularApmInstance = new HawkularApm(metricGroup);
+                    HawkularApmCollection.getHawkularApmCollection().addHawkularApmInstance(metricGroup, hawkularApmInstance);
+                }
+            }
+
+            try {
+                hawkularApmInstance.hawkularApm(metricName, traceAmp, hawkularTenant, metricGroup);
+            } catch (IllegalArgumentException | IllegalAccessException ex) {
+                ex.printStackTrace();
+            }
+
         }
 
     }

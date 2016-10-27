@@ -27,7 +27,7 @@ import java.util.concurrent.Callable;
  * @author panos
  */
 public interface MetricInterface {
-    public void applyMetricFeatures(Callable<Object> applyMetric);
+    public void applyMetricFeatures(Callable<Object> applyMetric, String... args);
     public String getMetricName();
     public void setMetricName(String metricName);
     public Object getMetricValue();

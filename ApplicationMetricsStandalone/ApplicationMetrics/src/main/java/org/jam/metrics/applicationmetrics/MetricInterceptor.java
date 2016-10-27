@@ -179,7 +179,7 @@ public class MetricInterceptor {
                         }
 
                         try {
-                            hawkularApmInstance.hawkularApm(target, fieldName, traceAmp, hawkularTenant, group);
+                            hawkularApmInstance.hawkularApm(fieldName, traceAmp, hawkularTenant, group);
                         } catch (IllegalArgumentException | IllegalAccessException ex) {
                             ex.printStackTrace();
                         }

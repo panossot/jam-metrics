@@ -45,6 +45,11 @@
             <version>${project.version}</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.hawkular.apm</groupId>
+            <artifactId>hawkular-apm-api</artifactId>
+            <version>0.11.0.Final</version>
+        </dependency>
     </dependencies>
 
     <build>
