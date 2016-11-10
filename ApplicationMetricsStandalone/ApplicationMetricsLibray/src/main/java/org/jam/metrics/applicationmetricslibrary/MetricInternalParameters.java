@@ -39,6 +39,7 @@ public class MetricInternalParameters {
     private HashMap<String,Integer> traceListRefreshed;
     private HashMap<String,Integer> traceListProcessed;
     private HashMap<String,Integer> hawkularAmpTimestampUpdate;
+    private HashMap<String,HawkularApmManagers> hawkularApmManagers;
 
     public MetricInternalParameters() {
         this.plotHandler = new HashMap<>();
@@ -51,8 +52,21 @@ public class MetricInternalParameters {
         this.traceListRefreshed = new HashMap<>();
         this.traceListProcessed = new HashMap<>();
         this.hawkularAmpTimestampUpdate = new HashMap<>();
+        this.hawkularApmManagers = new HashMap<>();
     }
 
+    public synchronized void putHawkularApmManagers(String thread, HawkularApmManagers hawkularApmManagers) {
+        this.hawkularApmManagers.put(thread, hawkularApmManagers);
+    }
+
+    public synchronized HawkularApmManagers getHawkularApmManagers(String thread) {
+        return hawkularApmManagers.get(thread);
+    }
+
+    public synchronized void setHawkularApmManagers(HashMap<String, HawkularApmManagers> hawkularApmManagers) {
+        this.hawkularApmManagers = hawkularApmManagers;
+    }
+    
     public synchronized int getHawkularAmpTimestampUpdate(String metricName) {
         if (hawkularAmpTimestampUpdate.get(metricName) == null)
             hawkularAmpTimestampUpdate.put(metricName, 1);

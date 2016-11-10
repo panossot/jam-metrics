@@ -68,6 +68,16 @@
             <artifactId>hawkular-apm-api</artifactId>
             <version>0.11.0.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.hawkular.apm</groupId>
+            <artifactId>hawkular-apm-client-opentracing</artifactId>
+            <version>0.11.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-core</artifactId>
+            <version>3.3.3</version>
+        </dependency>
     </dependencies>
 
     <build>

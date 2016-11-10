@@ -58,12 +58,12 @@ public class ApplicationMetricsJavaSeApiTest10 {
     private static void initializeMetricProperties() {
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setHawkularApm("true");
-        metricProperties.setHawkularApmRefreshRate(100);
-        metricProperties.setHawkularApmVisibleTraces(6);
+        metricProperties.setHawkularApmRefreshRate(5);
+        metricProperties.setHawkularApmVisibleTraces(5);
         metricProperties.setHawkularApmTenant("my-tenant");
         metricProperties.setCacheStore("true");
         metricProperties.setCacheMaxSize(1000);
-        metricProperties.setHawkularApmServerPort("8580");
+        metricProperties.setHawkularApmServerPort("8680");
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
     }
     

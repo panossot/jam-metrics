@@ -17,6 +17,8 @@
 package org.jam.metrics;
 
 import java.util.concurrent.Callable;
+import javax.inject.Inject;
+import org.jam.metrics.applicationmetricsapi.HawkularApm;
 
 /**
  *

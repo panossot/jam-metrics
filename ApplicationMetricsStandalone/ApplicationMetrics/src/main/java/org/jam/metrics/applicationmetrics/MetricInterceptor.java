@@ -73,7 +73,7 @@ public class MetricInterceptor {
                 String cacheStore = properties.getCacheStore();
                 String rhqMonitoring = properties.getRhqMonitoring();
                 String hawkularMonitoring = properties.getHawkularMonitoring();
-                String hawkularApm = properties.getHawkularApm();
+                String hawkularApm = properties.getHawkularMetricsApm();
                 final String hawkularTenant = properties.getHawkularTenant();
                 String metricPlot = properties.getMetricPlot();
                 final int refreshRate = properties.getPlotRefreshRate();
@@ -170,11 +170,11 @@ public class MetricInterceptor {
 
                         final Trace traceAmp = trace;
 
-                        HawkularApm hawkularApmInstance;
+                        MonitoringHawkularApm hawkularApmInstance;
                         synchronized (hawkularApmLock) {
                             hawkularApmInstance = HawkularApmCollection.getHawkularApmCollection().getHawkularApmInstance(group);
                             if (hawkularApmInstance == null) {
-                                hawkularApmInstance = new HawkularApm(group);
+                                hawkularApmInstance = new MonitoringHawkularApm(group);
                                 HawkularApmCollection.getHawkularApmCollection().addHawkularApmInstance(group, hawkularApmInstance);
                             }
                         }

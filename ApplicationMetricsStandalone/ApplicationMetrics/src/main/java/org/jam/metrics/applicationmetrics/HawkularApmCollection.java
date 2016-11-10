@@ -29,29 +29,29 @@ import java.util.HashMap;
 public class HawkularApmCollection {
 
     private static final HawkularApmCollection hawkularapmc = new HawkularApmCollection();
-    private HashMap<String, HawkularApm> hawkularApmInstances;
+    private HashMap<String, MonitoringHawkularApm> hawkularApmInstances;
 
     private HawkularApmCollection() {
-        hawkularApmInstances = new HashMap<String, HawkularApm>();
+        hawkularApmInstances = new HashMap<String, MonitoringHawkularApm>();
     }
     
     public static HawkularApmCollection getHawkularApmCollection() {
         return hawkularapmc;
     }
     
-    public synchronized HashMap<String, HawkularApm> getHawkularApmInstances() {
+    public synchronized HashMap<String, MonitoringHawkularApm> getHawkularApmInstances() {
         return hawkularApmInstances;
     }
 
-    public synchronized void setHawkularApmInstances(HashMap<String, HawkularApm> hawkularApmInstances) {
+    public synchronized void setHawkularApmInstances(HashMap<String, MonitoringHawkularApm> hawkularApmInstances) {
         this.hawkularApmInstances = hawkularApmInstances;
     }
     
-    public synchronized HawkularApm getHawkularApmInstance(String name) {
+    public synchronized MonitoringHawkularApm getHawkularApmInstance(String name) {
         return (this.hawkularApmInstances.get(name));
     }
     
-    public synchronized void addHawkularApmInstance(String name, HawkularApm hawkularApm) {
+    public synchronized void addHawkularApmInstance(String name, MonitoringHawkularApm hawkularApm) {
         this.hawkularApmInstances.put(name, hawkularApm);
     }
     

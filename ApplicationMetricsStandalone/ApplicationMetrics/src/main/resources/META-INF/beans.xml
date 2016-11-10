@@ -8,5 +8,6 @@
         <class>org.jam.metrics.applicationmetrics.MetricFilterInterceptor</class>
         <class>org.jam.metrics.applicationmetrics.DBStoreInterceptor</class>
         <class>org.jam.metrics.applicationmetrics.DBStoreSyncInterceptor</class>
+        <class>org.jam.metrics.applicationmetrics.HawkularApmInterceptor</class>
     </interceptors>
 </beans>

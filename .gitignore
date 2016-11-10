@@ -9,3 +9,4 @@ jboss.xml
 #dirs
 target
 /AutomatedMetricsStandalone/JBossAutomatedMetricsProperties/target2/
+/ApplicationMetricsStandalone/ApplicationMetricsApiTest15/ApplicationMetricsApiTest15-web/target2/

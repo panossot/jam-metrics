@@ -37,6 +37,7 @@ public class MetricProperties {
     private String rhqMonitoring = "false";
     private String hawkularMonitoring = "false";
     private String hawkularApm = "false";
+    private String hawkularMetricsApm = "false";
     private String cacheStore = "false";
     private String OpenAnalytics = "false";
     private int cacheMaxSize = Integer.MAX_VALUE;
@@ -81,6 +82,14 @@ public class MetricProperties {
         frames = new HashMap<>();
         hawkularApmTraces = new HashMap<>();
     }
+
+    public String getHawkularMetricsApm() {
+        return hawkularMetricsApm;
+    }
+
+    public void setHawkularMetricsApm(String hawkularMetricsApm) {
+        this.hawkularMetricsApm = hawkularMetricsApm;
+    } 
 
     public int getHawkularApmVisibleTraces() {
         return hawkularApmVisibleTraces;

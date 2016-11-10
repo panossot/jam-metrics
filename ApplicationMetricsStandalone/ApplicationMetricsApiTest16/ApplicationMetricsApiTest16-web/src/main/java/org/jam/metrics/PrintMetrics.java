@@ -23,12 +23,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.hawkular.apm.api.model.Property;
-import org.hawkular.apm.api.model.trace.Consumer;
-import org.hawkular.apm.api.model.trace.Node;
-import org.hawkular.apm.api.model.trace.NodeType;
-import org.hawkular.apm.api.model.trace.Producer;
-import org.hawkular.apm.api.model.trace.Trace;
 import org.jam.metrics.applicationmetricsapi.CodeParamsApi;
 import org.jam.metrics.applicationmetricsapi.MetricsCacheApi;
 import org.jam.metrics.applicationmetricsapi.MetricsPropertiesApi;
@@ -103,7 +97,7 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.setHawkularApmTenant("my-tenant");
         metricProperties.setCacheStore("true");
         metricProperties.setCacheMaxSize(1000);
-        metricProperties.setHawkularApmServerPort("8580");
+        metricProperties.setHawkularApmServerPort("8680");
         CodeParamsApi.addUserName("Niki");
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
     }

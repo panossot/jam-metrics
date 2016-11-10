@@ -18,10 +18,11 @@ package org.jam.metrics;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.inject.Inject;
 import org.jam.metrics.applicationmetricsapi.DBStore;
+import org.jam.metrics.applicationmetricsapi.HawkularApm;
 import org.jam.metrics.applicationmetricsapi.Metric;
 import org.jam.metrics.applicationmetricslibrary2.CodeParams;
-import org.jam.metrics.applicationmetricslibrary2.CodeParamsCollection;
 
 /**
  *
@@ -36,6 +37,9 @@ public class MetricsClass {
     private String metricUser="Niki";
     
     private CodeParams cp;
+    
+    @Inject
+    EndingClass endClass;
 
     public static AtomicInteger getCountAtomic() {
         return countAtomic;
@@ -80,14 +84,18 @@ public class MetricsClass {
     
     @Metric(fieldName = {"count"}, groupName = "myTestGroup")
     @DBStore(groupName = "myTestGroup", queryUpdateDB = {"StoreDBMetric","count"}, statementName = "statement_1")
+    @HawkularApm(childMethodSpans = {"endClass"}, groupName = "myTestGroup")
     public synchronized void getAndSetCountIncreased(Callable<Object> func) throws Exception {
         func.call();
+        endClass.endClass();
     }
 
     @Metric(fieldName = {"count2"}, groupName = "myTestGroup")
     @DBStore(groupName = "myTestGroup", queryUpdateDB = {"StoreDBMetric","count2"}, statementName = "statement_1")
+    @HawkularApm(childMethodSpans = {"endClass"}, groupName = "myTestGroup")
     public synchronized void getAndSetCount2Increased(Callable<Object> func) throws Exception {
         func.call();
+        endClass.endClass();
     }
     
 }

@@ -24,7 +24,7 @@ import org.hawkular.apm.api.model.Property;
 import org.hawkular.apm.api.model.trace.Consumer;
 import org.hawkular.apm.api.model.trace.Producer;
 import org.hawkular.apm.api.model.trace.Trace;
-import org.jam.metrics.applicationmetricsjavase.HawkularApm;
+import org.jam.metrics.applicationmetricsjavase.MonitoringHawkularApm;
 import org.jam.metrics.applicationmetricsjavase.HawkularApmCollection;
 import org.jam.metrics.applicationmetricsjavase.MonitoringHawkular;
 import org.jam.metrics.applicationmetricsjavase.MonitoringHawkularCollection;
@@ -54,7 +54,7 @@ public class ApplicationJavaSeMetrics {
         String cacheStore = properties.getCacheStore();
         String rhqMonitoring = properties.getRhqMonitoring();
         String hawkularMonitoring = properties.getHawkularMonitoring();
-        String hawkularApm = properties.getHawkularApm();
+        String hawkularApm = properties.getHawkularMetricsApm();
         final String hawkularTenant = properties.getHawkularTenant();
 
         synchronized (cacheStorage) {
@@ -136,11 +136,11 @@ public class ApplicationJavaSeMetrics {
 
             final Trace traceAmp = trace;
 
-            HawkularApm hawkularApmInstance;
+            MonitoringHawkularApm hawkularApmInstance;
             synchronized (hawkularApmLock) {
                 hawkularApmInstance = HawkularApmCollection.getHawkularApmCollection().getHawkularApmInstance(metricGroup);
                 if (hawkularApmInstance == null) {
-                    hawkularApmInstance = new HawkularApm(metricGroup);
+                    hawkularApmInstance = new MonitoringHawkularApm(metricGroup);
                     HawkularApmCollection.getHawkularApmCollection().addHawkularApmInstance(metricGroup, hawkularApmInstance);
                 }
             }

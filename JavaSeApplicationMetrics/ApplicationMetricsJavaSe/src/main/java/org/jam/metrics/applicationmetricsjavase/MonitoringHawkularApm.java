@@ -18,7 +18,7 @@
 /*
  *  ΙΔΕΑ : Everything is a potential metric .
  */
-package org.jam.metrics.applicationmetrics;
+package org.jam.metrics.applicationmetricsjavase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
  *
  * @author Panagiotis Sotiropoulos
  */
-public class HawkularApm {
+public class MonitoringHawkularApm {
 
     private final String APPLICATION_JSON;
     private final int REST_SERVER_PORT;
@@ -46,9 +46,9 @@ public class HawkularApm {
     private final PostDataHawkularApm postHawkularApm;
    
 
-    private Logger logger = Logger.getLogger(HawkularApm.class);
+    private Logger logger = Logger.getLogger(MonitoringHawkularApm.class);
 
-    public HawkularApm(String deployment) {
+    public MonitoringHawkularApm(String deployment) {
 
         MetricProperties metricProperties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(deployment);
         APPLICATION_JSON = "application/json";
