@@ -1,5 +1,5 @@
 /*
- * Copyleft 2015  by Red Hat.
+ * Copyleft 2016  by Red Hat.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,18 @@
  *  ΙΔΕΑ : Everything is a potential metric .
  */
 
-package org.jam.metrics.javase.applicationmetricsjavaseapi;
+package org.jam.metrics.applicationmetricsapi.types;
 
-import org.jam.metrics.applicationmetricslibrary2.CodeParams;
-import org.jam.metrics.applicationmetricslibrary2.CodeParamsCollection;
+import java.util.concurrent.Callable;
 
 /**
  *
  * @author panos
  */
-public class CodeParamsApi {
-    public static CodeParams getCodeParams(String user) {
-        return CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(user);
-    }
-    
-    public static void addUserName(String user) {
-        CodeParamsCollection.getCodeParamsCollection().addCodeParamsInstance(user);
-    }
+public interface MetricInterface {
+    public void applyMetricFeatures(Callable<Object> applyMetric, String... args);
+    public String getMetricName();
+    public void setMetricName(String metricName);
+    public Object getMetricValue();
+    public void setMetricValue(Object metricValue);
 }

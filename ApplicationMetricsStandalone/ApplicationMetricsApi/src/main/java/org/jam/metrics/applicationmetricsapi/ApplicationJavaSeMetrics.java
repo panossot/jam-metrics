@@ -18,7 +18,7 @@
 /*
  *  ΙΔΕΑ : Everything is a potential metric .
  */
-package org.jam.metrics.javase.applicationmetricsjavaseapi;
+package org.jam.metrics.applicationmetricsapi;
 
 import org.hawkular.apm.api.model.Property;
 import org.hawkular.apm.api.model.trace.Consumer;

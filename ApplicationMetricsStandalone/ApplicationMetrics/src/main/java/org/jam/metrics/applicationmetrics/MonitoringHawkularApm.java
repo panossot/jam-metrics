@@ -23,6 +23,7 @@ package org.jam.metrics.applicationmetrics;
 import java.util.ArrayList;
 import java.util.List;
 import org.hawkular.apm.api.model.trace.Trace;
+import org.hawkular.apm.trace.publisher.rest.client.TracePublisherRESTClient;
 import org.jboss.logging.Logger;
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
 import org.jam.metrics.applicationmetricslibrary.MetricInternalParameters;
@@ -44,7 +45,7 @@ public class MonitoringHawkularApm {
     private final String REST_SERVER_USERNAME;
     private final String REST_SERVER_PASSWORD;
     private final PostDataHawkularApm postHawkularApm;
-   
+    TracePublisherRESTClient tprc;
 
     private Logger logger = Logger.getLogger(MonitoringHawkularApm.class);
 
@@ -61,6 +62,8 @@ public class MonitoringHawkularApm {
         ResteasyWebTarget target = client.target("http://" + REST_SERVER_ADDRESS + ":" + REST_SERVER_PORT);
         target.register(new BasicAuthentication(REST_SERVER_USERNAME, REST_SERVER_PASSWORD));
         postHawkularApm = target.proxy(PostDataHawkularApm.class);
+        
+        tprc = new TracePublisherRESTClient();
 
     }
 

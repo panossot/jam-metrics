@@ -18,11 +18,12 @@
  *  ΙΔΕΑ : Everything is a potential metric .
  */
 
-package org.jam.metrics.javase.applicationmetricsjavaseapi.types;
+package org.jam.metrics.applicationmetricsapi.types;
 
 import java.util.concurrent.Callable;
-import org.jam.metrics.javase.applicationmetricsjavaseapi.ApplicationJavaSeMetrics;
-import org.jam.metrics.javase.applicationmetricsjavaseapi.ApplicationJavaSeMetricsSyncDbStore;
+import org.jam.metrics.applicationmetricsapi.ApplicationJavaSeMetrics;
+import org.jam.metrics.applicationmetricsapi.ApplicationJavaSeMetricsSyncDbStore;
+
 
 /**
  *

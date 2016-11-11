@@ -72,6 +72,12 @@
             <artifactId>jam-metrics-properties</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jam.metrics</groupId>
+            <artifactId>jam-metrics-javase</artifactId>
+            <version>${project.version}</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>

@@ -17,8 +17,8 @@
 package org.jam.metrics.applicationmetricsjavaseapitest;
 
 import java.util.concurrent.Callable;
-import org.jam.metrics.javase.applicationmetricsjavaseapi.types.Metric;
-import org.jam.metrics.javase.applicationmetricsjavaseapi.types.MetricProperties;
+import org.jam.metrics.applicationmetricsapi.types.Metric;
+import org.jam.metrics.applicationmetricsapi.types.MetricProperties;
 
 
 

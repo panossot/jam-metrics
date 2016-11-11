@@ -14,7 +14,6 @@
     
     <modules>
         <module>ApplicationMetricsJavaSe</module>
-        <module>ApplicationMetricsJavaSeApi</module>
         <module>ApplicationMetricsJavaSeApiTest</module>
         <module>ApplicationMetricsJavaSeApiTest2</module>
         <module>ApplicationMetricsJavaSeApiTest3</module>

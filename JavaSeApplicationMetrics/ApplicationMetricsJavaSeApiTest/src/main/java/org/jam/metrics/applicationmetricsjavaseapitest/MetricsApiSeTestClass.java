@@ -16,7 +16,7 @@
  */
 package org.jam.metrics.applicationmetricsjavaseapitest;
 
-import org.jam.metrics.javase.applicationmetricsjavaseapi.ApplicationJavaSeMetrics;
+import org.jam.metrics.applicationmetricsapi.ApplicationJavaSeMetrics;
 
 
 

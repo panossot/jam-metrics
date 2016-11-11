@@ -18,7 +18,7 @@
  *  ΙΔΕΑ : Everything is a potential metric .
  */
 
-package org.jam.metrics.javase.applicationmetricsjavaseapi;
+package org.jam.metrics.applicationmetricsapi;
 
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
 import org.jam.metrics.applicationmetricslibrary2.CodeParams;

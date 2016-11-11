@@ -39,7 +39,7 @@ import org.jboss.logging.Logger;
 public class HawkularApmInterceptor {
 
     private Logger logger = Logger.getLogger(HawkularApmInterceptor.class);
-    private Tracer tracer = new APMTracer();
+    private static Tracer tracer = new APMTracer();
 
     @AroundInvoke
     public Object hawkularApmInterceptor(InvocationContext ctx) throws Exception {

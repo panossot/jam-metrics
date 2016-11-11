@@ -19,7 +19,7 @@
  *  ΙΔΕΑ : Everything is a potential metric .
  */
 
-package org.jam.metrics.javase.applicationmetricsjavaseapi;
+package org.jam.metrics.applicationmetricsapi;
 
 import java.sql.SQLException;
 import org.jam.metrics.applicationmetricsjavase.DBStoreCollection;

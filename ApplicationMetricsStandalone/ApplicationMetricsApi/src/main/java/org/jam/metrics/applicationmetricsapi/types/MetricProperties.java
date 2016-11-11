@@ -18,7 +18,7 @@
  *  ΙΔΕΑ : Everything is a potential metric .
  */
 
-package org.jam.metrics.javase.applicationmetricsjavaseapi.types;
+package org.jam.metrics.applicationmetricsapi.types;
 
 /**
  *

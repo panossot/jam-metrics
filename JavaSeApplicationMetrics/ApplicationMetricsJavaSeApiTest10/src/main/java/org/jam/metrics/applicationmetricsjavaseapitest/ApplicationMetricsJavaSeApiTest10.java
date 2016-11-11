@@ -16,9 +16,9 @@
  */
 package org.jam.metrics.applicationmetricsjavaseapitest;
 
-import org.jam.metrics.javase.applicationmetricsjavaseapi.MetricsCacheApi;
+import org.jam.metrics.applicationmetricsapi.MetricsCacheApi;
 
-import org.jam.metrics.javase.applicationmetricsjavaseapi.MetricsPropertiesApi;
+import org.jam.metrics.applicationmetricsapi.MetricsPropertiesApi;
 import org.jam.metrics.applicationmetricslibrary.MetricsCacheCollection;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
 
