@@ -21,8 +21,6 @@
 package org.jam.metrics.applicationmetricsapi;
 
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
-import org.jam.metrics.applicationmetricslibrary2.CodeParams;
-import org.jam.metrics.applicationmetricslibrary2.CodeParamsCollection;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
 
 /**
@@ -37,21 +35,7 @@ public class ApplicationJavaSeMetricFilter {
             final MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(metricGroup);
             String filterMetrics = properties.getFilterMetrics();
 
-            if (filterMetrics != null && Boolean.parseBoolean(filterMetrics)) {
-                final double fieldValue = Double.parseDouble(value.toString());
-                CodeParams cp = CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(userName);
-
-                if (fieldValue > comparableValue) {
-                    cp.setFilterParam(filterParamName, largerThan);
-                }
-                if (fieldValue < comparableValue) {
-                    cp.setFilterParam(filterParamName, smallerThan);
-                }
-                if (fieldValue == comparableValue) {
-                    cp.setFilterParam(filterParamName, equalsWith);
-                }
-
-            }
+            MetricFilterAdapter.metricFilterAdapter(filterMetrics, properties, value, metricName, metricGroup, comparableValue, filterParamName, userName, largerThan, smallerThan, equalsWith);
         } catch (Exception e) {
             e.printStackTrace();
         }

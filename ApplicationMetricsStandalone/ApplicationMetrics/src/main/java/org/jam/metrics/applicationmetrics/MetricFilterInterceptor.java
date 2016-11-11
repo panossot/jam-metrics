@@ -52,53 +52,14 @@ public class MetricFilterInterceptor {
             
         try {
             final MetricFilter metricFilterAnnotation = method.getAnnotation(MetricFilter.class);
-            if (metricFilterAnnotation != null) {
-                final String group = metricFilterAnnotation.groupName();
-
-                final MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
-                String filterMetrics = properties.getFilterMetrics();
-                
-                if (filterMetrics != null && Boolean.parseBoolean(filterMetrics)) {
-                    final double comparableValue = metricFilterAnnotation.comparableValue();
-                    final String filterName = metricFilterAnnotation.filterName();
-                    final String filterParamName = metricFilterAnnotation.filterParamName();
-                    final String userName = metricFilterAnnotation.user();
-                    final boolean largerThan = metricFilterAnnotation.largerThan();
-                    final boolean smallerThan = metricFilterAnnotation.smallerThan();
-                    final boolean equalsWith = metricFilterAnnotation.equalsWith();
-                    final Field field = accessField(metricFilterAnnotation, method);
-                    final double fieldValue = Double.parseDouble((field.get(target)).toString());
-                    CodeParams cp = CodeParamsCollection.getCodeParamsCollection().getCodeParamsInstance(userName);
-                    
-                    if(fieldValue>comparableValue)
-                        cp.setFilterParam(filterParamName, largerThan);
-                    if(fieldValue<comparableValue)
-                        cp.setFilterParam(filterParamName, smallerThan);
-                    if(fieldValue==comparableValue)
-                        cp.setFilterParam(filterParamName, equalsWith);
-                        
-                }
-
-            }
+            
+            MetricFilterAdapter.metricFilterAdapter(metricFilterAnnotation, target, null, method, metricFields);
 
         } catch(Exception e) {
             e.printStackTrace();
         }
         
         return result;
-    }
-
-    private synchronized Field accessField(MetricFilter metricFilterAnnotation, Method method) throws Exception {
-        Field field;
-        if (metricFields.containsKey(metricFilterAnnotation.fieldName())) {
-            field = metricFields.get(metricFilterAnnotation.fieldName());
-        } else {
-            field = method.getDeclaringClass().getDeclaredField(metricFilterAnnotation.fieldName());
-            field.setAccessible(true);
-            metricFields.put(metricFilterAnnotation.fieldName(), field);
-        }
-        
-        return field;
     }
     
 }

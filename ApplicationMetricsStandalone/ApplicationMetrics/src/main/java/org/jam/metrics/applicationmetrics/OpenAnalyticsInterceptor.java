@@ -39,8 +39,6 @@ import org.jam.metrics.applicationmetricsproperties.MetricProperties;
 @Interceptor
 public class OpenAnalyticsInterceptor {
 
-    private final static Object OpenAnalyticsLock = new Object();
-
     @AroundInvoke
     public Object OpenAnalyticsInterceptor(InvocationContext ctx) throws Exception {
         long millisStart = Calendar.getInstance().getTimeInMillis();
@@ -81,29 +79,9 @@ public class OpenAnalyticsInterceptor {
                 final MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
                 String OpenAnalytics = properties.getOpenAnalytics();    
                     
-                if (OpenAnalytics != null && Boolean.parseBoolean(OpenAnalytics)) {
-                    new Thread() {
-                        public void run() {
-                            try {
-                                OpenAnalyticsInstance OpenAnalyticsInstance;
-                                synchronized(OpenAnalyticsLock) {
-                                    OpenAnalyticsInstance = OpenAnalyticsCollection.getOpenAnalyticsCollection().getOpenAnalyticsInstance(group);
-                                    if (OpenAnalyticsInstance == null) {
-                                        OpenAnalyticsInstance = new OpenAnalyticsInstance();
-                                        OpenAnalyticsCollection.getOpenAnalyticsCollection().addOpenAnalyticsInstance(group, OpenAnalyticsInstance);
-                                    }
-                                }
-                                
-                                OpenAnalyticsInstance.dbStoreAnalytics(idRecord, locationRecord, numAccessRecord, timeAccessRecord, date, time, methodName, className, instance, user, recordDbName, recordTableName, locationDbName, locationTableName, statementName, locationStatementName, group);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }.start();
-                }
-                    
-               
+                OpenAnalyticsAdapter.openAnalyticsAdapter(OpenAnalytics, group, idRecord, locationRecord, numAccessRecord, timeAccessRecord, date, time, methodName, className, instance, user, recordDbName, recordTableName, locationDbName, locationTableName, statementName, locationStatementName);
             }
+            
         } catch(Exception e) {
             e.printStackTrace();
         }

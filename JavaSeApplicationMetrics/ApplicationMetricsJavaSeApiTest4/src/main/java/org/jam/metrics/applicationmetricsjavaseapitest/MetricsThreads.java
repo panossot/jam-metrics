@@ -40,7 +40,8 @@ public class MetricsThreads extends Thread {
         try {
             System.out.println("Thread: " + threadName);
             
-            metricsApiSeTestClass.countMethod();
+            for (int i=0; i<100; i++)
+                metricsApiSeTestClass.countMethod();
             
         } catch (Exception e) {
             e.printStackTrace();
