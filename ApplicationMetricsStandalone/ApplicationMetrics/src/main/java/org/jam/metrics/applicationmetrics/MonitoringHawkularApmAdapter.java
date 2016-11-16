@@ -64,10 +64,10 @@ class MonitoringHawkularApmAdapter {
 
             MonitoringHawkularApm hawkularApmInstance;
             synchronized (hawkularApmLock) {
-                hawkularApmInstance = HawkularApmCollection.getHawkularApmCollection().getHawkularApmInstance(group);
+                hawkularApmInstance = MonitoringHawkularApmCollection.getMonitoringHawkularApmCollection().getMonitoringHawkularApmInstance(group);
                 if (hawkularApmInstance == null) {
                     hawkularApmInstance = new MonitoringHawkularApm(group);
-                    HawkularApmCollection.getHawkularApmCollection().addHawkularApmInstance(group, hawkularApmInstance);
+                    MonitoringHawkularApmCollection.getMonitoringHawkularApmCollection().addMonitoringHawkularApmInstance(group, hawkularApmInstance);
                 }
             }
 

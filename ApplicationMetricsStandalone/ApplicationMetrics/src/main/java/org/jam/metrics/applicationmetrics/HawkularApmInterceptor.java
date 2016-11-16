@@ -1,11 +1,12 @@
 /*
- * Copyright 2016 panos.
+ * Copyleft 2016 Red Hat, Inc. and/or its affiliates
+ * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,14 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ *  ΙΔΕΑ : Everything is a potential metric .
+ */
 package org.jam.metrics.applicationmetrics;
 
 import io.opentracing.Span;
-import io.opentracing.Tracer;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import org.hawkular.apm.api.model.trace.Trace;
+import org.hawkular.apm.client.api.reporter.TraceReporter;
 import org.hawkular.apm.client.opentracing.APMTracer;
 import org.jam.metrics.applicationmetricsapi.HawkularApm;
 import org.jam.metrics.applicationmetricsapi.Metric;
@@ -39,7 +47,9 @@ import org.jboss.logging.Logger;
 public class HawkularApmInterceptor {
 
     private Logger logger = Logger.getLogger(HawkularApmInterceptor.class);
-    private static Tracer tracer = new APMTracer();
+    private static MetricsTraceReporter reporter = new MetricsTraceReporter();
+    private static APMTracer tracer = new APMTracer(reporter);
+    private final static Object hawkularApmLock = new Object();
 
     @AroundInvoke
     public Object hawkularApmInterceptor(InvocationContext ctx) throws Exception {
@@ -55,6 +65,8 @@ public class HawkularApmInterceptor {
                 final String group = hawkularApmAnnotation.groupName();
                 final MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
                 final String hawkularApm = properties.getHawkularApm();
+                final String hawkularTenant = properties.getHawkularTenant();
+                
 
                 if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
                     String threadName = Thread.currentThread().getName();
@@ -82,7 +94,7 @@ public class HawkularApmInterceptor {
                                 .withTag("service", spanService != null ? spanService : method.getName() + "Service")
                                 .withTag("transaction", spanTransaction != null ? spanTransaction : method.getName() + "Transaction")
                                 .start();
-
+                        
                         hApmManagers.getParentSpans(method.getName()).remove(0);
 
                         int submethodSpanLength = submethodSpans.length;
@@ -134,6 +146,21 @@ public class HawkularApmInterceptor {
                     }
 
                 }
+                
+                HawkularApmService hawkularApmInstance;
+                synchronized (hawkularApmLock) {
+                    hawkularApmInstance = HawkularApmCollection.getHawkularApmCollection().getHawkularApmInstance(group);
+                    if (hawkularApmInstance == null) {
+                        hawkularApmInstance = new HawkularApmService(group);
+                        HawkularApmCollection.getHawkularApmCollection().addHawkularApmInstance(group, hawkularApmInstance);
+                    }
+                }
+
+                try {
+                    hawkularApmInstance.hawkularApm(reporter.getTraces(), hawkularTenant, group);
+                } catch (IllegalArgumentException ex) {
+                    ex.printStackTrace();
+                }
             }
 
         } catch (Exception e) {
@@ -143,5 +170,23 @@ public class HawkularApmInterceptor {
         Object result = ctx.proceed();
 
         return result;
+    }
+    
+    public static class MetricsTraceReporter implements TraceReporter {
+
+        private List<Trace> traces = new ArrayList<>();
+
+        @Override
+        public void report(Trace trace) {
+            traces.add(trace);
+        }
+
+        /**
+         * @return the traces
+         */
+        public List<Trace> getTraces() {
+            return traces;
+        }
+
     }
 }

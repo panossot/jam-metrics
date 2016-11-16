@@ -26,40 +26,40 @@ import java.util.HashMap;
  *
  * @author Panagiotis Sotiropoulos
  */
-public class HawkularApmCollection {
+public class MonitoringHawkularApmCollection {
 
-    private static final HawkularApmCollection hawkularapmc = new HawkularApmCollection();
-    private HashMap<String, HawkularApmService> hawkularApmInstances;
+    private static final MonitoringHawkularApmCollection hawkularapmc = new MonitoringHawkularApmCollection();
+    private HashMap<String, MonitoringHawkularApm> hawkularApmInstances;
 
-    private HawkularApmCollection() {
-        hawkularApmInstances = new HashMap<String, HawkularApmService>();
+    private MonitoringHawkularApmCollection() {
+        hawkularApmInstances = new HashMap<String, MonitoringHawkularApm>();
     }
     
-    public static HawkularApmCollection getHawkularApmCollection() {
+    public static MonitoringHawkularApmCollection getMonitoringHawkularApmCollection() {
         return hawkularapmc;
     }
     
-    public synchronized HashMap<String, HawkularApmService> getHawkularApmInstances() {
+    public synchronized HashMap<String, MonitoringHawkularApm> getMonitoringHawkularApmInstances() {
         return hawkularApmInstances;
     }
 
-    public synchronized void setHawkularApmInstances(HashMap<String, HawkularApmService> hawkularApmInstances) {
+    public synchronized void setMonitoringHawkularApmInstances(HashMap<String, MonitoringHawkularApm> hawkularApmInstances) {
         this.hawkularApmInstances = hawkularApmInstances;
     }
     
-    public synchronized HawkularApmService getHawkularApmInstance(String name) {
+    public synchronized MonitoringHawkularApm getMonitoringHawkularApmInstance(String name) {
         return (this.hawkularApmInstances.get(name));
     }
     
-    public synchronized void addHawkularApmInstance(String name, HawkularApmService hawkularApm) {
+    public synchronized void addMonitoringHawkularApmInstance(String name, MonitoringHawkularApm hawkularApm) {
         this.hawkularApmInstances.put(name, hawkularApm);
     }
     
-    public synchronized void removeHawkularApmInstance(String name) {
+    public synchronized void removeMonitoringHawkularApmInstance(String name) {
         this.hawkularApmInstances.remove(name);
     }
     
-    public synchronized boolean existsHawkularApmInstance(String name) {
+    public synchronized boolean existsMonitoringHawkularApmInstance(String name) {
         return(this.hawkularApmInstances.containsKey(name));
     }
 
