@@ -52,7 +52,7 @@ public class HawkularApmService {
         tprc = new TracePublisherRESTClient();
         tprc.setPassword(REST_SERVER_PASSWORD);
         tprc.setUsername(REST_SERVER_USERNAME);
-        tprc.setUri("http://" + REST_SERVER_ADDRESS + ":" + REST_SERVER_PORT);
+        tprc.setUri("http://" + REST_SERVER_ADDRESS + ":" + REST_SERVER_PORT + "/");
 
     }
 
@@ -60,7 +60,8 @@ public class HawkularApmService {
         boolean dataSent = false;
 
         try {
-            tprc.publish(tenant, traces);
+            if (traces.size()!=0)
+                tprc.publish(tenant, traces);
             dataSent = true;
         } catch (Exception e) {
             e.printStackTrace();

@@ -20,13 +20,19 @@
  */
 package org.jam.metrics.applicationmetrics;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import io.opentracing.Span;
+import io.opentracing.propagation.Format;
+import io.opentracing.propagation.TextMapInjectAdapter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import org.hawkular.apm.api.model.Constants;
+import org.hawkular.apm.api.model.trace.Message;
 import org.hawkular.apm.api.model.trace.Trace;
 import org.hawkular.apm.client.api.reporter.TraceReporter;
 import org.hawkular.apm.client.opentracing.APMTracer;
@@ -47,9 +53,15 @@ import org.jboss.logging.Logger;
 public class HawkularApmInterceptor {
 
     private Logger logger = Logger.getLogger(HawkularApmInterceptor.class);
-    private static MetricsTraceReporter reporter = new MetricsTraceReporter();
-    private static APMTracer tracer = new APMTracer(reporter);
+    private final static MetricsTraceReporter reporter = new MetricsTraceReporter();
+    private final static APMTracer tracer = new APMTracer(reporter);
     private final static Object hawkularApmLock = new Object();
+    private static ObjectMapper mapper;
+
+    public HawkularApmInterceptor() {
+        mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+    }
 
     @AroundInvoke
     public Object hawkularApmInterceptor(InvocationContext ctx) throws Exception {
@@ -91,6 +103,7 @@ public class HawkularApmInterceptor {
                         Span parentSpan = tracer.buildSpan(method.getName())
                                 .asChildOf(hApmManagers.getParentSpans(method.getName()).get(0))
                                 .withStartTimestamp(System.currentTimeMillis())
+                                .withTag("orderId", "1243343456455")
                                 .withTag("service", spanService != null ? spanService : method.getName() + "Service")
                                 .withTag("transaction", spanTransaction != null ? spanTransaction : method.getName() + "Transaction")
                                 .start();
@@ -102,7 +115,13 @@ public class HawkularApmInterceptor {
                             for (int i = submethodSpanLength - 1; i >= 0; i--) {
                                 Span childSpan = tracer.buildSpan(submethodSpans[i])
                                         .asChildOf(parentSpan)
+                                        .withTag("myTag", "myTag")
+                                        .withTag(Constants.ZIPKIN_BIN_ANNOTATION_HTTP_URL, "http://localhost:8780/outbound")
                                         .start();
+                                
+                                Message message = new Message();
+                                tracer.inject(childSpan.context(), Format.Builtin.TEXT_MAP,
+                                        new TextMapInjectAdapter(message.getHeaders()));
 
                                 if (hApmManagers.getMethodIndex(submethodSpans[i]) != -1) {
                                     hApmManagers.getParentSpans(submethodSpans[i]).add(0, childSpan);
@@ -122,6 +141,7 @@ public class HawkularApmInterceptor {
                     } else {
                         Span parentSpan = tracer.buildSpan(method.getName())
                                 .withStartTimestamp(System.currentTimeMillis())
+                                .withTag("orderId", "1243343456455")
                                 .withTag("service", spanService != null ? spanService : method.getName() + "Service")
                                 .withTag("transaction", spanTransaction != null ? spanTransaction : method.getName() + "Transaction")
                                 .start();
@@ -131,8 +151,14 @@ public class HawkularApmInterceptor {
                             for (int i = submethodSpanLength - 1; i >= 0; i--) {
                                 Span childSpan = tracer.buildSpan(submethodSpans[i])
                                         .asChildOf(parentSpan)
+                                        .withTag("myTag", "myTag")
+                                        .withTag(Constants.ZIPKIN_BIN_ANNOTATION_HTTP_URL, "http://localhost:8780/outbound")
                                         .start();
 
+                                Message message = new Message();
+                                tracer.inject(childSpan.context(), Format.Builtin.TEXT_MAP,
+                                        new TextMapInjectAdapter(message.getHeaders()));
+                                
                                 if (hApmManagers.getMethodIndex(submethodSpans[i]) != -1) {
                                     hApmManagers.getParentSpans(submethodSpans[i]).add(0, childSpan);
                                 } else {

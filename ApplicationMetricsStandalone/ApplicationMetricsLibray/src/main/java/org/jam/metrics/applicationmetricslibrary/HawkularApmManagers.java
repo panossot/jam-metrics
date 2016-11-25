@@ -74,9 +74,8 @@ public class HawkularApmManagers {
             parentSpans.get(methodName).add(pos,spanContext);
         } else {
             parentSpans.put(methodName, new ArrayList<Span>());
+            parentSpans.get(methodName).add(pos,spanContext);
         }
-        
-        parentSpans.get(methodName).add(pos,spanContext);
     }
     
     public void removeParentSpan(String methodName, int pos) {

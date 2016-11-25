@@ -23,7 +23,6 @@ package org.jam.metrics.applicationmetrics;
 import java.util.ArrayList;
 import java.util.List;
 import org.hawkular.apm.api.model.trace.Trace;
-import org.hawkular.apm.trace.publisher.rest.client.TracePublisherRESTClient;
 import org.jboss.logging.Logger;
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
 import org.jam.metrics.applicationmetricslibrary.MetricInternalParameters;
@@ -32,7 +31,6 @@ import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
-
 
 /**
  *
@@ -46,7 +44,6 @@ public class MonitoringHawkularApm {
     private final String REST_SERVER_USERNAME;
     private final String REST_SERVER_PASSWORD;
     private final PostDataHawkularApm postHawkularApm;
-    TracePublisherRESTClient tprc;
 
     private Logger logger = Logger.getLogger(MonitoringHawkularApm.class);
 
@@ -63,8 +60,6 @@ public class MonitoringHawkularApm {
         ResteasyWebTarget target = client.target("http://" + REST_SERVER_ADDRESS + ":" + REST_SERVER_PORT);
         target.register(new BasicAuthentication(REST_SERVER_USERNAME, REST_SERVER_PASSWORD));
         postHawkularApm = target.proxy(PostDataHawkularApm.class);
-        
-        tprc = new TracePublisherRESTClient();
 
     }
 
@@ -76,35 +71,46 @@ public class MonitoringHawkularApm {
             List<Trace> traceList = internalParameters.getTraceList(fieldName);
             int hawkularApmRefreshRate = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getHawkularApmRefreshRate();
             int hawkularApmVisibleTraces = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getHawkularApmVisibleTraces();
-            
-            if (traceList==null) {
+
+            if (traceList == null) {
                 traceList = new ArrayList();
             }
-            if (traceList.size()==hawkularApmVisibleTraces)
+            if (traceList.size() == hawkularApmVisibleTraces) {
                 traceList.remove(0);
-            
+            }
+
             traceList.add(trace);
             internalParameters.increaseTraceListRefreshed(fieldName);
             internalParameters.putTraceList(fieldName, traceList);
-            
+
             if (internalParameters.getTraceListRefreshed(fieldName) == hawkularApmRefreshRate) {
                 traceList.get(0).getNodes().get(0).setCorrelationIds(null);
                 double timestampUpdateRate;
-                
+
                 if (hawkularApmVisibleTraces > hawkularApmRefreshRate) {
-                    timestampUpdateRate = hawkularApmVisibleTraces/hawkularApmRefreshRate;
+                    timestampUpdateRate = hawkularApmVisibleTraces / hawkularApmRefreshRate;
                 } else {
                     timestampUpdateRate = hawkularApmVisibleTraces;
                 }
-                
+
                 if (timestampUpdateRate >= internalParameters.getHawkularAmpTimestampUpdate(fieldName)) {
-                    postHawkularApm.postDataHawkularApm(traceList, APPLICATION_JSON, tenant, APPLICATION_JSON);
-                    internalParameters.increaseHawkularAmpTimestampUpdate(fieldName);
+                    final List<Trace> traceListF = traceList;
+                    new Thread() {
+                        public void run() {
+                            postHawkularApm.postDataHawkularApm(traceListF, APPLICATION_JSON, tenant, APPLICATION_JSON);
+                            internalParameters.increaseHawkularAmpTimestampUpdate(fieldName);
+                        }
+                    }.start();
                 } else {
-                    postHawkularApm.postDataHawkularApm(traceList, APPLICATION_JSON, tenant, APPLICATION_JSON, System.currentTimeMillis());
-                    internalParameters.putHawkularAmpTimestampUpdate(fieldName, 1);
+                    final List<Trace> traceListF = traceList;
+                    new Thread() {
+                        public void run() {
+                            postHawkularApm.postDataHawkularApm(traceListF, APPLICATION_JSON, tenant, APPLICATION_JSON, System.currentTimeMillis());
+                            internalParameters.putHawkularAmpTimestampUpdate(fieldName, 1);
+                        }
+                    }.start();
                 }
-                    
+
                 internalParameters.putTraceListRefreshed(fieldName, 0);
                 dataSent = true;
             }
