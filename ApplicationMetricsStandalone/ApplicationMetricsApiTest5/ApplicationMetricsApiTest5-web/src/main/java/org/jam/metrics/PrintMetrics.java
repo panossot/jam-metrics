@@ -105,7 +105,7 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.setCacheMaxSize(10000);
        // metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
-        metricProperties.setDatabaseStore("true");
+        metricProperties.setDatabaseStore("false");
         HashMap<String,Integer> dbUpdateRates = new HashMap<>();
         dbUpdateRates.put("StoreDBMetric", 300);
         metricProperties.setUpdateRateOfDbQueries(dbUpdateRates);

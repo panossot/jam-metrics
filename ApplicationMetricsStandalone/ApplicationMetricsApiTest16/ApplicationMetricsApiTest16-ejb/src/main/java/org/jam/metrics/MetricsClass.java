@@ -84,7 +84,7 @@ public class MetricsClass {
     
     @Metric(fieldName = {"count"}, groupName = "myTestGroup")
     @DBStore(groupName = "myTestGroup", queryUpdateDB = {"StoreDBMetric","count"}, statementName = "statement_1")
-    @HawkularApm(childMethodSpans = {"endClass"}, groupName = "myTestGroup")
+    @HawkularApm(childMethods = {"endClass"}, groupName = "myTestGroup")
     public synchronized void getAndSetCountIncreased(Callable<Object> func) throws Exception {
         func.call();
         endClass.endClass();
@@ -92,7 +92,7 @@ public class MetricsClass {
 
     @Metric(fieldName = {"count2"}, groupName = "myTestGroup")
     @DBStore(groupName = "myTestGroup", queryUpdateDB = {"StoreDBMetric","count2"}, statementName = "statement_1")
-    @HawkularApm(childMethodSpans = {"endClass"}, groupName = "myTestGroup")
+    @HawkularApm(childMethods = {"endClass"}, groupName = "myTestGroup")
     public synchronized void getAndSetCount2Increased(Callable<Object> func) throws Exception {
         func.call();
         endClass.endClass();

@@ -40,7 +40,7 @@ import javax.interceptor.InterceptorBinding;
 @Retention(RUNTIME)
 public @interface HawkularApm {
     @Nonbinding
-    String[] childMethodSpans() default {};
+    String[] childMethods() default {};
     @Nonbinding
     String groupName() default "testGroup";
     @Nonbinding
