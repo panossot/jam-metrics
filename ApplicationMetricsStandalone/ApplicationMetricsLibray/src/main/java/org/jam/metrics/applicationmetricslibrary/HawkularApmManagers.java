@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 panos.
+ * Copyleft 2016  by Red Hat.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ *  ΙΔΕΑ : Everything is a potential metric .
+ */
 package org.jam.metrics.applicationmetricslibrary;
 
 import io.opentracing.Span;
@@ -25,62 +29,55 @@ import java.util.HashMap;
  * @author panos
  */
 public class HawkularApmManagers {
-    private ArrayList<String> methodNames;
-    private HashMap<String,ArrayList<Span>> parentSpans;
+    private ArrayList<ChildParentMethod> methodQueue;
+    private int methodQueueIndex;
+    private HashMap<String,Span> spanStore;
+    private Span rootSpan;
 
     public HawkularApmManagers() {
-        methodNames = new ArrayList<>();
-        parentSpans = new HashMap<>();
+        methodQueue = new ArrayList<>();
+        methodQueueIndex = 0;
+        spanStore = new HashMap();
     }
 
-    public ArrayList<String> getMethodNames() {
-        return methodNames;
-    }
-    
-     public int getMethodIndex(String methodName) {
-        return methodNames.indexOf(methodName);
+    public HashMap<String, Span> getSpanStore() {
+        return spanStore;
     }
 
-    public void setMethodNames(ArrayList<String> methodNames) {
-        this.methodNames = methodNames;
-    }
-    
-    public void addMethodName(String methodName) {
-        this.methodNames.add(methodName);
-    }
-    
-    public void addMethodName(String methodName, int index) {
-        this.methodNames.add(index,methodName);
-    }
-    
-    public void removeMethodName(String methodName) {
-        this.methodNames.remove(methodName);
+    public void setSpanStore(HashMap<String, Span> spanStore) {
+        this.spanStore = spanStore;
     }
 
-    public ArrayList<Span> getParentSpans(String methodName) {
-        return parentSpans.get(methodName);
+    public Span getRootSpan() {
+        return rootSpan;
     }
 
-    public void setParentSpans(String methodName, ArrayList<Span> parentSpan) {
-        this.parentSpans.put(methodName,parentSpan);
+    public void setRootSpan(Span rootSpan) {
+        this.rootSpan = rootSpan;
+    }
+
+    public synchronized void putInSpanStore(String methodName, Span span) {
+        spanStore.put(methodName, span);
     }
     
-    public void removeParentSpans(String methodName) {
-        parentSpans.remove(methodName);
+    public synchronized Span getFromSpanStore(String methodName) {
+        return spanStore.get(methodName);
     }
     
-    public void addParentSpan(String methodName, int pos, Span spanContext) {
-        if (parentSpans.get(methodName)!=null) {
-            parentSpans.get(methodName).add(pos,spanContext);
-        } else {
-            parentSpans.put(methodName, new ArrayList<Span>());
-            parentSpans.get(methodName).add(pos,spanContext);
-        }
+    public synchronized ArrayList<ChildParentMethod> getMethodQueue() {
+        return methodQueue;
     }
-    
-    public void removeParentSpan(String methodName, int pos) {
-        parentSpans.get(methodName).remove(pos);
+
+    public synchronized void setMethodQueue(ArrayList<ChildParentMethod> methodQueue) {
+        this.methodQueue = methodQueue;
     }
-    
+
+    public synchronized int getMethodQueueIndex() {
+        return methodQueueIndex;
+    }
+
+    public synchronized void setMethodQueueIndex(int methodQueueIndex) {
+        this.methodQueueIndex = methodQueueIndex;
+    }
     
 }

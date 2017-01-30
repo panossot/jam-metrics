@@ -20,29 +20,31 @@
  */
 package org.jam.metrics.applicationmetrics;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import io.opentracing.APMSpan;
 import io.opentracing.Span;
-import io.opentracing.propagation.Format;
-import io.opentracing.propagation.TextMapInjectAdapter;
+import io.opentracing.SpanContext;
+import io.opentracing.Tracer;
+import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
+import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.Level;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import org.hawkular.apm.api.model.Constants;
-import org.hawkular.apm.api.model.trace.Message;
-import org.hawkular.apm.api.model.trace.Trace;
-import org.hawkular.apm.client.api.reporter.TraceReporter;
 import org.hawkular.apm.client.opentracing.APMTracer;
 import org.jam.metrics.applicationmetricsapi.HawkularApm;
-import org.jam.metrics.applicationmetricsapi.Metric;
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
 import org.jam.metrics.applicationmetricslibrary.HawkularApmManagers;
 import org.jam.metrics.applicationmetricslibrary.MetricInternalParameters;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
 import org.jboss.logging.Logger;
+import org.jam.metrics.applicationmetricslibrary.ChildParentMethod;
 
 /**
  *
@@ -51,168 +53,106 @@ import org.jboss.logging.Logger;
 @HawkularApm
 @Interceptor
 public class HawkularApmInterceptor {
-
+    
     private Logger logger = Logger.getLogger(HawkularApmInterceptor.class);
-    private final static MetricsTraceReporter reporter = new MetricsTraceReporter();
-    private final static APMTracer tracer = new APMTracer(reporter);
+    private final static Tracer tracer = new APMTracer();
     private final static Object hawkularApmLock = new Object();
-    private static ObjectMapper mapper;
-
+    private final static Vertx vertx = Vertx.vertx();
+    private final static EventBus eb = vertx.eventBus();
+    
     public HawkularApmInterceptor() {
-        mapper = new ObjectMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
-
+    
     @AroundInvoke
     public Object hawkularApmInterceptor(InvocationContext ctx) throws Exception {
-
+        
         Method method = ctx.getMethod();
-        final Object target = ctx.getTarget();
-
+        
         try {
             final HawkularApm hawkularApmAnnotation = method.getAnnotation(HawkularApm.class);
-            final Metric metricsAnnotation = method.getAnnotation(Metric.class);
-
+            
             if (hawkularApmAnnotation != null) {
                 final String group = hawkularApmAnnotation.groupName();
                 final MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
                 final String hawkularApm = properties.getHawkularApm();
-                final String hawkularTenant = properties.getHawkularTenant();
                 
-
                 if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
                     String threadName = Thread.currentThread().getName();
-                    String[] submethodSpans = hawkularApmAnnotation.childMethodSpans();
-                    String spanTransaction = hawkularApmAnnotation.transaction();
-                    String spanService = hawkularApmAnnotation.service();
-
+                    String[] submethods = hawkularApmAnnotation.childMethods();
+                    
                     final MetricInternalParameters internalParams = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group);
-
+                    
                     HawkularApmManagers hApmManagers = internalParams.getHawkularApmManagers(threadName);
                     if (hApmManagers == null) {
                         internalParams.putHawkularApmManagers(threadName, new HawkularApmManagers());
                         hApmManagers = internalParams.getHawkularApmManagers(threadName);
                     }
-
-                    boolean methodExists = false;
-                    if (hApmManagers.getParentSpans(method.getName()) != null )
-                        methodExists = true;
                     
-                    if (methodExists) {
-
-                        Span parentSpan = tracer.buildSpan(method.getName())
-                                .asChildOf(hApmManagers.getParentSpans(method.getName()).get(0))
-                                .withStartTimestamp(System.currentTimeMillis())
-                                .withTag("orderId", "1243343456455")
-                                .withTag("service", spanService != null ? spanService : method.getName() + "Service")
-                                .withTag("transaction", spanTransaction != null ? spanTransaction : method.getName() + "Transaction")
-                                .start();
-                        
-                        hApmManagers.getParentSpans(method.getName()).remove(0);
-
-                        int submethodSpanLength = submethodSpans.length;
-                        if (submethodSpanLength != 0) {
-                            for (int i = submethodSpanLength - 1; i >= 0; i--) {
-                                Span childSpan = tracer.buildSpan(submethodSpans[i])
+                    final HawkularApmManagers hm = hApmManagers;
+                    MessageConsumer<JsonObject> getMethodConsumer = eb.consumer(group + "." + method.getName());
+                    if (!getMethodConsumer.isRegistered()) {
+                        getMethodConsumer.handler(message -> {
+                            
+                            try {
+                                System.out.println(group + "." + method.getName());
+                                System.out.println("hello : " + message.body().getString("parentspan"));
+                                Span spanObject = null;
+                                if (hm.getFromSpanStore(message.body().getString("parentspan"))!=null)
+                                    spanObject = hm.getFromSpanStore(message.body().getString("parentspan"));
+                                else
+                                    spanObject = hm.getRootSpan();
+                                //   Span spanObject = Json.mapper.convertValue ( message.body().getMap().get(hawkularApmLock), Span.class );
+                                SpanContext parentSpan = spanObject.context();
+                                System.out.println("pSpan : " + parentSpan.toString());
+                                
+                                
+                                Span childSpan = tracer.buildSpan(group + "." + method.getName())
                                         .asChildOf(parentSpan)
-                                        .withTag("myTag", "myTag")
-                                        .withTag(Constants.ZIPKIN_BIN_ANNOTATION_HTTP_URL, "http://localhost:8780/outbound")
+                                        .withTag("service", method.getName())
                                         .start();
                                 
-                                Message message = new Message();
-                                tracer.inject(childSpan.context(), Format.Builtin.TEXT_MAP,
-                                        new TextMapInjectAdapter(message.getHeaders()));
-
-                                if (hApmManagers.getMethodIndex(submethodSpans[i]) != -1) {
-                                    hApmManagers.getParentSpans(submethodSpans[i]).add(0, childSpan);
-                                } else {
-                                    hApmManagers.addMethodName(submethodSpans[i]);
-                                    hApmManagers.addParentSpan(submethodSpans[i], 0, childSpan);
-                                }
-                                
-                                childSpan.finish();
+                                hm.putInSpanStore(method.getName(), childSpan);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
                             }
-                        }
-
-                        if (hApmManagers.getParentSpans(method.getName()).isEmpty()) {
-                            hApmManagers.removeParentSpans(method.getName());
-                            hApmManagers.removeMethodName(method.getName());
+                        });
+                    }
+                    
+                    int submethodLength = submethods.length;
+                    if (submethodLength != 0) {
+                        for (int i = submethodLength - 1; i >= 0; i--) {
+                            hApmManagers.getMethodQueue().add(hApmManagers.getMethodQueueIndex(), new ChildParentMethod(submethods[i], method.getName()));
                         }
                     } else {
-                        Span parentSpan = tracer.buildSpan(method.getName())
-                                .withStartTimestamp(System.currentTimeMillis())
-                                .withTag("orderId", "1243343456455")
-                                .withTag("service", spanService != null ? spanService : method.getName() + "Service")
-                                .withTag("transaction", spanTransaction != null ? spanTransaction : method.getName() + "Transaction")
-                                .start();
-
-                        int submethodSpanLength = submethodSpans.length;
-                        if (submethodSpanLength != 0) {
-                            for (int i = submethodSpanLength - 1; i >= 0; i--) {
-                                Span childSpan = tracer.buildSpan(submethodSpans[i])
-                                        .asChildOf(parentSpan)
-                                        .withTag("myTag", "myTag")
-                                        .withTag(Constants.ZIPKIN_BIN_ANNOTATION_HTTP_URL, "http://localhost:8780/outbound")
-                                        .start();
-
-                                Message message = new Message();
-                                tracer.inject(childSpan.context(), Format.Builtin.TEXT_MAP,
-                                        new TextMapInjectAdapter(message.getHeaders()));
-                                
-                                if (hApmManagers.getMethodIndex(submethodSpans[i]) != -1) {
-                                    hApmManagers.getParentSpans(submethodSpans[i]).add(0, childSpan);
-                                } else {
-                                    hApmManagers.addMethodName(submethodSpans[i]);
-                                    hApmManagers.addParentSpan(submethodSpans[i], 0, childSpan);
-                                }
-
-                                childSpan.finish();
-                            }
+                        hApmManagers.getMethodQueue().add(hApmManagers.getMethodQueueIndex(), new ChildParentMethod(null, method.getName()));
+                    }
+                    
+                    hApmManagers.setMethodQueueIndex(hApmManagers.getMethodQueueIndex() + 1);
+                
+                    HawkularApmService hawkularApmInstance;
+                    synchronized (hawkularApmLock) {
+                        hawkularApmInstance = HawkularApmCollection.getHawkularApmCollection().getHawkularApmInstance(group);
+                        if (hawkularApmInstance == null) {
+                            hawkularApmInstance = new HawkularApmService(group, tracer, eb);
+                            HawkularApmCollection.getHawkularApmCollection().addHawkularApmInstance(group, hawkularApmInstance);
                         }
                     }
 
-                }
-                
-                HawkularApmService hawkularApmInstance;
-                synchronized (hawkularApmLock) {
-                    hawkularApmInstance = HawkularApmCollection.getHawkularApmCollection().getHawkularApmInstance(group);
-                    if (hawkularApmInstance == null) {
-                        hawkularApmInstance = new HawkularApmService(group);
-                        HawkularApmCollection.getHawkularApmCollection().addHawkularApmInstance(group, hawkularApmInstance);
+                    try {
+                        hawkularApmInstance.hawkularApm(hApmManagers,group,eb);
+                    } catch (IllegalArgumentException ex) {
+                        ex.printStackTrace();
                     }
                 }
-
-                try {
-                    hawkularApmInstance.hawkularApm(reporter.getTraces(), hawkularTenant, group);
-                } catch (IllegalArgumentException ex) {
-                    ex.printStackTrace();
-                }
             }
-
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        
         Object result = ctx.proceed();
-
+        
         return result;
     }
     
-    public static class MetricsTraceReporter implements TraceReporter {
-
-        private List<Trace> traces = new ArrayList<>();
-
-        @Override
-        public void report(Trace trace) {
-            traces.add(trace);
-        }
-
-        /**
-         * @return the traces
-         */
-        public List<Trace> getTraces() {
-            return traces;
-        }
-
-    }
 }

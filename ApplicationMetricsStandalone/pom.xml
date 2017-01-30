@@ -54,6 +54,7 @@
         <module>ApplicationMetricsApiTest14</module>
         <module>ApplicationMetricsApiTest15</module>
         <module>ApplicationMetricsApiTest16</module>
+        <module>VertxReproducer</module>
         <module>ApplicationMetricsLibray</module>
         <module>ApplicationMetricsProperties</module>
         <module>ApplicationMetricsLibrary2</module>
