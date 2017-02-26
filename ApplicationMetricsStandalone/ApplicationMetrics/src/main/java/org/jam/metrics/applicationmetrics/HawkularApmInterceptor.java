@@ -65,7 +65,6 @@ public class HawkularApmInterceptor {
     
     @AroundInvoke
     public Object hawkularApmInterceptor(InvocationContext ctx) throws Exception {
-        
         Method method = ctx.getMethod();
         
         try {
