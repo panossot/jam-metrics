@@ -32,19 +32,26 @@ public class MetricsApiSessionBean {
     private double count[][];
     
     private double count2[][];
+    
+    private double count3[][];
 
     public MetricsApiSessionBean() {
     }
 
-    @Plot(fieldData = {"count","count2","count","count2","count"}, groupName = "myTestGroup", plot = {"plot1","plot2","plot3","plot4","plot5"}, color = {"red", "blue","green","yellow","magenta"}, typePlot={"box","scatter","histogram","grid"}, threeD=true)
+    @Plot(fieldData = {"count3","count","count3","count3","count2"}, groupName = "myTestGroup", plot = {"plot1","plot2","plot3","plot4","plot5"}, color = {"red", "blue","green","yellow","magenta"}, typePlot={"box","scatter","histogram","grid","line"}, threeD=true)
     public void countMethod() {
-        count = new double[10][10];
-        count2 = new double[10][10];
+        count = new double[10][3];
+        count2 = new double[10][3];
+        count3 = new double[10][10];
         
         for(int i=0; i<10; i++) {
             for(int j=0; j<3; j++) {
                 count[i][j]=i*j;
                 count2[i][j]=i*j +2*i;
+            }
+            
+            for(int j=0; j<10; j++) {
+                count3[i][j]=i*j;
             }
         }
     }
