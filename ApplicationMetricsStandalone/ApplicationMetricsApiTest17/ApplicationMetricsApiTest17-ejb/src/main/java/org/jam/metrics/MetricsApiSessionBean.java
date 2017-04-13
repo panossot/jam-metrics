@@ -19,6 +19,7 @@ package org.jam.metrics;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
 import org.jam.metrics.applicationmetricsapi.Metric;
+import org.jam.metrics.applicationmetricsapi.Plot;
 
 /**
  *
@@ -28,19 +29,24 @@ import org.jam.metrics.applicationmetricsapi.Metric;
 @LocalBean
 public class MetricsApiSessionBean {
 
-    private int count = 0;
+    private double count[][];
     
-    private int count2 = 0;
+    private double count2[][];
 
     public MetricsApiSessionBean() {
     }
 
-    @Metric(fieldName = {"count","count2"}, groupName = "myTestGroup", plot = {"plot1","plot2","plot3","plot4","plot5"}, data = {"count","count2", "count","count2", "count"}, color = {"red", "blue","green","yellow","magenta"}, typePlot={"bar","scatter","histogram","stair"})
-    public int countMethod() {
-        count++;
-        count2 += 2;
-
-        return count;
+    @Plot(fieldData = {"count","count2","count","count2","count"}, groupName = "myTestGroup", plot = {"plot1","plot2","plot3","plot4","plot5"}, color = {"red", "blue","green","yellow","magenta"}, typePlot={"box","scatter","histogram","grid"}, threeD=true)
+    public void countMethod() {
+        count = new double[10][10];
+        count2 = new double[10][10];
+        
+        for(int i=0; i<10; i++) {
+            for(int j=0; j<3; j++) {
+                count[i][j]=i*j;
+                count2[i][j]=i*j +2*i;
+            }
+        }
     }
 
 }

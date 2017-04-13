@@ -27,6 +27,7 @@ import java.util.HashMap;
 import javax.swing.JFrame;
 import org.hawkular.apm.api.model.trace.Trace;
 import org.math.plot.Plot2DPanel;
+import org.math.plot.Plot3DPanel;
 
 /**
  *
@@ -49,6 +50,7 @@ public class MetricProperties {
     private HashMap<String,Integer> updateRateOfDbQueries;
     private HashMap<String,Trace> hawkularApmTraces;
     private HashMap<String,Plot2DPanel> plots;
+    private HashMap<String,Plot3DPanel> plots3D;
     private HashMap<String,JFrame> frames;
     private HashMap<String,Color> colors;
     private int plotRefreshRate = 1;
@@ -78,6 +80,7 @@ public class MetricProperties {
         updateRateOfDbQueries = new HashMap<>();
         updateDbQueries = new HashMap<>();
         plots = new HashMap<>();
+        plots3D = new HashMap<>();
         colors = new HashMap<>();
         frames = new HashMap<>();
         hawkularApmTraces = new HashMap<>();
@@ -356,6 +359,22 @@ public class MetricProperties {
 
     public synchronized void setMetricPlot(String metricPlot) {
         this.metricPlot = metricPlot;
+    }
+    
+    public synchronized HashMap<String, Plot3DPanel> get3DPlots() {
+        return plots3D;
+    }
+
+    public synchronized void set3DPlots(HashMap<String, Plot3DPanel> plots) {
+        this.plots3D = plots;
+    }
+
+    public synchronized void add3DPlot(String name, Plot3DPanel plot) {
+        this.plots3D.put(name, plot);
+    }
+    
+    public synchronized void remove3DPlot(String name) {
+        this.plots3D.remove(name);
     }
 
     public synchronized HashMap<String, Plot2DPanel> getPlots() {

@@ -21,8 +21,10 @@
 package org.jam.metrics.applicationmetrics;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Map;
 import org.jam.metrics.applicationmetricsapi.Metric;
+import org.jam.metrics.applicationmetricsapi.Plot;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
 
 /**
@@ -46,6 +48,20 @@ class JMathPlotAdapter {
                                 ex.printStackTrace();
                             }
                         }
+                    }
+                }
+            }.start();
+        }
+    }
+
+    protected static void jMathPlotAdapter(String metricPlot, String group, Object target, Method method, String fieldName, int refreshRate, int i, MetricProperties properties, Plot plotAnnotation, boolean threeD) throws IllegalArgumentException, IllegalAccessException {
+        if (metricPlot != null && Boolean.parseBoolean(metricPlot)) {
+            new Thread() {
+                public void run() {
+                    try {
+                        MetricPlot.plot(plotAnnotation, fieldName, target, method, properties, group, refreshRate, i, threeD);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             }.start();

@@ -32,7 +32,8 @@ import org.jam.metrics.applicationmetricsapi.MetricsPropertiesApi;
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
 import org.jam.metrics.applicationmetricslibrary.MetricInternalParameters;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
-import org.math.plot.Plot2DPanel;
+import org.math.plot.Plot3DPanel;
+import org.math.plot.Plot3DPanel;
 
 /**
  *
@@ -53,7 +54,7 @@ public class PrintMetrics extends HttpServlet {
 
     private String groupName = "myTestGroup";
     private HashMap<String, JFrame> frames = new HashMap<String, JFrame>();
-    HashMap<String, Plot2DPanel> plots = new HashMap<String, Plot2DPanel>();
+    HashMap<String, Plot3DPanel> plots = new HashMap<String, Plot3DPanel>();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -73,7 +74,6 @@ public class PrintMetrics extends HttpServlet {
             metricsApiSessionBean.countMethod();
             metricsApiSessionBean.countMethod();
             metricsApiSessionBean.countMethod();
-            out.println(MetricsCacheApi.printMetricsCache(groupName));
             out.println("<br>Successful Run ...</br>");
             out.println("</body>");
             out.println("</html>");
@@ -86,11 +86,11 @@ public class PrintMetrics extends HttpServlet {
         rhqScheduleIds.put("count2", "11762");
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setRhqMonitoring("false");
-        metricProperties.setCacheStore("true");
+        metricProperties.setCacheStore("false");
         metricProperties.setMetricPlot("true");
         DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentInternalParameters(groupName, new MetricInternalParameters());
         initializePlots(true);
-        metricProperties.setPlots(plots);
+        metricProperties.set3DPlots(plots);
         metricProperties.setFrames(frames);
         metricProperties.addColor("red", Color.RED);
         metricProperties.addColor("blue", Color.BLUE);
@@ -110,15 +110,15 @@ public class PrintMetrics extends HttpServlet {
 
     private void initializePlots(boolean init) {
         if (init) {
-            HashMap<String, Plot2DPanel> metricPlots;
+            HashMap<String, Plot3DPanel> metricPlots;
             HashMap<String, JFrame> metricFrames;
 
             MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName);
 
             if (properties == null || properties.getPlots().isEmpty()) {
-                metricPlots = new HashMap<String, Plot2DPanel>();
+                metricPlots = new HashMap<String, Plot3DPanel>();
             } else {
-                metricPlots = properties.getPlots();
+                metricPlots = properties.get3DPlots();
             }
 
             if (properties == null || properties.getFrames().isEmpty()) {
@@ -133,12 +133,13 @@ public class PrintMetrics extends HttpServlet {
             }
 
             if (create) {
-                Plot2DPanel plot = new Plot2DPanel("SOUTH");
+                Plot3DPanel plot = new Plot3DPanel("SOUTH");
 
                 JFrame frame = new JFrame("Plot 1");
                 frame.setSize(600, 600);
                 frame.setContentPane(plot);
                 frame.setVisible(true);
+                frame.setResizable(true);
                 frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 frame.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosed(java.awt.event.WindowEvent evt) {
@@ -157,12 +158,13 @@ public class PrintMetrics extends HttpServlet {
             }
 
             if (create) {
-                Plot2DPanel plot2 = new Plot2DPanel("SOUTH");
+                Plot3DPanel plot2 = new Plot3DPanel("SOUTH");
 
                 JFrame frame2 = new JFrame("Plot 2");
                 frame2.setSize(600, 600);
                 frame2.setContentPane(plot2);
                 frame2.setVisible(true);
+                frame2.setResizable(true);
                 frame2.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 frame2.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosed(java.awt.event.WindowEvent evt) {
@@ -181,12 +183,13 @@ public class PrintMetrics extends HttpServlet {
             }
             
             if (create) {
-                Plot2DPanel plot3 = new Plot2DPanel("SOUTH");
+                Plot3DPanel plot3 = new Plot3DPanel("SOUTH");
 
                 JFrame frame3 = new JFrame("Plot 3");
                 frame3.setSize(600, 600);
                 frame3.setContentPane(plot3);
                 frame3.setVisible(true);
+                frame3.setResizable(true);
                 frame3.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 frame3.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosed(java.awt.event.WindowEvent evt) {
@@ -205,12 +208,13 @@ public class PrintMetrics extends HttpServlet {
             }
             
             if (create) {
-                Plot2DPanel plot4 = new Plot2DPanel("SOUTH");
+                Plot3DPanel plot4 = new Plot3DPanel("SOUTH");
 
                 JFrame frame4 = new JFrame("Plot 4");
                 frame4.setSize(600, 600);
                 frame4.setContentPane(plot4);
                 frame4.setVisible(true);
+                frame4.setResizable(true);
                 frame4.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 frame4.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosed(java.awt.event.WindowEvent evt) {
@@ -229,12 +233,13 @@ public class PrintMetrics extends HttpServlet {
             }
             
             if (create) {
-                Plot2DPanel plot5 = new Plot2DPanel("SOUTH");
+                Plot3DPanel plot5 = new Plot3DPanel("SOUTH");
 
                 JFrame frame5 = new JFrame("Plot 5");
                 frame5.setSize(600, 600);
                 frame5.setContentPane(plot5);
                 frame5.setVisible(true);
+                frame5.setResizable(true);
                 frame5.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 frame5.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosed(java.awt.event.WindowEvent evt) {
