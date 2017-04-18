@@ -50,5 +50,5 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-#### This project uses a part of jmathplots library which is released under thE BSD license.
+#### This project uses a part of jmathplot library which is released under thE BSD license.
 
