@@ -11,7 +11,7 @@ Just define in your deployment the operations of JAM-Application-Metrics that yo
 
 Then, annotate the method of your ejb with the annotation @Metric(fieldName = {"field name of first metric","field name of second metric", etc}, deploymentName="some name characteristic to the deployment") .
 
-######The annotation parameter deploymentName is used for grouping of metrics under the same metric-properties configuration.
+###### The annotation parameter deploymentName is used for grouping of metrics under the same metric-properties configuration.
 
 ## Example of usage
 An example of usage can be found under the folder ApplicationMetricsStandalone/ApplicationMetricsApiTest.
@@ -32,7 +32,7 @@ Please, check the example in JavaSeApplicationMetrics/ApplicationMetricsJavaSeAp
 
 <br/>
 
-##License 
+## License 
 JAM-Application-Metrics are released under Apache License, Version 2.0 as described in the LICENSE document
 
 
@@ -49,4 +49,6 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+#### This project uses a part of jmathplots library which is released under thE BSD license.
 
