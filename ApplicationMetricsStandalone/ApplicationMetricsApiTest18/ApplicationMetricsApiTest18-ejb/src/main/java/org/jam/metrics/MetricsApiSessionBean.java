@@ -40,7 +40,7 @@ public class MetricsApiSessionBean {
     public MetricsApiSessionBean() {
     }
 
-    @Plot(fieldData = {"count4","count","count2","count2","count3","count"}, groupName = "myTestGroup", plot = {"plot1","plot2","plot3","plot4","plot5","plot6"}, color = {"red", "blue","green","yellow","magenta","cyan"}, typePlot={"box","bar","scatter","stair","histogram","line"}, threeD=false)
+    @Plot(fieldData = {"count4","count","count2","count2","count3","count"}, groupName = "myTestGroup", plotHandlerName = {"box","bar","scatter","stair","histogram","line"}, plot = {"plot1","plot2","plot3","plot4","plot5","plot6"}, color = {"red", "blue","green","yellow","magenta","cyan"}, typePlot={"box","bar","scatter","stair","histogram","line"}, threeD=false)
     public void countMethod() {
         count = new double[10][2];
         count2 = new double[10][2];

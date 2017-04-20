@@ -29,7 +29,7 @@ import org.hawkular.apm.api.model.trace.Trace;
  * @author panos
  */
 public class MetricInternalParameters {
-    private HashMap<String,Integer> plotHandler;
+    private HashMap<String,HashMap<String,Integer>> plotHandlerStore;
     private HashMap<String,Boolean> plotRefreshed;
     private HashMap<MetricOfPlot,Integer> plotedCount;
     private HashMap<String,Integer> rhqMonitoringCount;
@@ -42,7 +42,7 @@ public class MetricInternalParameters {
     private HashMap<String,HawkularApmManagers> hawkularApmManagers;
 
     public MetricInternalParameters() {
-        this.plotHandler = new HashMap<>();
+        this.plotHandlerStore = new HashMap<>();
         this.plotRefreshed = new HashMap<>();
         this.plotedCount = new HashMap<>();
         this.rhqMonitoringCount = new HashMap<>();
@@ -189,16 +189,16 @@ public class MetricInternalParameters {
         this.dbQueries = dbQueries;
     }
 
-    public synchronized HashMap<String, Integer> getPlotHandler() {
-        return plotHandler;
+    public synchronized HashMap<String, HashMap<String,Integer>> getPlotHandlerStore() {
+        return plotHandlerStore;
     }
 
-    public synchronized void setPlotHandler(HashMap<String, Integer> plotHandler) {
-        this.plotHandler = plotHandler;
+    public synchronized void setPlotHandlerStore(HashMap<String, HashMap<String,Integer>> plotHandler) {
+        this.plotHandlerStore = plotHandler;
     }
     
-    public synchronized void putPlotHandler(String plotName, int value) {
-        this.plotHandler.put(plotName, value);
+    public synchronized void putPlotHandlerStore(String plotName, HashMap<String,Integer> value) {
+        this.plotHandlerStore.put(plotName, value);
     }
 
     public synchronized HashMap<String, Boolean> getPlotRefreshed() {

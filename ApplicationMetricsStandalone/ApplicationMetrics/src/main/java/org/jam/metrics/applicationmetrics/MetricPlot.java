@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.commons.lang.ArrayUtils;
 import org.jam.metrics.applicationmetricsapi.Metric;
@@ -35,7 +36,6 @@ import org.jam.metrics.applicationmetricslibrary.MetricsCacheCollection;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.Plot3DPanel;
-import org.math.plot.utils.Array;
 
 /**
  *
@@ -58,6 +58,7 @@ public class MetricPlot {
             mo = metricsCacheInstance.searchMetricObject(instanceName);
         }
         String plotName = metricAnnotation.plot()[i];
+        String plotNameHandler = metricAnnotation.plotHandlerName()[i];
         MetricOfPlot mOP = new MetricOfPlot(fieldName, plotName);
         if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotedCount().get(mOP) == null) {
             DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).resetPlotedCount(mOP);
@@ -81,7 +82,13 @@ public class MetricPlot {
                     String colorName = metricAnnotation.color()[i];
                     color = properties.getColors().get(colorName);
                 }
-                int plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandler().get(plotName) == null ? 0 : DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandler().get(plotName);
+                
+                int plotHandler = 0;
+                if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName) != null)
+                    plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler) == null ? 0 : DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler);
+                else
+                    DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).putPlotHandlerStore(plotName, new HashMap<>());
+                
                 try {
                     if (!plotsUsed.contains(plotName)) {
                         plotsUsed.add(plotName);
@@ -98,31 +105,31 @@ public class MetricPlot {
                 }
                 if (color != null) {
                     if (typePlot.compareTo("bar") == 0) {
-                        plotHandler = plot.addBarPlot(plotName, color, ArrayUtils.toPrimitive(plotArray));
+                        plotHandler = plot.addBarPlot(plotNameHandler, color, ArrayUtils.toPrimitive(plotArray));
                     } else if (typePlot.compareTo("scatter") == 0) {
-                        plotHandler = plot.addScatterPlot(plotName, color, ArrayUtils.toPrimitive(plotArray));
+                        plotHandler = plot.addScatterPlot(plotNameHandler, color, ArrayUtils.toPrimitive(plotArray));
                     } else if (typePlot.compareTo("stair") == 0) {
-                        plotHandler = plot.addStaircasePlot(plotName, color, ArrayUtils.toPrimitive(plotArray));
+                        plotHandler = plot.addStaircasePlot(plotNameHandler, color, ArrayUtils.toPrimitive(plotArray));
                     } else if (typePlot.compareTo("histogram") == 0) {
-                        plotHandler = plot.addHistogramPlot(plotName, color, ArrayUtils.toPrimitive(plotArray), 10);
+                        plotHandler = plot.addHistogramPlot(plotNameHandler, color, ArrayUtils.toPrimitive(plotArray), 10);
                     } else {
-                        plotHandler = plot.addLinePlot(plotName, color, ArrayUtils.toPrimitive(plotArray));
+                        plotHandler = plot.addLinePlot(plotNameHandler, color, ArrayUtils.toPrimitive(plotArray));
                     }
                 } else {
                     if (typePlot.compareTo("bar") == 0) {
-                        plotHandler = plot.addBarPlot(plotName, ArrayUtils.toPrimitive(plotArray));
+                        plotHandler = plot.addBarPlot(plotNameHandler, ArrayUtils.toPrimitive(plotArray));
                     } else if (typePlot.compareTo("scatter") == 0) {
-                        plotHandler = plot.addScatterPlot(plotName, ArrayUtils.toPrimitive(plotArray));
+                        plotHandler = plot.addScatterPlot(plotNameHandler, ArrayUtils.toPrimitive(plotArray));
                     } else if (typePlot.compareTo("stair") == 0) {
-                        plotHandler = plot.addStaircasePlot(plotName, ArrayUtils.toPrimitive(plotArray));
+                        plotHandler = plot.addStaircasePlot(plotNameHandler, ArrayUtils.toPrimitive(plotArray));
                     } else if (typePlot.compareTo("histogram") == 0) {
-                        plotHandler = plot.addHistogramPlot(plotName, ArrayUtils.toPrimitive(plotArray), 10);
+                        plotHandler = plot.addHistogramPlot(plotNameHandler, ArrayUtils.toPrimitive(plotArray), 10);
                     } else {
-                        plotHandler = plot.addLinePlot(plotName, ArrayUtils.toPrimitive(plotArray));
+                        plotHandler = plot.addLinePlot(plotNameHandler, ArrayUtils.toPrimitive(plotArray));
                     }
                 }
 
-                DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandler().put(plotName, plotHandler);
+                DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).put(plotNameHandler, plotHandler);
             }
         }
     }
@@ -134,6 +141,7 @@ public class MetricPlot {
             }
 
             String plotName = plotAnnotation.plot()[i];
+            String plotNameHandler = plotAnnotation.plotHandlerName()[i];
             Field field = method.getDeclaringClass().getDeclaredField(fieldName);
             field.setAccessible(true);
             double[][] plotData = (double[][]) field.get(target);
@@ -143,7 +151,13 @@ public class MetricPlot {
                 String colorName = plotAnnotation.color()[i];
                 color = properties.getColors().get(colorName);
             }
-            int plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandler().get(plotName) == null ? 0 : DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandler().get(plotName);
+            
+            int plotHandler = 0;
+            if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName) != null)
+                plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler) == null ? 0 : DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler);
+            else
+                DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).putPlotHandlerStore(plotName, new HashMap<>());
+            
             try {
                 if (!plotsUsed.contains(plotName)) {
                     plotsUsed.add(plotName);
@@ -160,32 +174,32 @@ public class MetricPlot {
             }
             if (color != null) {
                 if (typePlot.compareTo("box") == 0) {
-                    plotHandler = plot.addBoxPlot(plotName, color, plotData);
+                    plotHandler = plot.addBoxPlot(plotNameHandler, color, plotData);
                 } else if (typePlot.compareTo("scatter") == 0) {
-                    plotHandler = plot.addScatterPlot(plotName, color, plotData);
+                    plotHandler = plot.addScatterPlot(plotNameHandler, color, plotData);
                 } else if (typePlot.compareTo("grid") == 0) {
-                    plotHandler = plot.addGridPlot(plotName, color, increment(0,1,plotData.length), increment(0,1,plotData[0].length), plotData);
+                    plotHandler = plot.addGridPlot(plotNameHandler, color, increment(0,1,plotData.length), increment(0,1,plotData[0].length), plotData);
                 } else if (typePlot.compareTo("histogram") == 0) {
-                    plotHandler = plot.addHistogramPlot(plotName, color, plotData);
+                    plotHandler = plot.addHistogramPlot(plotNameHandler, color, plotData);
                 } else {
-                    plotHandler = plot.addLinePlot(plotName, color, plotData);
+                    plotHandler = plot.addLinePlot(plotNameHandler, color, plotData);
                 }
             } else {
                 if (typePlot.compareTo("box") == 0) {
-                    plotHandler = plot.addBoxPlot(plotName, plotData);
+                    plotHandler = plot.addBoxPlot(plotNameHandler, plotData);
                 } else if (typePlot.compareTo("scatter") == 0) {
-                    plotHandler = plot.addScatterPlot(plotName, plotData);
+                    plotHandler = plot.addScatterPlot(plotNameHandler, plotData);
                 } else if (typePlot.compareTo("grid") == 0) {
                     plotHandler = plot.addGridPlot(plotName, increment(0,1,plotData.length), increment(0,1,plotData[0].length), plotData);
                 } else if (typePlot.compareTo("histogram") == 0) {
-                    plotHandler = plot.addHistogramPlot(plotName, plotData);
+                    plotHandler = plot.addHistogramPlot(plotNameHandler, plotData);
                 } else {
-                    plotHandler = plot.addLinePlot(plotName, plotData);
+                    plotHandler = plot.addLinePlot(plotNameHandler, plotData);
                 }
             }
 
             plot.repaint();
-            DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandler().put(plotName, plotHandler);
+            DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).put(plotNameHandler, plotHandler);
         }
     }
     
@@ -196,6 +210,7 @@ public class MetricPlot {
             }
 
             String plotName = plotAnnotation.plot()[i];
+            String plotNameHandler = plotAnnotation.plotHandlerName()[i];
             Field field = method.getDeclaringClass().getDeclaredField(fieldName);
             field.setAccessible(true);
             double[][] plotData = (double[][]) field.get(target);
@@ -205,7 +220,13 @@ public class MetricPlot {
                 String colorName = plotAnnotation.color()[i];
                 color = properties.getColors().get(colorName);
             }
-            int plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandler().get(plotName) == null ? 0 : DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandler().get(plotName);
+            
+            int plotHandler = 0;
+            if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName) != null)
+                plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler) == null ? 0 : DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler);
+            else
+                DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).putPlotHandlerStore(plotName, new HashMap<>());
+            
             try {
                 if (!plotsUsed.contains(plotName)) {
                     plotsUsed.add(plotName);
@@ -222,36 +243,36 @@ public class MetricPlot {
             }
             if (color != null) {
                 if (typePlot.compareTo("box") == 0) {
-                    plotHandler = plot.addBoxPlot(plotName, color, plotData);
+                    plotHandler = plot.addBoxPlot(plotNameHandler, color, plotData);
                 } else if (typePlot.compareTo("bar") == 0) {
-                    plotHandler = plot.addBarPlot(plotName, color, plotData);
+                    plotHandler = plot.addBarPlot(plotNameHandler, color, plotData);
                 } else if (typePlot.compareTo("scatter") == 0) {
-                    plotHandler = plot.addScatterPlot(plotName, color, plotData);
+                    plotHandler = plot.addScatterPlot(plotNameHandler, color, plotData);
                 } else if (typePlot.compareTo("stair") == 0) {
-                    plotHandler = plot.addStaircasePlot(plotName, color, plotData);
+                    plotHandler = plot.addStaircasePlot(plotNameHandler, color, plotData);
                 } else if (typePlot.compareTo("histogram") == 0) {
-                    plotHandler = plot.addHistogramPlot(plotName, color, plotData);
+                    plotHandler = plot.addHistogramPlot(plotNameHandler, color, plotData);
                 } else {
-                    plotHandler = plot.addLinePlot(plotName, color, plotData);
+                    plotHandler = plot.addLinePlot(plotNameHandler, color, plotData);
                 }
             } else {
                 if (typePlot.compareTo("box") == 0) {
-                    plotHandler = plot.addBoxPlot(plotName, plotData);
+                    plotHandler = plot.addBoxPlot(plotNameHandler, plotData);
                 } else if (typePlot.compareTo("bar") == 0) {
                     plotHandler = plot.addBarPlot(plotName, color, plotData);
                 } else if (typePlot.compareTo("scatter") == 0) {
-                    plotHandler = plot.addScatterPlot(plotName, plotData);
+                    plotHandler = plot.addScatterPlot(plotNameHandler, plotData);
                 } else if (typePlot.compareTo("stair") == 0) {
-                    plotHandler = plot.addStaircasePlot(plotName, color, plotData);
+                    plotHandler = plot.addStaircasePlot(plotNameHandler, color, plotData);
                 } else if (typePlot.compareTo("histogram") == 0) {
-                    plotHandler = plot.addHistogramPlot(plotName, plotData);
+                    plotHandler = plot.addHistogramPlot(plotNameHandler, plotData);
                 } else {
-                    plotHandler = plot.addLinePlot(plotName, plotData);
+                    plotHandler = plot.addLinePlot(plotNameHandler, plotData);
                 }
             }
 
             plot.repaint();
-            DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandler().put(plotName, plotHandler);
+            DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).put(plotNameHandler, plotHandler);
         }
     }
     

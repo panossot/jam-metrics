@@ -46,6 +46,8 @@ public @interface Metric {
     @Nonbinding
     String[] plot() default {};
     @Nonbinding
+    String[] plotHandlerName() default {};
+    @Nonbinding
     String[] typePlot() default {};
     @Nonbinding
     String[] data() default {};

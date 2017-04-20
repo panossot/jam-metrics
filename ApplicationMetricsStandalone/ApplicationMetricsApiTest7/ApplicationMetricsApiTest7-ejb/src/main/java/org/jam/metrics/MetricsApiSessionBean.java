@@ -35,7 +35,7 @@ public class MetricsApiSessionBean {
     public MetricsApiSessionBean() {
     }
 
-    @Metric(fieldName = {"count","count2"}, groupName = "myTestGroup", plot = {"plot1","plot2","plot3","plot4","plot5"}, data = {"count","count2", "count","count2", "count"}, color = {"red", "blue","green","yellow","magenta"}, typePlot={"bar","scatter","histogram","stair"})
+    @Metric(fieldName = {"count","count2"}, groupName = "myTestGroup", plot = {"plot1","plot2","plot3","plot4","plot5"}, plotHandlerName = {"bar","scatter","histogram","stair","line"}, data = {"count","count2", "count","count2", "count"}, color = {"red", "blue","green","yellow","magenta"}, typePlot={"bar","scatter","histogram","stair","line"})
     public int countMethod() {
         count++;
         count2 += 2;

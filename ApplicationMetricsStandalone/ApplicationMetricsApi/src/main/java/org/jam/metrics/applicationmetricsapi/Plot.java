@@ -46,6 +46,8 @@ public @interface Plot {
     @Nonbinding
     String[] plot() default {};
     @Nonbinding
+    String[] plotHandlerName() default {};
+    @Nonbinding
     String[] typePlot() default {};
     @Nonbinding
     String[] color() default {};
