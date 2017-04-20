@@ -35,6 +35,7 @@ import org.jam.metrics.applicationmetricslibrary.MetricsCacheCollection;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.Plot3DPanel;
+import org.math.plot.utils.Array;
 
 /**
  *
@@ -126,7 +127,7 @@ public class MetricPlot {
         }
     }
 
-    public static synchronized void plot(Plot plotAnnotation, String fieldName, Object target, Method method, MetricProperties properties, String group, int refreshRate, int i, boolean threeD) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    public static synchronized void plot3D(Plot plotAnnotation, String fieldName, Object target, Method method, MetricProperties properties, String group, int refreshRate, int i, boolean threeD) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         if (threeD) {
             if (i == 0) {
                 plotsUsed.clear();
@@ -163,7 +164,7 @@ public class MetricPlot {
                 } else if (typePlot.compareTo("scatter") == 0) {
                     plotHandler = plot.addScatterPlot(plotName, color, plotData);
                 } else if (typePlot.compareTo("grid") == 0) {
-                    plotHandler = plot.addGridPlot(plotName, color, plotData);
+                    plotHandler = plot.addGridPlot(plotName, color, increment(0,1,plotData.length), increment(0,1,plotData[0].length), plotData);
                 } else if (typePlot.compareTo("histogram") == 0) {
                     plotHandler = plot.addHistogramPlot(plotName, color, plotData);
                 } else {
@@ -175,7 +176,7 @@ public class MetricPlot {
                 } else if (typePlot.compareTo("scatter") == 0) {
                     plotHandler = plot.addScatterPlot(plotName, plotData);
                 } else if (typePlot.compareTo("grid") == 0) {
-                    plotHandler = plot.addGridPlot(plotName, plotData);
+                    plotHandler = plot.addGridPlot(plotName, increment(0,1,plotData.length), increment(0,1,plotData[0].length), plotData);
                 } else if (typePlot.compareTo("histogram") == 0) {
                     plotHandler = plot.addHistogramPlot(plotName, plotData);
                 } else {
@@ -183,7 +184,84 @@ public class MetricPlot {
                 }
             }
 
+            plot.repaint();
             DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandler().put(plotName, plotHandler);
         }
     }
+    
+    public static synchronized void plot2D(Plot plotAnnotation, String fieldName, Object target, Method method, MetricProperties properties, String group, int refreshRate, int i, boolean threeD) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        if (!threeD) { // Then it is 2D
+            if (i == 0) {
+                plotsUsed.clear();
+            }
+
+            String plotName = plotAnnotation.plot()[i];
+            Field field = method.getDeclaringClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            double[][] plotData = (double[][]) field.get(target);
+            Plot2DPanel plot = properties.getPlots().get(plotName);
+            Color color = null;
+            if (plotAnnotation.color().length != 0) {
+                String colorName = plotAnnotation.color()[i];
+                color = properties.getColors().get(colorName);
+            }
+            int plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandler().get(plotName) == null ? 0 : DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandler().get(plotName);
+            try {
+                if (!plotsUsed.contains(plotName)) {
+                    plotsUsed.add(plotName);
+                }
+                plot.removePlot(plotHandler);
+            } catch (Exception e) {
+            }
+
+            String typePlot;
+            try {
+                typePlot = plotAnnotation.typePlot()[i];
+            } catch (Exception e) {
+                typePlot = "line";
+            }
+            if (color != null) {
+                if (typePlot.compareTo("box") == 0) {
+                    plotHandler = plot.addBoxPlot(plotName, color, plotData);
+                } else if (typePlot.compareTo("bar") == 0) {
+                    plotHandler = plot.addBarPlot(plotName, color, plotData);
+                } else if (typePlot.compareTo("scatter") == 0) {
+                    plotHandler = plot.addScatterPlot(plotName, color, plotData);
+                } else if (typePlot.compareTo("stair") == 0) {
+                    plotHandler = plot.addStaircasePlot(plotName, color, plotData);
+                } else if (typePlot.compareTo("histogram") == 0) {
+                    plotHandler = plot.addHistogramPlot(plotName, color, plotData);
+                } else {
+                    plotHandler = plot.addLinePlot(plotName, color, plotData);
+                }
+            } else {
+                if (typePlot.compareTo("box") == 0) {
+                    plotHandler = plot.addBoxPlot(plotName, plotData);
+                } else if (typePlot.compareTo("bar") == 0) {
+                    plotHandler = plot.addBarPlot(plotName, color, plotData);
+                } else if (typePlot.compareTo("scatter") == 0) {
+                    plotHandler = plot.addScatterPlot(plotName, plotData);
+                } else if (typePlot.compareTo("stair") == 0) {
+                    plotHandler = plot.addStaircasePlot(plotName, color, plotData);
+                } else if (typePlot.compareTo("histogram") == 0) {
+                    plotHandler = plot.addHistogramPlot(plotName, plotData);
+                } else {
+                    plotHandler = plot.addLinePlot(plotName, plotData);
+                }
+            }
+
+            plot.repaint();
+            DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandler().put(plotName, plotHandler);
+        }
+    }
+    
+    private static double[] increment(double start, double step, double end) {
+      double range = end - start;
+      int steps = (int)(range / step);
+      double[] rv = new double[steps];
+      for (int i = 0; i<steps; i++) {
+         rv[i] = start + ((step / range) * i);
+      }
+      return rv;
+   }
 }

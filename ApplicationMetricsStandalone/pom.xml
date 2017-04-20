@@ -55,6 +55,7 @@
         <module>ApplicationMetricsApiTest15</module>
         <module>ApplicationMetricsApiTest16</module>
         <module>ApplicationMetricsApiTest17</module>
+        <module>ApplicationMetricsApiTest18</module>
         <module>VertxReproducer</module>
         <module>ApplicationMetricsLibray</module>
         <module>ApplicationMetricsProperties</module>

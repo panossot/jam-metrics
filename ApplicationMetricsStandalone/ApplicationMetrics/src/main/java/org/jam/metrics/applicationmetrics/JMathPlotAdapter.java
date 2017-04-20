@@ -59,7 +59,10 @@ class JMathPlotAdapter {
             new Thread() {
                 public void run() {
                     try {
-                        MetricPlot.plot(plotAnnotation, fieldName, target, method, properties, group, refreshRate, i, threeD);
+                        if(threeD)
+                            MetricPlot.plot3D(plotAnnotation, fieldName, target, method, properties, group, refreshRate, i, threeD);
+                        else
+                            MetricPlot.plot2D(plotAnnotation, fieldName, target, method, properties, group, refreshRate, i, threeD);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
