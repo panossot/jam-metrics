@@ -43,13 +43,7 @@ import org.math.plot.Plot3DPanel;
  */
 public class MetricPlot {
 
-    private static List<String> plotsUsed = new ArrayList();
-
     public static synchronized void plot(Metric metricAnnotation, String fieldName, Object target, MetricProperties properties, String group, int refreshRate, int i) {
-        if (i == 0) {
-            plotsUsed.clear();
-        }
-
         MetricsCache metricsCacheInstance;
         metricsCacheInstance = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(group);
         MetricObject mo = null;
@@ -82,18 +76,25 @@ public class MetricPlot {
                     String colorName = metricAnnotation.color()[i];
                     color = properties.getColors().get(colorName);
                 }
-                
+
                 int plotHandler = 0;
-                if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName) != null)
-                    plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler) == null ? 0 : DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler);
-                else
-                    DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).putPlotHandlerStore(plotName, new HashMap<>());
-                
-                try {
-                    if (!plotsUsed.contains(plotName)) {
-                        plotsUsed.add(plotName);
+                if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName) != null) {
+                    if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler) == null) {
+                        plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getMaxPlotHandler(plotName) + 1;
+                    } else {
+                        plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler);
+                        try {
+                            plot.removePlot(plotHandler);
+                        } catch (Exception e) {
+                        }
                     }
-                    plot.removePlot(plotHandler);
+
+                } else {
+                    DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).putPlotHandlerStore(plotName, new HashMap<>());
+                }
+
+                try {
+
                 } catch (Exception e) {
                 }
 
@@ -136,10 +137,6 @@ public class MetricPlot {
 
     public static synchronized void plot3D(Plot plotAnnotation, String fieldName, Object target, Method method, MetricProperties properties, String group, int refreshRate, int i, boolean threeD) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         if (threeD) {
-            if (i == 0) {
-                plotsUsed.clear();
-            }
-
             String plotName = plotAnnotation.plot()[i];
             String plotNameHandler = plotAnnotation.plotHandlerName()[i];
             Field field = method.getDeclaringClass().getDeclaredField(fieldName);
@@ -151,19 +148,20 @@ public class MetricPlot {
                 String colorName = plotAnnotation.color()[i];
                 color = properties.getColors().get(colorName);
             }
-            
+
             int plotHandler = 0;
-            if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName) != null)
-                plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler) == null ? 0 : DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler);
-            else
-                DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).putPlotHandlerStore(plotName, new HashMap<>());
-            
-            try {
-                if (!plotsUsed.contains(plotName)) {
-                    plotsUsed.add(plotName);
+            if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName) != null) {
+                if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler) == null) {
+                    plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getMaxPlotHandler(plotName) + 1;
+                } else {
+                    plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler);
+                    try {
+                        plot.removePlot(plotHandler);
+                    } catch (Exception e) {
+                    }
                 }
-                plot.removePlot(plotHandler);
-            } catch (Exception e) {
+            } else {
+                DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).putPlotHandlerStore(plotName, new HashMap<>());
             }
 
             String typePlot;
@@ -178,7 +176,7 @@ public class MetricPlot {
                 } else if (typePlot.compareTo("scatter") == 0) {
                     plotHandler = plot.addScatterPlot(plotNameHandler, color, plotData);
                 } else if (typePlot.compareTo("grid") == 0) {
-                    plotHandler = plot.addGridPlot(plotNameHandler, color, increment(0,1,plotData.length), increment(0,1,plotData[0].length), plotData);
+                    plotHandler = plot.addGridPlot(plotNameHandler, color, increment(0, 1, plotData.length), increment(0, 1, plotData[0].length), plotData);
                 } else if (typePlot.compareTo("histogram") == 0) {
                     plotHandler = plot.addHistogramPlot(plotNameHandler, color, plotData);
                 } else {
@@ -190,7 +188,7 @@ public class MetricPlot {
                 } else if (typePlot.compareTo("scatter") == 0) {
                     plotHandler = plot.addScatterPlot(plotNameHandler, plotData);
                 } else if (typePlot.compareTo("grid") == 0) {
-                    plotHandler = plot.addGridPlot(plotName, increment(0,1,plotData.length), increment(0,1,plotData[0].length), plotData);
+                    plotHandler = plot.addGridPlot(plotName, increment(0, 1, plotData.length), increment(0, 1, plotData[0].length), plotData);
                 } else if (typePlot.compareTo("histogram") == 0) {
                     plotHandler = plot.addHistogramPlot(plotNameHandler, plotData);
                 } else {
@@ -202,13 +200,9 @@ public class MetricPlot {
             DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).put(plotNameHandler, plotHandler);
         }
     }
-    
+
     public static synchronized void plot2D(Plot plotAnnotation, String fieldName, Object target, Method method, MetricProperties properties, String group, int refreshRate, int i, boolean threeD) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         if (!threeD) { // Then it is 2D
-            if (i == 0) {
-                plotsUsed.clear();
-            }
-
             String plotName = plotAnnotation.plot()[i];
             String plotNameHandler = plotAnnotation.plotHandlerName()[i];
             Field field = method.getDeclaringClass().getDeclaredField(fieldName);
@@ -220,19 +214,20 @@ public class MetricPlot {
                 String colorName = plotAnnotation.color()[i];
                 color = properties.getColors().get(colorName);
             }
-            
+
             int plotHandler = 0;
-            if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName) != null)
-                plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler) == null ? 0 : DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler);
-            else
-                DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).putPlotHandlerStore(plotName, new HashMap<>());
-            
-            try {
-                if (!plotsUsed.contains(plotName)) {
-                    plotsUsed.add(plotName);
+            if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName) != null) {
+                if (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler) == null) {
+                    plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getMaxPlotHandler(plotName) + 1;
+                } else {
+                    plotHandler = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).get(plotNameHandler);
+                    try {
+                        plot.removePlot(plotHandler);
+                    } catch (Exception e) {
+                    }
                 }
-                plot.removePlot(plotHandler);
-            } catch (Exception e) {
+            } else {
+                DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).putPlotHandlerStore(plotName, new HashMap<>());
             }
 
             String typePlot;
@@ -259,11 +254,11 @@ public class MetricPlot {
                 if (typePlot.compareTo("box") == 0) {
                     plotHandler = plot.addBoxPlot(plotNameHandler, plotData);
                 } else if (typePlot.compareTo("bar") == 0) {
-                    plotHandler = plot.addBarPlot(plotName, color, plotData);
+                    plotHandler = plot.addBarPlot(plotName, plotData);
                 } else if (typePlot.compareTo("scatter") == 0) {
                     plotHandler = plot.addScatterPlot(plotNameHandler, plotData);
                 } else if (typePlot.compareTo("stair") == 0) {
-                    plotHandler = plot.addStaircasePlot(plotNameHandler, color, plotData);
+                    plotHandler = plot.addStaircasePlot(plotNameHandler, plotData);
                 } else if (typePlot.compareTo("histogram") == 0) {
                     plotHandler = plot.addHistogramPlot(plotNameHandler, plotData);
                 } else {
@@ -275,14 +270,14 @@ public class MetricPlot {
             DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group).getPlotHandlerStore().get(plotName).put(plotNameHandler, plotHandler);
         }
     }
-    
+
     private static double[] increment(double start, double step, double end) {
-      double range = end - start;
-      int steps = (int)(range / step);
-      double[] rv = new double[steps];
-      for (int i = 0; i<steps; i++) {
-         rv[i] = start + ((step / range) * i);
-      }
-      return rv;
-   }
+        double range = end - start;
+        int steps = (int) (range / step);
+        double[] rv = new double[steps];
+        for (int i = 0; i < steps; i++) {
+            rv[i] = start + ((step / range) * i);
+        }
+        return rv;
+    }
 }

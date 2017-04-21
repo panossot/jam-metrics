@@ -33,7 +33,7 @@ import org.jam.metrics.applicationmetricsproperties.MetricProperties;
  */
 class JMathPlotAdapter {
 
-    protected static void jMathPlotAdapter(String metricPlot, String group, Object target, String fieldName, int dataSize, int refreshRate, MetricProperties properties, Metric metricAnnotation, Map<String, Field> metricFields) throws IllegalArgumentException, IllegalAccessException {
+    protected synchronized static void jMathPlotAdapter(String metricPlot, String group, Object target, String fieldName, int dataSize, int refreshRate, MetricProperties properties, Metric metricAnnotation, Map<String, Field> metricFields) throws IllegalArgumentException, IllegalAccessException {
         if (metricPlot != null && Boolean.parseBoolean(metricPlot)) {
             new Thread() {
                 public void run() {
@@ -54,7 +54,7 @@ class JMathPlotAdapter {
         }
     }
 
-    protected static void jMathPlotAdapter(String metricPlot, String group, Object target, Method method, String fieldName, int refreshRate, int i, MetricProperties properties, Plot plotAnnotation, boolean threeD) throws IllegalArgumentException, IllegalAccessException {
+    protected synchronized static void jMathPlotAdapter(String metricPlot, String group, Object target, Method method, String fieldName, int refreshRate, int i, MetricProperties properties, Plot plotAnnotation, boolean threeD) throws IllegalArgumentException, IllegalAccessException {
         if (metricPlot != null && Boolean.parseBoolean(metricPlot)) {
             new Thread() {
                 public void run() {

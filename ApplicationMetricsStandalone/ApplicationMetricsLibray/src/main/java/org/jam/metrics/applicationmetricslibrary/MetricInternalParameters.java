@@ -266,5 +266,18 @@ public class MetricInternalParameters {
         if (!this.dbQueries.get(user).containsKey(statement))
             this.dbQueries.get(user).put(statement, new DbQueries(statement));
     }
+    
+    public synchronized int getMaxPlotHandler(String plotName) {
+        int maxPlotHandler = 0;
+        
+        HashMap<String,Integer> plotHandlers = plotHandlerStore.get(plotName);
+        
+        for(int value : plotHandlers.values()) {
+            if (value > maxPlotHandler)
+                maxPlotHandler = value;
+        }
+        
+        return maxPlotHandler;
+    }
 
 }
