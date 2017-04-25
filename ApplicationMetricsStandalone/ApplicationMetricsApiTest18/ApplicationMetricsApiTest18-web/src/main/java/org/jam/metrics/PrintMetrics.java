@@ -97,17 +97,11 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.addColor("green", Color.GREEN);
         metricProperties.addColor("yellow", Color.YELLOW);
         metricProperties.addColor("magenta", Color.MAGENTA);
-        metricProperties.addColor("magenta", Color.CYAN);
+        metricProperties.addColor("cyan", Color.CYAN);
         metricProperties.setPlotRefreshRate(1);
      //   metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot1", false);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot2", false);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot3", false);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot4", false);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot5", false);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot6", false);
     }
 
     private void initializePlots(boolean init) {

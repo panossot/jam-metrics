@@ -101,11 +101,6 @@ public class PrintMetrics extends HttpServlet {
      //   metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot1", false);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot2", false);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot3", false);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot4", false);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot5", false);
     }
 
     private void initializePlots(boolean init) {

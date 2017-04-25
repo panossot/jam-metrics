@@ -101,11 +101,6 @@ public class PrintMetrics extends HttpServlet {
      //   metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot1", false);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot2", false);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot3", false);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot4", false);
-        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(groupName).putPlotRefreshed("plot5", false);
     }
 
     private void initializePlots(boolean init) {
@@ -139,6 +134,7 @@ public class PrintMetrics extends HttpServlet {
                 frame.setSize(600, 600);
                 frame.setContentPane(plot);
                 frame.setVisible(true);
+                frame.setResizable(true);
                 frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 frame.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosed(java.awt.event.WindowEvent evt) {
@@ -163,6 +159,7 @@ public class PrintMetrics extends HttpServlet {
                 frame2.setSize(600, 600);
                 frame2.setContentPane(plot2);
                 frame2.setVisible(true);
+                frame2.setResizable(true);
                 frame2.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 frame2.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosed(java.awt.event.WindowEvent evt) {
@@ -187,6 +184,7 @@ public class PrintMetrics extends HttpServlet {
                 frame3.setSize(600, 600);
                 frame3.setContentPane(plot3);
                 frame3.setVisible(true);
+                frame3.setResizable(true);
                 frame3.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 frame3.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosed(java.awt.event.WindowEvent evt) {
@@ -211,6 +209,7 @@ public class PrintMetrics extends HttpServlet {
                 frame4.setSize(600, 600);
                 frame4.setContentPane(plot4);
                 frame4.setVisible(true);
+                frame4.setResizable(true);
                 frame4.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 frame4.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosed(java.awt.event.WindowEvent evt) {
@@ -235,6 +234,7 @@ public class PrintMetrics extends HttpServlet {
                 frame5.setSize(600, 600);
                 frame5.setContentPane(plot5);
                 frame5.setVisible(true);
+                frame5.setResizable(true);
                 frame5.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 frame5.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosed(java.awt.event.WindowEvent evt) {
