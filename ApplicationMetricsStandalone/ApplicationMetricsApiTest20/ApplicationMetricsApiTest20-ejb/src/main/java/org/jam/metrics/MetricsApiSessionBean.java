@@ -39,25 +39,22 @@ public class MetricsApiSessionBean {
     public MetricsApiSessionBean() {
     }
 
-    @Plot(fieldData = {"count4","count","count2","count","count2","count2","count","count3","count","count2"}, groupName = "myTestGroup", plotHandlerName = {"box","bar","bar2","scatter","scatter2","stair","stair2","histogram","line","line2"}, plot = {"plot1","plot2","plot2","plot3","plot3","plot4","plot4","plot5","plot6","plot6"}, color = {"red", "blue","red","green","red","yellow","red","magenta","cyan","red"}, typePlot={"box","bar","bar","scatter","scatter","stair","stair","histogram","line","line"}, threeD=false)
+    @Plot(fieldData = {"count3","count4","count","count2","count3","count4","count3","count4","count2","count"}, groupName = "myTestGroup", plot = {"plot1","plot1","plot2","plot2","plot3","plot3","plot4","plot4","plot5","plot5"}, plotHandlerName = {"box","box2","scatter","scatter2","histogram","histogram2","grid","grid2","line","line2"}, color = {"red", "blue","green","yellow","magenta","red", "blue","green","yellow","magenta"}, typePlot={"box","box","scatter","scatter","histogram","histogram","grid","grid","line","line"}, threeD=true)
     public void countMethod() {
-        count = new double[10][2];
-        count2 = new double[10][2];
-        count3 = new double[10][3];
+        count = new double[10][3];
+        count2 = new double[10][3];
+        count3 = new double[10][10];
         count4 = new double[10][10];
         
         for(int i=0; i<10; i++) {
-            for(int j=0; j<2; j++) {
+            for(int j=0; j<3; j++) {
                 count[i][j]=i*j+Math.random()*5;
                 count2[i][j]=i*j +2*i+Math.random()*5;
             }
             
-            for(int j=0; j<3; j++) {
-                count3[i][j]=i*j+Math.random()*5;
-            }
-            
             for(int j=0; j<10; j++) {
-                count4[i][j]=i*j+Math.random()*5;
+                count3[i][j]=i*j+Math.random()*5;
+                count4[i][j]=i*j+Math.random()*4;
             }
         }
     }
