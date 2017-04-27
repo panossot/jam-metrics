@@ -1,8 +1,8 @@
 # JAM-Application-Metrics 
-=====================================
+--------------------------
 
 ## A PROJECT UNDER THE ΙΔΕΑ STATEMENT
-=====================================
+-------------------------------------
 
 This library is created to facilitate the creation, record and monitoring of metrics for any deployment. (Initial project JBoss-Automated Metrics renamed)
 
