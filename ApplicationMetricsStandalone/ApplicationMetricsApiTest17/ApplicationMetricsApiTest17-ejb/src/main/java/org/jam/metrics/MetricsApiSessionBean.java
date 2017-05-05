@@ -18,7 +18,6 @@ package org.jam.metrics;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
-import org.jam.metrics.applicationmetricsapi.Metric;
 import org.jam.metrics.applicationmetricsapi.Plot;
 
 /**

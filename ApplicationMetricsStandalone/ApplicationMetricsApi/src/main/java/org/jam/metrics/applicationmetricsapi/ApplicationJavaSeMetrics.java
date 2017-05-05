@@ -35,6 +35,7 @@ public class ApplicationJavaSeMetrics {
         String rhqMonitoring = properties.getRhqMonitoring();
         String hawkularMonitoring = properties.getHawkularMonitoring();
         String hawkularApm = properties.getHawkularMetricsApm();
+        int refreshRate = properties.getPlotRefreshRate();
         final String hawkularTenant = properties.getHawkularTenant();
 
         CacheAdapter.cacheAdapter(cacheStore, instance, value, metricName, metricGroup, properties);
@@ -44,6 +45,8 @@ public class ApplicationJavaSeMetrics {
         MonitoringHawkularAdapter.monitoringHawkularAdapter(hawkularMonitoring, instance, value, metricName, metricGroup, hawkularTenant, properties);
 
         MonitoringHawkularApmAdapter.monitoringHawkularApmAdapter(hawkularApm, instance, value, metricName, metricGroup, hawkularTenant, properties, moreArgs);
+        
+        JMathPlotAdapter.jMathPlotAdapter(metricGroup, instance, metricName, refreshRate, properties, moreArgs[0], moreArgs[1], moreArgs[2], moreArgs[3]);
 
     }
 

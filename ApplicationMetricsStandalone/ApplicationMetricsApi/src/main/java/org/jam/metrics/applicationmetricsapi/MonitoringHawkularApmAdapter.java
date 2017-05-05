@@ -40,7 +40,7 @@ class MonitoringHawkularApmAdapter {
 
     private static int id = 1;
 
-    protected static void monitoringHawkularApmAdapter(String hawkularApm, final Object instance, Object value, final String metricName, final String metricGroup, final String hawkularTenant, final MetricProperties properties, final String[] moreArgs) throws Exception {
+    protected static void monitoringHawkularApmAdapter(String hawkularApm, final Object instance, Object value, final String metricName, final String metricGroup, final String hawkularTenant, final MetricProperties properties, final Object[] moreArgs) throws Exception {
         if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
             MetricInternalParameters internalParameters = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(metricGroup);
             Trace trace = new Trace();
@@ -50,7 +50,7 @@ class MonitoringHawkularApmAdapter {
 
             Consumer c1 = new Consumer();
             c1.getProperties().add(new Property(metricName, String.valueOf(value)));
-            c1.getProperties().add(new Property("method", moreArgs[0]));
+            c1.getProperties().add(new Property("method", (String)moreArgs[0]));
             c1.getProperties().add(new Property("time", String.valueOf(System.currentTimeMillis())));
             c1.setEndpointType("js");
             c1.addInteractionCorrelationId(metricName + "_" + internalParameters.getTraceListProcessed(metricName));

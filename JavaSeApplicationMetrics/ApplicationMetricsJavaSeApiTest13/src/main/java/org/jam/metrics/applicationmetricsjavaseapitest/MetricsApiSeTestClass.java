@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jam.metrics;
+package org.jam.metrics.applicationmetricsjavaseapitest;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateful;
-import org.jam.metrics.applicationmetricsapi.Plot;
+import org.jam.metrics.applicationmetricsapi.JMathPlotAdapter;
+import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
+import org.jam.metrics.applicationmetricsproperties.MetricProperties;
+
+
 
 /**
  *
  * @author Panagiotis Sotiropoulos
  */
-@Stateful
-@LocalBean
-public class MetricsApiSessionBean {
+public class MetricsApiSeTestClass {
 
     private double count[][];
     
@@ -35,12 +35,14 @@ public class MetricsApiSessionBean {
     private double count3[][];
     
     private double count4[][];
+    
+    final MetricProperties properties;
 
-    public MetricsApiSessionBean() {
+    public MetricsApiSeTestClass() {
+        properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty("myTestGroup");
     }
 
-    @Plot(fieldData = {"count4","count","count2","count2","count3","count"}, groupName = "myTestGroup", plotHandlerName = {"box","bar","scatter","stair","histogram","line"}, plot = {"plot1","plot2","plot3","plot4","plot5","plot6"}, color = {"red", "blue","green","yellow","magenta","cyan"}, typePlot={"box","bar","scatter","stair","histogram","line"}, threeD=false)
-    public void countMethod() {
+    public void countMethod() throws IllegalArgumentException, IllegalAccessException {
         count = new double[10][2];
         count2 = new double[10][2];
         count3 = new double[10][3];
@@ -60,6 +62,13 @@ public class MetricsApiSessionBean {
                 count4[i][j]=i*j+Math.random()*5;
             }
         }
+        
+        JMathPlotAdapter.jMathPlotAdapter(count4, "myTestGroup", properties, "plot1", "count4", "red", "box", false);
+        JMathPlotAdapter.jMathPlotAdapter(count, "myTestGroup", properties, "plot2", "count", "blue", "bar", false);
+        JMathPlotAdapter.jMathPlotAdapter(count2, "myTestGroup", properties, "plot3", "count2", "green", "scatter", false);
+        JMathPlotAdapter.jMathPlotAdapter(count2, "myTestGroup", properties, "plot4", "count2", "yellow", "stair", false);
+        JMathPlotAdapter.jMathPlotAdapter(count3, "myTestGroup", properties, "plot5", "count3", "magenta", "histogram", false);
+        JMathPlotAdapter.jMathPlotAdapter(count, "myTestGroup", properties, "plot6", "count", "cyan", "line", false);
     }
 
 }
