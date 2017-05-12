@@ -20,10 +20,12 @@ import java.awt.Color;
 import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
+import org.jam.metrics.applicationmetricsapi.MetricsCacheApi;
 
 import org.jam.metrics.applicationmetricsapi.MetricsPropertiesApi;
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
 import org.jam.metrics.applicationmetricslibrary.MetricInternalParameters;
+import org.jam.metrics.applicationmetricslibrary.MetricsCacheCollection;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
 import org.math.plot.Plot3DPanel;
 
@@ -31,7 +33,7 @@ import org.math.plot.Plot3DPanel;
  *
  * @author Panagiotis Sotiropoulos
  */
-public class ApplicationMetricsJavaSeApiTest12 {
+public class ApplicationMetricsJavaSeApiTest17 {
 
     private static String groupName = "myTestGroup";
     private static HashMap<String, JFrame> frames = new HashMap<String, JFrame>();
@@ -50,14 +52,8 @@ public class ApplicationMetricsJavaSeApiTest12 {
             Thread.sleep(10000);
             
             try {
-                frames.get("plot1").setVisible(false);
-                frames.get("plot1").dispose();
                 frames.get("plot2").setVisible(false);
                 frames.get("plot2").dispose();
-                frames.get("plot3").setVisible(false);
-                frames.get("plot3").dispose();
-                frames.get("plot4").setVisible(false);
-                frames.get("plot4").dispose();
                 frames.get("plot5").setVisible(false);
                 frames.get("plot5").dispose();
             }catch(Exception e){}
@@ -103,31 +99,6 @@ public class ApplicationMetricsJavaSeApiTest12 {
             }
 
             boolean create = true;
-            if (properties != null && properties.get3DPlots().containsKey("plot1") && properties.getFrames().get("plot1") != null) {
-                create = false;
-            }
-
-            if (create) {
-                Plot3DPanel plot = new Plot3DPanel("SOUTH");
-
-                JFrame frame = new JFrame("Plot 1");
-                frame.setSize(600, 600);
-                frame.setContentPane(plot);
-                frame.setVisible(true);
-                frame.setResizable(true);
-                frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                frame.addWindowListener(new java.awt.event.WindowAdapter() {
-                    public void windowClosed(java.awt.event.WindowEvent evt) {
-                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).getFrames().remove("plot1");
-                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).get3DPlots().remove("plot1");
-                    }
-                });
-
-                metricPlots.put("plot1", plot);
-                frames.put("plot1", frame);
-            }
-
-            create = true;
             if (properties != null && properties.get3DPlots().containsKey("plot2") && properties.getFrames().get("plot2") != null) {
                 create = false;
             }
@@ -150,56 +121,6 @@ public class ApplicationMetricsJavaSeApiTest12 {
 
                 metricPlots.put("plot2", plot2);
                 frames.put("plot2", frame2);
-            }
-            
-            create = true;
-            if (properties != null && properties.get3DPlots().containsKey("plot3") && properties.getFrames().get("plot3") != null) {
-                create = false;
-            }
-            
-            if (create) {
-                Plot3DPanel plot3 = new Plot3DPanel("SOUTH");
-
-                JFrame frame3 = new JFrame("Plot 3");
-                frame3.setSize(600, 600);
-                frame3.setContentPane(plot3);
-                frame3.setVisible(true);
-                frame3.setResizable(true);
-                frame3.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                frame3.addWindowListener(new java.awt.event.WindowAdapter() {
-                    public void windowClosed(java.awt.event.WindowEvent evt) {
-                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).getFrames().remove("plot3");
-                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).get3DPlots().remove("plot3");
-                    }
-                });
-
-                metricPlots.put("plot3", plot3);
-                frames.put("plot3", frame3);
-            }
-            
-            create = true;
-            if (properties != null && properties.get3DPlots().containsKey("plot4") && properties.getFrames().get("plot4") != null) {
-                create = false;
-            }
-            
-            if (create) {
-                Plot3DPanel plot4 = new Plot3DPanel("SOUTH");
-
-                JFrame frame4 = new JFrame("Plot 4");
-                frame4.setSize(600, 600);
-                frame4.setContentPane(plot4);
-                frame4.setVisible(true);
-                frame4.setResizable(true);
-                frame4.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                frame4.addWindowListener(new java.awt.event.WindowAdapter() {
-                    public void windowClosed(java.awt.event.WindowEvent evt) {
-                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).getFrames().remove("plot4");
-                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).get3DPlots().remove("plot4");
-                    }
-                });
-
-                metricPlots.put("plot4", plot4);
-                frames.put("plot4", frame4);
             }
             
             create = true;
