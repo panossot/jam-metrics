@@ -45,7 +45,7 @@
                         </goals>  
                         <configuration>  
                             <killAfter>-1</killAfter>
-                            <mainClass>org.jam.metrics.applicationmetricsjavaseapitest.ApplicationMetricsJavaSeApiTest11</mainClass>  
+                            <mainClass>org.jam.metrics.applicationmetricsjavaseapitest11.ApplicationMetricsJavaSeApiTest11</mainClass>  
                         </configuration>  
                     </execution>  
                 </executions>  
