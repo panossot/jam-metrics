@@ -35,16 +35,28 @@ public class MetricsApiSessionBean {
     private double count3[][];
     
     private double count4[][];
+    
+    private double count5[][];
+    
+    private double count6[][];
+    
+    private double count7[][];
+    
+    private double count8[][];
 
     public MetricsApiSessionBean() {
     }
 
-    @Plot(fieldData = {"count3","count4","count","count2","count3","count4","count3","count4","count2","count"}, groupName = "myTestGroup", plot = {"plot1","plot1","plot2","plot2","plot3","plot3","plot4","plot4","plot5","plot5"}, plotHandlerName = {"box","box2","scatter","scatter2","histogram","histogram2","grid","grid2","line","line2"}, color = {"red", "blue","green","yellow","magenta","red", "blue","green","yellow","magenta"}, typePlot={"box","box","scatter","scatter","histogram","histogram","grid","grid","line","line"}, threeD=true)
+    @Plot(fieldData = {"count7","count8","count","count2","count5","count6","count3","count4","count2","count"}, groupName = "myTestGroup", plot = {"plot1","plot1","plot2","plot2","plot3","plot3","plot4","plot4","plot5","plot5"}, plotHandlerName = {"box","box2","scatter","scatter2","histogram","histogram2","grid","grid2","line","line2"}, color = {"red", "blue","green","yellow","magenta","red", "blue","green","yellow","magenta"}, typePlot={"box","box","scatter","scatter","histogram","histogram","grid","grid","line","line"}, threeD=true)
     public void countMethod() {
         count = new double[10][3];
         count2 = new double[10][3];
         count3 = new double[10][10];
         count4 = new double[10][10];
+        count5 = new double[10][5];
+        count6 = new double[10][5];
+        count7 = new double[10][6];
+        count8 = new double[10][6];
         
         for(int i=0; i<10; i++) {
             for(int j=0; j<3; j++) {
@@ -55,6 +67,26 @@ public class MetricsApiSessionBean {
             for(int j=0; j<10; j++) {
                 count3[i][j]=i*j+Math.random()*5;
                 count4[i][j]=i*j+Math.random()*4;
+            }
+            
+            for(int j=0; j<5; j++) {
+                if (j<3) {
+                    count5[i][j]=i*j+Math.random()*5;
+                    count6[i][j]=i*j+Math.random()*5;
+                }else if (j<5) {
+                    count5[i][j]=1;
+                    count6[i][j]=1;
+                }
+            }
+            
+            for(int j=0; j<6; j++) {
+                if (j<3) {
+                    count7[i][j]=i*j+Math.random()*5;
+                    count8[i][j]=i*j+Math.random()*5;
+                }else {
+                    count7[i][j]=1;
+                    count8[i][j]=1;
+                }
             }
         }
     }

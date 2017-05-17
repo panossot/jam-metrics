@@ -44,7 +44,7 @@ public class MetricsApiSessionBean {
         count = new double[10][2];
         count2 = new double[10][2];
         count3 = new double[10][3];
-        count4 = new double[10][10];
+        count4 = new double[10][4];
         
         for(int i=0; i<10; i++) {
             for(int j=0; j<2; j++) {
@@ -53,11 +53,17 @@ public class MetricsApiSessionBean {
             }
             
             for(int j=0; j<3; j++) {
-                count3[i][j]=i*j+Math.random()*5;
+                if(j<2)
+                    count3[i][j]=i*j+Math.random()*5;
+                else
+                    count3[i][j]=1;
             }
             
-            for(int j=0; j<10; j++) {
-                count4[i][j]=i*j+Math.random()*5;
+            for(int j=0; j<4; j++) {
+                if(j<2)
+                    count4[i][j]=i*j+Math.random()*5;
+                else
+                    count4[i][j]=1;
             }
         }
     }

@@ -35,6 +35,10 @@ public class MetricsApiSeTestClass12 {
     
     private double count3[][];
     
+    private double count4[][];
+    
+    private double count5[][];
+    
     final MetricProperties properties;
 
     public MetricsApiSeTestClass12() {
@@ -44,7 +48,9 @@ public class MetricsApiSeTestClass12 {
     public void countMethod() throws IllegalArgumentException, IllegalAccessException {
         count = new double[10][3];
         count2 = new double[10][3];
-        count3 = new double[10][10];
+        count3 = new double[10][5];
+        count4 = new double[10][6];
+        count5 = new double[10][10];
         
         for(int i=0; i<10; i++) {
             for(int j=0; j<3; j++) {
@@ -52,15 +58,29 @@ public class MetricsApiSeTestClass12 {
                 count2[i][j]=i*j +2*i+Math.random()*5;
             }
             
+            for(int j=0; j<5; j++) {
+                if (j<3)
+                    count3[i][j]=i*j+Math.random()*5;
+                else if (j<5)
+                    count3[i][j]=1;
+            }
+            
+            for(int j=0; j<6; j++) {
+                if (j<3)
+                    count4[i][j]=i*j+Math.random()*5;
+                else
+                    count4[i][j]=1;
+            }
+            
             for(int j=0; j<10; j++) {
-                count3[i][j]=i*j+Math.random()*5;
+                count5[i][j]=i*j+Math.random()*5;
             }
         }
         
-        JMathPlotAdapter.jMathPlotAdapter(count3, "myTestGroup", properties, "plot3", "count3", "red", "box", true);
+        JMathPlotAdapter.jMathPlotAdapter(count4, "myTestGroup", properties, "plot3", "count4", "red", "box", true);
         JMathPlotAdapter.jMathPlotAdapter(count, "myTestGroup", properties, "plot4", "count", "blue", "scatter", true);
         JMathPlotAdapter.jMathPlotAdapter(count3, "myTestGroup", properties, "plot5", "count3", "green", "histogram", true);
-        JMathPlotAdapter.jMathPlotAdapter(count3, "myTestGroup", properties, "plot6", "count3", "yellow", "grid", true);
+        JMathPlotAdapter.jMathPlotAdapter(count5, "myTestGroup", properties, "plot6", "count5", "yellow", "grid", true);
         JMathPlotAdapter.jMathPlotAdapter(count2, "myTestGroup", properties, "plot7", "count2", "magenta", "line", true);
     }
 }
