@@ -60,6 +60,7 @@
         <module>ApplicationMetricsApiTest20</module>
         <module>ApplicationMetricsApiTest21</module>
         <module>ApplicationMetricsApiTest22</module>
+        <module>ApplicationMetricsApiTest23</module>
         <module>VertxReproducer</module>
         <module>ApplicationMetricsLibray</module>
         <module>ApplicationMetricsProperties</module>
