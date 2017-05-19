@@ -95,7 +95,7 @@ public class ApplicationMetricsJavaSeApiTest11 {
             
             while (mTreads.getT().isAlive() || mTreads2.getT().isAlive() || mTreads3.getT().isAlive() || mTreads4.getT().isAlive() || mTreads5.getT().isAlive() || mTreads6.getT().isAlive() || mTreads7.getT().isAlive() || mTreads8.getT().isAlive() || mTreads9.getT().isAlive()){};
             
-       /*     Thread.sleep(30000);
+            Thread.sleep(30000);
             
             try {
                 frames.get("plot1").setVisible(false);
@@ -154,7 +154,7 @@ public class ApplicationMetricsJavaSeApiTest11 {
                 frames.get("plot27").dispose();
                 frames.get("plot28").setVisible(false);
                 frames.get("plot28").dispose();
-            }catch(Exception e){}*/
+            }catch(Exception e){}
             
         } catch (Exception e) {
             e.printStackTrace();
