@@ -10,6 +10,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import java.util.Hashtable;
+import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import org.jam.metrics.applicationmetricsapi.JMathPlotAdapter;
@@ -59,8 +60,11 @@ public class RemoteEJBClient {
      * @throws NamingException
      */
     private static RemoteCalculator2 lookupRemoteStatelessCalculator() throws NamingException {
-        final Hashtable<String, String> jndiProperties = new Hashtable<>();
+        final Properties jndiProperties = new Properties();
         jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+        jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY,"org.jboss.naming.remote.client.InitialContextFactory");
+        jndiProperties.put(Context.PROVIDER_URL, "http-remoting://localhost:8080");
+        jndiProperties.put("jboss.naming.client.ejb.context", true);
         final Context context = new InitialContext(jndiProperties);
 
         // The JNDI lookup name for a stateless session bean has the syntax of:
@@ -82,7 +86,7 @@ public class RemoteEJBClient {
         // the whole package name.
 
         // let's do the lookup
-        return (RemoteCalculator2) context.lookup("ejb:/jboss-ejb-remote-server-side/CalculationBean2!"
+        return (RemoteCalculator2) context.lookup("/jboss-ejb-remote-server-side/CalculationBean2!"
             + RemoteCalculator2.class.getName());
     }
 
@@ -110,8 +114,11 @@ public class RemoteEJBClient {
      * @throws NamingException
      */
     private static RemoteCalculator lookupRemoteStatefulCalculator() throws NamingException {
-        final Hashtable<String, String> jndiProperties = new Hashtable<>();
+        final Properties jndiProperties = new Properties();
         jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+        jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY,"org.jboss.naming.remote.client.InitialContextFactory");
+        jndiProperties.put(Context.PROVIDER_URL, "http-remoting://localhost:8080");
+        jndiProperties.put("jboss.naming.client.ejb.context", true);
         final Context context = new InitialContext(jndiProperties);
 
         // The JNDI lookup name for a stateful session bean has the syntax of:
@@ -133,8 +140,8 @@ public class RemoteEJBClient {
         // the whole package name.
 
         // let's do the lookup
-        return (RemoteCalculator) context.lookup("ejb:/jboss-ejb-remote-server-side/CalculationBean!"
-            + RemoteCalculator.class.getName() + "?stateful");
+        return (RemoteCalculator) context.lookup("/jboss-ejb-remote-server-side/CalculationBean!"
+            + RemoteCalculator.class.getName());
     }
     
     private static void initializeMetricProperties() {
