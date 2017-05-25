@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="" href="">
+    <information>
+        <title>JAM Metric Plots</title>
+        <vendor>panos</vendor>
+    </information>
+    <resources>
+        <!-- Application Resources -->
+        <j2se version="1.8+" href=
+           "http://java.sun.com/products/autodl/j2se"/>
+        <jar href="jboss-ejb-remote-applet-client.jar"
+            main="true" />
+
+    </resources>
+
+    <security>
+        <all-permissions/>
+    </security>
+
+    <application-desc
+         name="JAM Metric Plots Demo"
+         main-class="org.jam.metrics.ejb.remote.client.RemoteEJBClientWebStart"
+         width="300"
+         height="300">
+     </application-desc>
+     <update check="background"/>
+</jnlp>

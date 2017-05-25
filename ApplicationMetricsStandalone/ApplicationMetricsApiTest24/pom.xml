@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+    JBoss, Home of Professional Open Source
+    Copyright 2015, Red Hat, Inc. and/or its affiliates, and individual
+    contributors by the @authors tag. See the copyright.txt in the
+    distribution for a full listing of individual contributors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+      <groupId>org.jam.metrics</groupId>
+      <artifactId>jam-metrics-standalone</artifactId>
+      <version>1.0.5.Final-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.jam.metrics</groupId>
+    <artifactId>ApplicationMetricsApiTest24</artifactId>
+    <version>1.0.5.Final-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>ApplicationMetricsApiTest24 --Standalone--</name>
+
+    <modules>
+        <module>server-side</module>
+        <module>client</module>
+    </modules>
+
+    <repositories>
+        <repository>
+            <id>jboss-developer-staging-repository</id>
+            <url>http://jboss-developer.github.io/temp-maven-repo/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>jboss-enterprise-maven-repository</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jboss-developer-staging-repository</id>
+            <url>http://jboss-developer.github.io/temp-maven-repo/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>jboss-enterprise-maven-repository</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+</project>
