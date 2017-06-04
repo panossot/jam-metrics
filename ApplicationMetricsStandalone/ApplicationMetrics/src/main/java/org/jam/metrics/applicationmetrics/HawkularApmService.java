@@ -56,8 +56,6 @@ import org.jam.metrics.applicationmetricslibrary.HawkularApmManagers;
  */
 public class HawkularApmService {
 
-    private Vertx vertx;
-    private Router router;
     private EventBus eb;
     private Tracer tracer;
     private String group;
@@ -65,18 +63,17 @@ public class HawkularApmService {
     private HttpClient client;
     private String url = "localhost";
     private HttpServer server = null;
+    private static int counter =0;
 
     public HawkularApmService(String deployment, Tracer tracer, EventBus eb) {
-        vertx = Vertx.vertx();
-        router = Router.router(vertx);
         this.eb = eb;
         this.tracer = tracer;
-        MessageConsumer<JsonObject> getMethodConsumer = eb.consumer(group + ".endofStructure");
+    /*    MessageConsumer<JsonObject> getMethodConsumer = eb.consumer(group + ".endofStructure");
         if (!getMethodConsumer.isRegistered()) {
             getMethodConsumer.handler(message -> {
             });
         }
-
+*/
     }
 
     public synchronized void hawkularApm(HawkularApmManagers hApmManagers, final String group, EventBus eb) throws IllegalArgumentException, IllegalAccessException {
@@ -96,15 +93,15 @@ public class HawkularApmService {
     public void handleApmData() {
         try {
 
-            Span apmRootSpan = tracer.buildSpan("POST")
-                    .withTag("http.url", "/apm")
-                    .withTag("service", "APMManager")
-                    .withTag("transaction", "Display Code Structure")
-                    .start();
+        //    Span apmRootSpan = tracer.buildSpan("POST")
+        //            .withTag("http.url", "/apm")
+        //            .withTag("service", "APMManager")
+        //            .withTag("transaction", "Display Code Structure")
+        //            .start();
 
-            HashMap<String,Span> rootHM = new HashMap();
-            rootHM.put("root", apmRootSpan);
-            hApmManagers.setRootSpan(apmRootSpan);
+         //   HashMap<String,Span> rootHM = new HashMap();
+         //   rootHM.put("root", apmRootSpan);
+         //   hApmManagers.setRootSpan(apmRootSpan);
             //       JsonObject apmRoot = buf.toJsonObject();
           //  apmRootSpan.finish();
             constructSpanSturcture();
@@ -116,6 +113,7 @@ public class HawkularApmService {
 
     private void constructSpanSturcture() {
         try {
+            System.out.println("Counter : " + counter++);
             if (hApmManagers.getMethodQueueIndex() > 0) {
                 for (int i = 0; i < hApmManagers.getMethodQueueIndex(); i++) {
                     System.out.println("child : " + hApmManagers.getMethodQueue().get(i).getChildMethod() + ", parent : " + hApmManagers.getMethodQueue().get(i).getParentMethod());
@@ -123,10 +121,23 @@ public class HawkularApmService {
                     final String childMethod = hApmManagers.getMethodQueue().get(i).getChildMethod();
                     JsonObject spanObject = new JsonObject();
                     spanObject.put("parentspan", parentMethod);
-                       eb.send(group + "." + childMethod, spanObject);
+                    eb.send(group + "." + childMethod, spanObject);
+                }
+                
+                for (Span value : hApmManagers.getRootSpans().values()) {
+                    value.finish();
+                }
+                
+                for (int i = 0; i < hApmManagers.getMethodQueueIndex(); i++) {
+                    String parentMethod = hApmManagers.getMethodQueue().get(i).getParentMethod();
+                //    String childMethod = hApmManagers.getMethodQueue().get(i).getChildMethod();
+                    if (hApmManagers.getFromSpanStore(parentMethod)!=null)
+                        hApmManagers.getFromSpanStore(parentMethod).finish();
+                //    if (hApmManagers.getFromSpanStore(childMethod)!=null)
+                //        hApmManagers.getFromSpanStore(childMethod).finish();
+                    
                 }
             }
-            //    eb.publish(group + ".endofStructure", apmRoot);
         } catch (Exception e) {
             e.printStackTrace();
         }

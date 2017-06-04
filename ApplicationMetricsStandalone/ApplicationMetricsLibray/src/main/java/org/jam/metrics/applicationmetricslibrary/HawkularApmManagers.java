@@ -32,12 +32,13 @@ public class HawkularApmManagers {
     private ArrayList<ChildParentMethod> methodQueue;
     private int methodQueueIndex;
     private HashMap<String,Span> spanStore;
-    private Span rootSpan;
+    private HashMap<String,Span> rootSpans;
 
     public HawkularApmManagers() {
         methodQueue = new ArrayList<>();
         methodQueueIndex = 0;
         spanStore = new HashMap();
+        rootSpans = new HashMap();
     }
 
     public HashMap<String, Span> getSpanStore() {
@@ -48,12 +49,16 @@ public class HawkularApmManagers {
         this.spanStore = spanStore;
     }
 
-    public Span getRootSpan() {
-        return rootSpan;
+    public HashMap<String,Span> getRootSpans() {
+        return rootSpans;
     }
 
-    public void setRootSpan(Span rootSpan) {
-        this.rootSpan = rootSpan;
+    public void setRootSpans(HashMap<String,Span> rootSpans) {
+        this.rootSpans = rootSpans;
+    }
+    
+    public void addRootSpan(String key, Span rootSpan) {
+        this.rootSpans.put(key, rootSpan);
     }
 
     public synchronized void putInSpanStore(String methodName, Span span) {

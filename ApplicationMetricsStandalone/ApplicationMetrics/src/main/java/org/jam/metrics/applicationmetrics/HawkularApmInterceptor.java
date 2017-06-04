@@ -28,6 +28,7 @@ import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -90,7 +91,7 @@ public class HawkularApmInterceptor {
                     final HawkularApmManagers hm = hApmManagers;
                     MessageConsumer<JsonObject> getMethodConsumer = eb.consumer(group + "." + method.getName());
                     if (!getMethodConsumer.isRegistered()) {
-                        getMethodConsumer.handler(message -> {
+                        getMethodConsumer.handler((Message<JsonObject> message) -> {
                             
                             try {
                                 System.out.println(group + "." + method.getName());
@@ -98,8 +99,17 @@ public class HawkularApmInterceptor {
                                 Span spanObject = null;
                                 if (hm.getFromSpanStore(message.body().getString("parentspan"))!=null)
                                     spanObject = hm.getFromSpanStore(message.body().getString("parentspan"));
-                                else
-                                    spanObject = hm.getRootSpan();
+                                else if(hm.getRootSpans().get(message.body().getString("parentspan"))!=null) { 
+                                    spanObject = hm.getRootSpans().get(message.body().getString("parentspan"));
+                                }else {
+                                    spanObject = tracer.buildSpan(group + "." + message.body().getString("parentspan"))
+                                        .withTag("http.url", "/root")
+                                        .withTag("service", message.body().getString("parentspan"))
+                                        .withTag("transaction", message.body().getString("parentspan"))
+                                        .start();
+                                    hm.addRootSpan(message.body().getString("parentspan"), spanObject);
+                                }
+                                //    spanObject = hm.getRootSpan();
                                 //   Span spanObject = Json.mapper.convertValue ( message.body().getMap().get(hawkularApmLock), Span.class );
                                 SpanContext parentSpan = spanObject.context();
                                 System.out.println("pSpan : " + parentSpan.toString());
@@ -108,6 +118,7 @@ public class HawkularApmInterceptor {
                                 Span childSpan = tracer.buildSpan(group + "." + method.getName())
                                         .asChildOf(parentSpan)
                                         .withTag("service", method.getName())
+                                        .withTag("transaction", method.getName())
                                         .start();
                                 
                                 hm.putInSpanStore(method.getName(), childSpan);
