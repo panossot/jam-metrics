@@ -44,9 +44,9 @@ class MonitoringHawkularApmAdapter {
         if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
             MetricInternalParameters internalParameters = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(metricGroup);
             Trace trace = new Trace();
-            trace.setId(metricName + String.valueOf(id++));
-            trace.setBusinessTransaction(metricName);
-            trace.setStartTime(System.currentTimeMillis());
+            trace.setTraceId(metricName + String.valueOf(id++));
+            trace.setTransaction(metricName);
+            trace.setTimestamp(System.currentTimeMillis());
 
             Consumer c1 = new Consumer();
             c1.getProperties().add(new Property(metricName, String.valueOf(value)));

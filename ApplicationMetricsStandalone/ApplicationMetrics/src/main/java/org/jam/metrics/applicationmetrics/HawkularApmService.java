@@ -112,10 +112,10 @@ public class HawkularApmService {
     }
 
     private void constructSpanSturcture() {
-        try {
+  /*      try {
             System.out.println("Counter : " + counter++);
-            if (hApmManagers.getMethodQueueIndex() > 0) {
-                for (int i = 0; i < hApmManagers.getMethodQueueIndex(); i++) {
+              if (hApmManagers.getMethodQueueIndex() > 0) {
+               for (int i = 0; i < hApmManagers.getMethodQueueIndex(); i++) {
                     System.out.println("child : " + hApmManagers.getMethodQueue().get(i).getChildMethod() + ", parent : " + hApmManagers.getMethodQueue().get(i).getParentMethod());
                     final String parentMethod = hApmManagers.getMethodQueue().get(i).getParentMethod();
                     final String childMethod = hApmManagers.getMethodQueue().get(i).getChildMethod();
@@ -123,24 +123,28 @@ public class HawkularApmService {
                     spanObject.put("parentspan", parentMethod);
                     eb.send(group + "." + childMethod, spanObject);
                 }
-                
+               
                 for (Span value : hApmManagers.getRootSpans().values()) {
                     value.finish();
                 }
                 
-                for (int i = 0; i < hApmManagers.getMethodQueueIndex(); i++) {
-                    String parentMethod = hApmManagers.getMethodQueue().get(i).getParentMethod();
+                for (Span value : hApmManagers.getSpanStore().values()) {
+                    value.finish();
+                }
+                
+       //         for (int i = 0; i < hApmManagers.getMethodQueueIndex(); i++) {
+            //        String parentMethod = hApmManagers.getMethodQueue().get(i).getParentMethod();
                 //    String childMethod = hApmManagers.getMethodQueue().get(i).getChildMethod();
-                    if (hApmManagers.getFromSpanStore(parentMethod)!=null)
-                        hApmManagers.getFromSpanStore(parentMethod).finish();
+            //        if (hApmManagers.getFromSpanStore(parentMethod)!=null)
+           //             hApmManagers.getFromSpanStore(parentMethod).finish();
                 //    if (hApmManagers.getFromSpanStore(childMethod)!=null)
                 //        hApmManagers.getFromSpanStore(childMethod).finish();
                     
-                }
+          //      }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        } */
 
     }
 }

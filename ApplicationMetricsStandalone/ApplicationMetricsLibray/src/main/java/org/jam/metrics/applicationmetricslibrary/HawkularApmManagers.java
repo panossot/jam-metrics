@@ -21,7 +21,7 @@ package org.jam.metrics.applicationmetricslibrary;
 
 import io.opentracing.Span;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.CountDownLatch;
 
 
 /**
@@ -29,60 +29,81 @@ import java.util.HashMap;
  * @author panos
  */
 public class HawkularApmManagers {
-    private ArrayList<ChildParentMethod> methodQueue;
-    private int methodQueueIndex;
-    private HashMap<String,Span> spanStore;
-    private HashMap<String,Span> rootSpans;
+    private ArrayList<ArrayList<ChildParentMethod>> methodQueuesDone;
+    private ArrayList<ArrayList<ChildParentMethod>> methodQueuesToDo;
+    private ArrayList<Span> spanStore;
+    private Span rootSpan;
+    private CountDownLatch latch;
 
     public HawkularApmManagers() {
-        methodQueue = new ArrayList<>();
-        methodQueueIndex = 0;
-        spanStore = new HashMap();
-        rootSpans = new HashMap();
+        methodQueuesDone = new ArrayList<>();
+        methodQueuesToDo = new ArrayList<>();
+        spanStore = new ArrayList();
+        latch = new CountDownLatch(1);
     }
 
-    public HashMap<String, Span> getSpanStore() {
+    public ArrayList<ArrayList<ChildParentMethod>> getMethodQueuesDone() {
+        return methodQueuesDone;
+    }
+
+    public void setMethodQueuesDone(ArrayList<ArrayList<ChildParentMethod>> methodQueuesDone) {
+        this.methodQueuesDone = methodQueuesDone;
+    }
+    
+    public void addMethodQueuesDoneElement(int methodQueueIndex, int index, ChildParentMethod childParentMethog) {
+        this.methodQueuesDone.get(methodQueueIndex).add(index, childParentMethog);
+    }
+    
+    public void removeMethodQueuesDoneElement(int methodQueueIndex, int index) {
+        this.methodQueuesDone.get(methodQueueIndex).remove(index);
+    }
+
+    public ArrayList<ArrayList<ChildParentMethod>> getMethodQueuesToDo() {
+        return methodQueuesToDo;
+    }
+
+    public void setMethodQueuesToDo(ArrayList<ArrayList<ChildParentMethod>> methodQueuesToDo) {
+        this.methodQueuesToDo = methodQueuesToDo;
+    }
+    
+    public void addMethodQueuesToDoElement(int methodQueueIndex, int index, ChildParentMethod childParentMethog) {
+        this.methodQueuesToDo.get(methodQueueIndex).add(index, childParentMethog);
+    }
+    
+    public void removeMethodQueuesToDoElement(int methodQueueIndex, int index) {
+        this.methodQueuesToDo.get(methodQueueIndex).remove(index);
+    }
+    
+    public ArrayList<Span> getSpanStore() {
         return spanStore;
     }
 
-    public void setSpanStore(HashMap<String, Span> spanStore) {
+    public void setSpanStore(ArrayList<Span> spanStore) {
         this.spanStore = spanStore;
     }
 
-    public HashMap<String,Span> getRootSpans() {
-        return rootSpans;
+    public Span getRootSpan() {
+        return rootSpan;
     }
 
-    public void setRootSpans(HashMap<String,Span> rootSpans) {
-        this.rootSpans = rootSpans;
+    public void setRootSpan(Span rootSpan) {
+        this.rootSpan = rootSpan;
+    }
+
+    public synchronized void addInSpanStore(Span span) {
+        spanStore.add(span);
     }
     
-    public void addRootSpan(String key, Span rootSpan) {
-        this.rootSpans.put(key, rootSpan);
+    public synchronized Span getFromSpanStore(int index) {
+        return spanStore.get(index);
     }
 
-    public synchronized void putInSpanStore(String methodName, Span span) {
-        spanStore.put(methodName, span);
-    }
-    
-    public synchronized Span getFromSpanStore(String methodName) {
-        return spanStore.get(methodName);
-    }
-    
-    public synchronized ArrayList<ChildParentMethod> getMethodQueue() {
-        return methodQueue;
+    public CountDownLatch getLatch() {
+        return latch;
     }
 
-    public synchronized void setMethodQueue(ArrayList<ChildParentMethod> methodQueue) {
-        this.methodQueue = methodQueue;
-    }
-
-    public synchronized int getMethodQueueIndex() {
-        return methodQueueIndex;
-    }
-
-    public synchronized void setMethodQueueIndex(int methodQueueIndex) {
-        this.methodQueueIndex = methodQueueIndex;
+    public void setLatch(CountDownLatch latch) {
+        this.latch = latch;
     }
     
 }

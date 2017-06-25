@@ -168,17 +168,17 @@
         <dependency>
             <groupId>org.hawkular.apm</groupId>
             <artifactId>hawkular-apm-api</artifactId>
-            <version>0.13.0.Final</version>
+            <version>0.14.4.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hawkular.apm</groupId>
             <artifactId>hawkular-apm-client-opentracing</artifactId>
-            <version>0.13.0.Final</version>
+            <version>0.14.4.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hawkular.apm</groupId>
             <artifactId>hawkular-apm-trace-publisher-rest-client</artifactId>
-            <version>0.13.0.Final</version>
+            <version>0.14.4.Final</version>
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>
