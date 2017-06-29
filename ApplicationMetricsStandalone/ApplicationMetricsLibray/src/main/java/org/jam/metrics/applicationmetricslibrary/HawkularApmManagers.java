@@ -34,12 +34,21 @@ public class HawkularApmManagers {
     private ArrayList<Span> spanStore;
     private Span rootSpan;
     private CountDownLatch latch;
+    private String threadName;
 
     public HawkularApmManagers() {
         methodQueuesDone = new ArrayList<>();
         methodQueuesToDo = new ArrayList<>();
         spanStore = new ArrayList();
         latch = new CountDownLatch(1);
+    }
+
+    public String getThreadName() {
+        return threadName;
+    }
+
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
     }
 
     public ArrayList<ArrayList<ChildParentMethod>> getMethodQueuesDone() {

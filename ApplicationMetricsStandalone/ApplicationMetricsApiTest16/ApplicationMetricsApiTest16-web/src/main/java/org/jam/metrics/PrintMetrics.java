@@ -69,13 +69,13 @@ public class PrintMetrics extends HttpServlet {
             MetricsThreads mTreads =  new MetricsThreads(metricsBean, "1");
             mTreads.start();
          
-       //     MetricsThreads mTreads2 =  new MetricsThreads(metricsBean2, "2");
-       //     mTreads2.start();
+            MetricsThreads mTreads2 =  new MetricsThreads(metricsBean2, "2");
+            mTreads2.start();
             
-       //     MetricsThreads mTreads3 =  new MetricsThreads(metricsBean2, "3");
-       //     mTreads3.start();
+            MetricsThreads mTreads3 =  new MetricsThreads(metricsBean2, "3");
+            mTreads3.start();
             
-            while (mTreads.getT().isAlive()){}; //|| mTreads2.getT().isAlive() || mTreads3.getT().isAlive()){};
+            while (mTreads.getT().isAlive() || mTreads2.getT().isAlive() || mTreads3.getT().isAlive()){};
             
             if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
                 out.println(MetricsCacheApi.printMetricsCache(groupName));
