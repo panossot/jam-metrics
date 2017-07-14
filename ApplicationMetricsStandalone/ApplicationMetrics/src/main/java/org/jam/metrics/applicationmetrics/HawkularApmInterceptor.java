@@ -84,12 +84,9 @@ public class HawkularApmInterceptor {
                     if (hApmManagers == null) {
                         internalParams.putHawkularApmManagers(threadName, new HawkularApmManagers());
                         hApmManagers = internalParams.getHawkularApmManagers(threadName);
-                        System.out.println("threadname2 : " + threadName);
+                        System.out.println("threadname : " + threadName);
                     }
                     
-                    hApmManagers.setThreadName(threadName);
-                    System.out.println("threadname : " + threadName);
-
                     HawkularApmManagers hm = hApmManagers;
                     MessageConsumer<JsonObject> getMethodConsumer = eb.consumer(threadName + "." + group + "." + method.getName());
                     if (!getMethodConsumer.isRegistered()) {
@@ -98,28 +95,32 @@ public class HawkularApmInterceptor {
                             System.out.println("latch " + latch.getCount() + " " + hm.getThreadName());
                             try {
                                 System.out.println(group + "." + method.getName());
-                                System.out.println("hello : " + message.body().getString("parentspan"));
+                                System.out.println("hello : " + message.body().getString("grandpaspan"));
                                 Span spanObject = null;
                                 if (message.body().getInteger("index") > 1) {
-                                    spanObject = hm.getFromSpanStore(message.body().getInteger("parentspan"));
+                                    spanObject = hm.getFromSpanStore(message.body().getString("grandpaspan"));
                                     SpanContext parentSpan = spanObject.context();
                                     Span childSpan = tracer.buildSpan(group + "." + method.getName())
                                             .asChildOf(parentSpan)
+                                            .withTag("http.url", message.body().getString("grandpaspan"))
                                             .withTag("service", method.getName())
                                             .withTag("transaction", method.getName())
                                             .start();
 
-                                    hm.addInSpanStore(childSpan);
+                                    System.out.println("method.getName2() " + method.getName());
+                                    hm.addInSpanStore(method.getName(),childSpan);
                                 } else if (message.body().getInteger("index") == 1) {
                                     spanObject = hm.getRootSpan();
                                     SpanContext parentSpan = spanObject.context();
                                     Span childSpan = tracer.buildSpan(group + "." + method.getName())
                                             .asChildOf(parentSpan)
+                                            .withTag("http.url", message.body().getString("parentspan"))
                                             .withTag("service", method.getName())
                                             .withTag("transaction", method.getName())
                                             .start();
 
-                                    hm.addInSpanStore(childSpan);
+                                    System.out.println("method.getName() " + method.getName());
+                                    hm.addInSpanStore(method.getName(),childSpan);
                                 } else {
                                     spanObject = tracer.buildSpan(group + "." + message.body().getString("parentspan"))
                                             .withTag("http.url", message.body().getString("parentspan"))
@@ -141,7 +142,7 @@ public class HawkularApmInterceptor {
                     synchronized (hawkularApmLock) {
                         if (hApmManagers.getMethodQueuesDone().size() == 0) {
                             hApmManagers.getMethodQueuesDone().add(new ArrayList<>());
-                            hApmManagers.getMethodQueuesDone().get(0).add(new ChildParentMethod(method.getName(), null));
+                            hApmManagers.getMethodQueuesDone().get(0).add(new ChildParentMethod(method.getName(), null, null));
                         }
 
                         if (hApmManagers.getMethodQueuesToDo().size() == 0) {
@@ -151,55 +152,59 @@ public class HawkularApmInterceptor {
                         if (hApmManagers.getMethodQueuesDone().size() != 0) {
                             ChildParentMethod toDo = null;
                             if (hApmManagers.getMethodQueuesToDo().get(hApmManagers.getMethodQueuesToDo().size() - 1).size() != 0) {
-                                hApmManagers.getMethodQueuesToDo().get(hApmManagers.getMethodQueuesToDo().size() - 1).remove(0);
+                                toDo = hApmManagers.getMethodQueuesToDo().get(hApmManagers.getMethodQueuesToDo().size() - 1).remove(0);
                             }
 
-                            String parentMethodName = "";
+                            String parentMethodName = null;
                             int j = 0;
                             while (excludeParentMethod(Thread.currentThread().getStackTrace()[j].getMethodName())) {
                                 j++;
                             }
                             parentMethodName = Thread.currentThread().getStackTrace()[j].getMethodName();
-                            System.out.println("parentMethodName = " + parentMethodName);
-                            if (hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() != 0 && hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() - 1).getChildMethod().compareTo(parentMethodName) == 0 || (hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() != 0 && hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() - 1).getParentMethod() == null && hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() == 1)) {
-                                if (hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() - 1).getChildMethod().compareTo(method.getName()) == 0 || hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() - 1).getParentMethod() == null) {
-                                    while (hApmManagers.getMethodQueuesToDo().size() < hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size()) {
-                                        hApmManagers.getMethodQueuesToDo().add(new ArrayList<>());
-                                    }
-                                    if (toDo != null) {
-                                        hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).add(toDo);
-                                    }
-                                } else {
-                                    if (hApmManagers.getMethodQueuesDone().size() != 0) {
-                                        hApmManagers.getMethodQueuesDone().add(new ArrayList<>());
-                                        hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).add(new ChildParentMethod(method.getName(), null));
-                                        hApmManagers.getMethodQueuesToDo().add(new ArrayList<>());
-                                    }
-                                    if (toDo != null) {
-                                        hApmManagers.getMethodQueuesToDo().get(hApmManagers.getMethodQueuesToDo().size() - 1).add(0, toDo);
-                                    }
+                            if (parentMethodName.compareTo(method.getName())==0) {
+                                j++;
+                                while (excludeParentMethod(Thread.currentThread().getStackTrace()[j].getMethodName())) {  
+                                    j++;
+                                }
+                                parentMethodName = Thread.currentThread().getStackTrace()[j].getMethodName();
+                            }
+                            System.out.println("parentMethodName = " + parentMethodName + " " + method.getName());
+                            if (hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() != 0 && 
+                                hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() - 1).getChildMethod().compareTo(parentMethodName) == 0 || 
+                                (hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() != 0 && 
+                                hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() - 1).getParentMethod() == null)) {
+                                while (hApmManagers.getMethodQueuesToDo().size() < hApmManagers.getMethodQueuesDone().size()) {
+                                    hApmManagers.getMethodQueuesToDo().add(new ArrayList<>());
+                                }
+                                if (toDo != null) {
+                                    hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).add(toDo);
                                 }
                             } else {
                                 if (toDo != null) {
                                     hApmManagers.getMethodQueuesToDo().get(hApmManagers.getMethodQueuesToDo().size() - 1).add(0, toDo);
                                 }
-                                hApmManagers.getMethodQueuesDone().add(new ArrayList<>());
-                                hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).add(new ChildParentMethod(method.getName(), null));
-                                hApmManagers.getMethodQueuesToDo().add(new ArrayList<>());
+                                    
+                                if (hApmManagers.getMethodQueuesDone().size() != 0) {
+                                        hApmManagers.getMethodQueuesDone().add(new ArrayList<>());
+                                        hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).add(new ChildParentMethod(method.getName(), null, null));
+                                        hApmManagers.getMethodQueuesToDo().add(new ArrayList<>());
+                                } 
                             }
+                             
 
                             int submethodLength = submethods.length;
                             if (submethodLength != 0) {
                                 for (int i = submethodLength - 1; i >= 0; i--) {
-                                    hApmManagers.getMethodQueuesToDo().get(hApmManagers.getMethodQueuesToDo().size() - 1).add(0, new ChildParentMethod(submethods[i], method.getName()));
+                                    hApmManagers.getMethodQueuesToDo().get(hApmManagers.getMethodQueuesToDo().size() - 1).add(0, new ChildParentMethod(submethods[i], method.getName(), parentMethodName));
                                 }
-                            } else {
-                                hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).add(new ChildParentMethod(null, method.getName()));
+                            }else if(hApmManagers.getMethodQueuesToDo().get(hApmManagers.getMethodQueuesToDo().size() - 1).isEmpty() ) {
+                                hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).add(new ChildParentMethod(null, method.getName(), parentMethodName));
 
                                 for (int i = 0; i < hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size(); i++) {
                                     System.out.println("child : " + hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(i).getChildMethod() + ", parent : " + hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(i).getParentMethod());
                                     final String parentMethod = hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(i).getParentMethod();
                                     final String childMethod = hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(i).getChildMethod();
+                                    final String grandpaMethod = hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(i).getGrandpaMethod();
                                     JsonObject spanObject = new JsonObject();
                                     latch = new CountDownLatch(1);
                                     hm.setLatch(latch);
@@ -212,6 +217,7 @@ public class HawkularApmInterceptor {
                                         latch.await();
                                     } else {
                                         spanObject.put("parentspan", parentMethod);
+                                        spanObject.put("grandpaspan", grandpaMethod);
                                         spanObject.put("index", i);
                                         eb.send(threadName + "." + group + "." + parentMethod, spanObject);
                                         System.out.println("****** " + group + "." + parentMethod);
@@ -221,7 +227,7 @@ public class HawkularApmInterceptor {
 
                                 }
 
-                                for (Span value : hApmManagers.getSpanStore()) {
+                                for (Span value : hApmManagers.getSpanStore().values()) {
                                     value.finish();
                                 }
 

@@ -26,10 +26,17 @@ package org.jam.metrics.applicationmetricslibrary;
 public class ChildParentMethod {
     String childMethod;
     String parentMethod;
+    String grandpaMethod;
 
     public ChildParentMethod(String childMethod, String parentMethod) {
         this.childMethod = childMethod;
         this.parentMethod = parentMethod;
+    }
+    
+    public ChildParentMethod(String childMethod, String parentMethod, String grandpaMethod) {
+        this.childMethod = childMethod;
+        this.parentMethod = parentMethod;
+        this.grandpaMethod = grandpaMethod;
     }
 
     public String getChildMethod() {
@@ -47,5 +54,14 @@ public class ChildParentMethod {
     public void setParentMethod(String parentMethod) {
         this.parentMethod = parentMethod;
     }
+
+    public String getGrandpaMethod() {
+        return grandpaMethod;
+    }
+
+    public void setGrandpaMethod(String grandpaMethod) {
+        this.grandpaMethod = grandpaMethod;
+    }
+    
     
 }

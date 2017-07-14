@@ -21,6 +21,7 @@ package org.jam.metrics.applicationmetricslibrary;
 
 import io.opentracing.Span;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
 
@@ -31,7 +32,7 @@ import java.util.concurrent.CountDownLatch;
 public class HawkularApmManagers {
     private ArrayList<ArrayList<ChildParentMethod>> methodQueuesDone;
     private ArrayList<ArrayList<ChildParentMethod>> methodQueuesToDo;
-    private ArrayList<Span> spanStore;
+    private HashMap<String,Span> spanStore;
     private Span rootSpan;
     private CountDownLatch latch;
     private String threadName;
@@ -39,7 +40,7 @@ public class HawkularApmManagers {
     public HawkularApmManagers() {
         methodQueuesDone = new ArrayList<>();
         methodQueuesToDo = new ArrayList<>();
-        spanStore = new ArrayList();
+        spanStore = new HashMap();
         latch = new CountDownLatch(1);
     }
 
@@ -83,11 +84,11 @@ public class HawkularApmManagers {
         this.methodQueuesToDo.get(methodQueueIndex).remove(index);
     }
     
-    public ArrayList<Span> getSpanStore() {
+    public HashMap<String,Span> getSpanStore() {
         return spanStore;
     }
 
-    public void setSpanStore(ArrayList<Span> spanStore) {
+    public void setSpanStore(HashMap<String,Span> spanStore) {
         this.spanStore = spanStore;
     }
 
@@ -99,12 +100,12 @@ public class HawkularApmManagers {
         this.rootSpan = rootSpan;
     }
 
-    public synchronized void addInSpanStore(Span span) {
-        spanStore.add(span);
+    public synchronized void addInSpanStore(String spanName, Span span) {
+        spanStore.put(spanName,span);
     }
     
-    public synchronized Span getFromSpanStore(int index) {
-        return spanStore.get(index);
+    public synchronized Span getFromSpanStore(String spanName) {
+        return spanStore.get(spanName);
     }
 
     public CountDownLatch getLatch() {
