@@ -27,16 +27,27 @@ public class ChildParentMethod {
     String childMethod;
     String parentMethod;
     String grandpaMethod;
+    boolean isEnd;
 
     public ChildParentMethod(String childMethod, String parentMethod) {
         this.childMethod = childMethod;
         this.parentMethod = parentMethod;
+        this.isEnd = false;
     }
     
     public ChildParentMethod(String childMethod, String parentMethod, String grandpaMethod) {
         this.childMethod = childMethod;
         this.parentMethod = parentMethod;
         this.grandpaMethod = grandpaMethod;
+        this.isEnd = false;
+    }
+
+    public boolean isIsEnd() {
+        return isEnd;
+    }
+
+    public void setIsEnd(boolean isEnd) {
+        this.isEnd = isEnd;
     }
 
     public String getChildMethod() {

@@ -32,7 +32,7 @@ import java.util.concurrent.CountDownLatch;
 public class HawkularApmManagers {
     private ArrayList<ArrayList<ChildParentMethod>> methodQueuesDone;
     private ArrayList<ArrayList<ChildParentMethod>> methodQueuesToDo;
-    private HashMap<String,Span> spanStore;
+    private HashMap<String,ArrayList<Span>> spanStore;
     private Span rootSpan;
     private CountDownLatch latch;
     private String threadName;
@@ -84,11 +84,11 @@ public class HawkularApmManagers {
         this.methodQueuesToDo.get(methodQueueIndex).remove(index);
     }
     
-    public HashMap<String,Span> getSpanStore() {
+    public HashMap<String,ArrayList<Span>> getSpanStore() {
         return spanStore;
     }
 
-    public void setSpanStore(HashMap<String,Span> spanStore) {
+    public void setSpanStore(HashMap<String,ArrayList<Span>> spanStore) {
         this.spanStore = spanStore;
     }
 
@@ -101,11 +101,25 @@ public class HawkularApmManagers {
     }
 
     public synchronized void addInSpanStore(String spanName, Span span) {
-        spanStore.put(spanName,span);
+        ArrayList<Span> arraySpan = spanStore.get(spanName);
+        if (arraySpan==null)
+            arraySpan = new ArrayList();
+        arraySpan.add(span);
+        spanStore.put(spanName,arraySpan);
     }
     
     public synchronized Span getFromSpanStore(String spanName) {
-        return spanStore.get(spanName);
+        if (spanStore.get(spanName)!=null)
+            return spanStore.get(spanName).get(spanStore.get(spanName).size()-1);
+        else
+            return null;
+    }
+    
+    public synchronized Span removeFromSpanStore(String spanName) {
+        if(spanStore.get(spanName)!=null && spanStore.get(spanName).size()!=0)
+            return spanStore.get(spanName)!=null?spanStore.get(spanName).remove(spanStore.get(spanName).size()-1):null;
+        else
+            return null;
     }
 
     public CountDownLatch getLatch() {

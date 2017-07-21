@@ -15,22 +15,16 @@
  */
 package org.jam.metrics;
 
-import javax.inject.Inject;
 import org.jam.metrics.applicationmetricsapi.HawkularApm;
 
 /**
  *
  * @author panos
  */
-public class EndingClass {
+public class LastClass {
 
-    @Inject
-    LastClass lastClass;
-    
-    @HawkularApm(childMethods = {"lastClass","lastClass","lastClass"}, groupName = "myTestGroup")
-    public void endClass() {
-        System.out.println("End is close ...");
-        for(int i=0; i<3; i++)
-            lastClass.lastClass();
+    @HawkularApm(groupName = "myTestGroup")
+    public void lastClass() {
+        System.out.println("Here is the end ...");
     }
 }
