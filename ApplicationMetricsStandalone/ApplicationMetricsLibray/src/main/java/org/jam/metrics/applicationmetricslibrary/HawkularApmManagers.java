@@ -42,6 +42,7 @@ public class HawkularApmManagers {
         methodQueuesToDo = new ArrayList<>();
         spanStore = new HashMap();
         latch = new CountDownLatch(1);
+        rootSpan = null;
     }
 
     public String getThreadName() {

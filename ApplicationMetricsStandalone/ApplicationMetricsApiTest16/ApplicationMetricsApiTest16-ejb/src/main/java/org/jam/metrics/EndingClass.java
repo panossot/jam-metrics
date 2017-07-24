@@ -23,7 +23,7 @@ import org.jam.metrics.applicationmetricsapi.HawkularApm;
  */
 public class EndingClass {
 
-    @HawkularApm(groupName = "myTestGroup")
+    @HawkularApm(groupName = "myTestGroup", isEnd = true)
     public void endClass() {
         System.out.println("Here is the end ...");
     }

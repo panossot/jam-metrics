@@ -47,4 +47,6 @@ public @interface HawkularApm {
     String transaction() default "defaultTransaction";
     @Nonbinding
     String service() default "defaultService";
+    @Nonbinding
+    boolean isEnd() default false;
 }

@@ -30,6 +30,7 @@ public class MediumClass {
     @Inject
     OtherClass otherClass;
     
+    
     @HawkularApm(childMethods = {"endClass","otherClass"}, groupName = "myTestGroup")
     public void mediumClass() {
         System.out.println("Here is the middle ...");
