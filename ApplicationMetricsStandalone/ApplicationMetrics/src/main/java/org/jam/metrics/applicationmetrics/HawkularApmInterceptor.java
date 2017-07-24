@@ -99,8 +99,6 @@ public class HawkularApmInterceptor {
                                 Span spanObject = null;
                                 if (message.body().getInteger("index") > 0) {
                                     spanObject = hm.getFromSpanStore(message.body().getString("parentspan"));
-                                    if(spanObject==null)
-                                        spanObject = hm.getFromSpanStore(message.body().getString("grandpaspan"));
                                     SpanContext parentSpan = spanObject.context();
                                     Span childSpan = tracer.buildSpan(group + "." + method.getName())
                                             .asChildOf(parentSpan)
@@ -209,7 +207,6 @@ public class HawkularApmInterceptor {
                                     hm.setLatch(latch);
 
                                         spanObject.put("parentspan", parentMethod);
-                                        spanObject.put("grandpaspan", grandpaMethod);
                                         spanObject.put("index", i);
                                         if (childMethod!=null){
                                             eb.send(threadName + "." + group + "." + childMethod, spanObject);

@@ -63,6 +63,7 @@
         <module>ApplicationMetricsApiTest23</module>
         <module>ApplicationMetricsApiTest24</module>
         <module>ApplicationMetricsApiTest25</module>
+        <module>ApplicationMetricsApiTest26</module>
         <module>ApplicationMetricsLibray</module>
         <module>ApplicationMetricsProperties</module>
         <module>ApplicationMetricsLibrary2</module>
