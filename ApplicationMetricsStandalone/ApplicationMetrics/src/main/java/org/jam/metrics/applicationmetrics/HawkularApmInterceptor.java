@@ -266,21 +266,7 @@ public class HawkularApmInterceptor {
                         }
                     }
 
-                    /*
-                     HawkularApmService hawkularApmInstance;
-                     synchronized (hawkularApmLock) {
-                     hawkularApmInstance = HawkularApmCollection.getHawkularApmCollection().getHawkularApmInstance(group);
-                     if (hawkularApmInstance == null) {
-                     hawkularApmInstance = new HawkularApmService(group, tracer, eb);
-                     HawkularApmCollection.getHawkularApmCollection().addHawkularApmInstance(group, hawkularApmInstance);
-                     }
-                     }
-
-                     try {
-                     hawkularApmInstance.hawkularApm(hApmManagers,group,eb);
-                     } catch (IllegalArgumentException ex) {
-                     ex.printStackTrace();
-                     }*/
+                   
                 }
             }
 
