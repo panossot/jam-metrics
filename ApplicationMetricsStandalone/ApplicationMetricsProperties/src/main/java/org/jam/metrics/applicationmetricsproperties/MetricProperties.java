@@ -21,6 +21,8 @@
 
 package org.jam.metrics.applicationmetricsproperties;
 
+import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.EventBus;
 import java.awt.Color;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -73,6 +75,7 @@ public class MetricProperties {
     private String hawkularApmServerUsername = "hawkularapmadmin";
     private String hawkularApmServerPassword = "hawkularapmadmin";
     private String hawkularApmTenant = "my-tenant";
+    private EventBus eb = null;
 
     public MetricProperties() {
         rhqScheduleIds = new HashMap<>();
@@ -84,6 +87,14 @@ public class MetricProperties {
         colors = new HashMap<>();
         frames = new HashMap<>();
         hawkularApmTraces = new HashMap<>();
+    }
+
+    public EventBus getEventBus() {
+        return eb;
+    }
+
+    public void setEventBus(EventBus eb) {
+        this.eb = eb;
     }
 
     public String getHawkularMetricsApm() {

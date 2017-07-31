@@ -25,6 +25,7 @@
         <module>ApplicationMetricsJavaSeApiTest9</module>
         <module>ApplicationMetricsJavaSeApiTest10</module>
         <module>ApplicationMetricsJavaSeApiTest11</module>
+        <module>ApplicationMetricsJavaSeApiTest12</module>
     </modules>
 
 </project>

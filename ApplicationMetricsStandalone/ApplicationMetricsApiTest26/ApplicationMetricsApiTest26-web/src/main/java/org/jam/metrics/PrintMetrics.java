@@ -92,13 +92,10 @@ public class PrintMetrics extends HttpServlet {
         
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setHawkularApm("true");
-        metricProperties.setHawkularApmRefreshRate(3);
-        metricProperties.setHawkularApmVisibleTraces(6);
         metricProperties.setHawkularApmTenant("my-tenant");
         metricProperties.setCacheStore("true");
         metricProperties.setCacheMaxSize(1000);
         metricProperties.setHawkularApmServerPort("8780");
-        CodeParamsApi.addUserName("Niki");
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
     }
 

@@ -23,20 +23,16 @@ package org.jam.metrics.applicationmetricsapi;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
-import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.JsonObject;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
-import org.hawkular.apm.client.opentracing.APMTracer;
 import org.jam.metrics.applicationmetricslibrary.ChildParentMethod;
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
 import org.jam.metrics.applicationmetricslibrary.HawkularApmManagers;
 import org.jam.metrics.applicationmetricslibrary.MetricInternalParameters;
-import org.jam.metrics.applicationmetricsproperties.MetricProperties;
 
 /**
  *
@@ -44,19 +40,19 @@ import org.jam.metrics.applicationmetricsproperties.MetricProperties;
  */
 class HawkularApmAdapter {
 
-    private final static Tracer tracer = new APMTracer();
+//    private final static Tracer tracer = new APMTracer();
     private final static Object hawkularApmLock = new Object();
-    private final static Vertx vertx = Vertx.vertx();
-    private final static EventBus eb = vertx.eventBus();
-    private final static String[] containExclude = new String[]{"getStackTrace", "Intercept", "invoke", "Invoke", "proceed", "hawkularApmAdapter"};
+ //   private final static Vertx vertx = Vertx.vertx();
+    private final static String[] containExclude = new String[]{"getStackTrace", "Intercept", "invoke", "Invoke", "proceed", "hawkularApmAdapter", "hawkularApm"};
     private static CountDownLatch latch;
 
-    protected static void hawkularApmAdapter(String group, String[] submethods, boolean isEnd, Method method) throws IllegalArgumentException, IllegalAccessException, Exception {
-
-        final MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group);
-        final String hawkularApm = properties.getHawkularApm();
-
+    protected static synchronized void hawkularApmAdapter(Tracer tracer, String hawkularApm, String method, String group, String[] submethods, boolean isEnd) throws IllegalArgumentException, IllegalAccessException, Exception {
+        
+        
         if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
+            EventBus eb = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getEventBus();
+            
+            
             String threadName = Thread.currentThread().getName();
 
             final MetricInternalParameters internalParams = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group);
@@ -69,40 +65,40 @@ class HawkularApmAdapter {
             }
 
             HawkularApmManagers hm = hApmManagers;
-            MessageConsumer<JsonObject> getMethodConsumer = eb.consumer(threadName + "." + group + "." + method.getName());
+            MessageConsumer<JsonObject> getMethodConsumer = eb.consumer(threadName + "." + group + "." + method);
             if (!getMethodConsumer.isRegistered()) {
                 getMethodConsumer.handler((Message<JsonObject> message) -> {
                     latch = hm.getLatch();
                     //    System.out.println("latch " + latch.getCount() + " " + hm.getThreadName());
                     try {
-                        //        System.out.println(group + "." + method.getName());
+                        //        System.out.println(group + "." + method);
                         //        System.out.println("hello : " + message.body().getString("parentspan"));
                         Span spanObject = null;
                         if (message.body().getInteger("index") > 0) {
                             spanObject = hm.getFromSpanStore(message.body().getString("parentspan"));
-                            SpanContext parentSpan = spanObject.context();
-                            Span childSpan = tracer.buildSpan(group + "." + method.getName())
+                           SpanContext parentSpan = spanObject.context();
+                           Span childSpan = tracer.buildSpan(group + "." + method)
                                     .asChildOf(parentSpan)
-                                    .withTag("service", method.getName())
-                                    .withTag("transaction", method.getName())
+                                    .withTag("service", method)
+                                    .withTag("transaction", method)
                                     .start();
 
-                            //            System.out.println("method.getName2() " + method.getName());
-                            hm.addInSpanStore(method.getName(), childSpan);
+                            //            System.out.println("method.getName2() " + method);
+                            hm.addInSpanStore(method, childSpan);
                         } else if (message.body().getInteger("index") == 0) {
                             spanObject = hm.getRootSpan();
                             SpanContext parentSpan = spanObject.context();
-                            Span childSpan = tracer.buildSpan(group + "." + method.getName())
+                            Span childSpan = tracer.buildSpan(group + "." + method)
                                     //    .addReference(threadName, parentSpan)
                                     .withTag("thread", threadName)
-                                    .withTag("http.url", method.getName())
+                                    .withTag("http.url", method)
                                     .asChildOf(parentSpan)
-                                    .withTag("service", method.getName())
-                                    .withTag("transaction", method.getName())
+                                    .withTag("service", method)
+                                    .withTag("transaction", method)
                                     .start();
 
-                            //            System.out.println("method.getName() " + method.getName());
-                            hm.addInSpanStore(method.getName(), childSpan);
+                            //            System.out.println("method " + method);
+                            hm.addInSpanStore(method, childSpan);
                         }
 
                     } catch (Exception ex) {
@@ -117,7 +113,7 @@ class HawkularApmAdapter {
             synchronized (hawkularApmLock) {
                 if (hApmManagers.getMethodQueuesDone().size() == 0) {
                     hApmManagers.getMethodQueuesDone().add(new ArrayList<>());
-                    hApmManagers.getMethodQueuesDone().get(0).add(new ChildParentMethod(method.getName(), null, null));
+                    hApmManagers.getMethodQueuesDone().get(0).add(new ChildParentMethod(method, null, null));
                 }
 
                 if (hApmManagers.getMethodQueuesToDo().size() == 0) {
@@ -136,19 +132,19 @@ class HawkularApmAdapter {
                         j++;
                     }
                     parentMethodName = Thread.currentThread().getStackTrace()[j].getMethodName();
-                    if (parentMethodName.compareTo(method.getName()) == 0) {
+                    if (parentMethodName.compareTo(method) == 0) {
                         j++;
                         while (excludeParentMethod(Thread.currentThread().getStackTrace()[j].getMethodName())) {
                             j++;
                         }
                         parentMethodName = Thread.currentThread().getStackTrace()[j].getMethodName();
                     }
-                    //    System.out.println("parentMethodName = " + parentMethodName + " " + method.getName());
+                    //    System.out.println("parentMethodName = " + parentMethodName + " " + method);
                     if (hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() != 0
                             && hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() - 1).getChildMethod().compareTo(parentMethodName) == 0
                             || (hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() != 0
                             && hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size() - 1).getParentMethod() == null)
-                            || (toDo != null && toDo.getChildMethod().compareTo(method.getName()) == 0) && toDo.getParentMethod().compareTo(parentMethodName) == 0) {
+                            || (toDo != null && toDo.getChildMethod().compareTo(method) == 0) && toDo.getParentMethod().compareTo(parentMethodName) == 0) {
                         while (hApmManagers.getMethodQueuesToDo().size() < hApmManagers.getMethodQueuesDone().size()) {
                             hApmManagers.getMethodQueuesToDo().add(new ArrayList<>());
                         }
@@ -162,7 +158,7 @@ class HawkularApmAdapter {
 
                         if (hApmManagers.getMethodQueuesDone().size() != 0) {
                             hApmManagers.getMethodQueuesDone().add(new ArrayList<>());
-                            hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).add(new ChildParentMethod(method.getName(), null, null));
+                            hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).add(new ChildParentMethod(method, null, null));
                             hApmManagers.getMethodQueuesToDo().add(new ArrayList<>());
                         }
                     }
@@ -175,10 +171,10 @@ class HawkularApmAdapter {
 
                     if (submethodLength != 0) {
                         for (int i = submethodLength - 1; i >= 0; i--) {
-                            hApmManagers.getMethodQueuesToDo().get(hApmManagers.getMethodQueuesToDo().size() - 1).add(0, new ChildParentMethod(submethods[i], method.getName(), parentMethodName));
+                            hApmManagers.getMethodQueuesToDo().get(hApmManagers.getMethodQueuesToDo().size() - 1).add(0, new ChildParentMethod(submethods[i], method, parentMethodName));
                         }
                     } else if (hApmManagers.getMethodQueuesToDo().get(hApmManagers.getMethodQueuesToDo().size() - 1).isEmpty()) {
-                        hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).add(new ChildParentMethod(null, method.getName(), parentMethodName));
+                        hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).add(new ChildParentMethod(null, method, parentMethodName));
 
                         if (hm.getRootSpan() == null) {
                             Span sObject = tracer.buildSpan(group + " - thread : " + threadName)
@@ -256,7 +252,6 @@ class HawkularApmAdapter {
                     }
                 }
             }
-
         }
     }
 
