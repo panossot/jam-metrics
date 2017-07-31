@@ -93,21 +93,6 @@
             <artifactId>hawkular-apm-trace-publisher-rest-client</artifactId>
             <version>0.14.4.Final</version>
         </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-core</artifactId>
-            <version>3.3.3</version>
-        </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-sync</artifactId>
-            <version>3.3.3</version>
-        </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-web</artifactId>
-            <version>3.3.3</version>
-        </dependency>
     </dependencies>
 
     <build>
