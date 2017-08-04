@@ -108,6 +108,7 @@ class HawkularApmAdapter {
                         //        System.out.println("latch2 " + latch.getCount() + " " + hm.getThreadName());
                     }
                 });
+                
             }
 
             synchronized (hawkularApmLock) {
@@ -182,6 +183,7 @@ class HawkularApmAdapter {
                                     .withTag("http.url", threadName)
                                     .start();
                             hm.setRootSpan(sObject);
+                            hm.getRootSpan().finish();
                         }
 
                         for (int i = 0; i < hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size(); i++) {
@@ -246,7 +248,6 @@ class HawkularApmAdapter {
                         hApmManagers.getMethodQueuesToDo().remove(hApmManagers.getMethodQueuesToDo().size() - 1);
 
                         if (hApmManagers.getMethodQueuesDone().isEmpty() && hApmManagers.getMethodQueuesToDo().isEmpty()) {
-                            hApmManagers.getRootSpan().finish();
                             hApmManagers.setRootSpan(null);
                         }
                     }
