@@ -16,6 +16,7 @@
  */
 package org.jam.metrics;
 
+import io.vertx.core.Vertx;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.inject.Inject;
@@ -23,7 +24,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.jam.metrics.applicationmetricsapi.CodeParamsApi;
 import org.jam.metrics.applicationmetricsapi.MetricsCacheApi;
 import org.jam.metrics.applicationmetricsapi.MetricsPropertiesApi;
 import org.jam.metrics.applicationmetricslibrary.MetricsCacheCollection;
@@ -43,6 +43,7 @@ public class PrintMetrics extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private static Vertx vertx;
     
     MetricsApiSessionBean metricsBean;
     
@@ -83,10 +84,15 @@ public class PrintMetrics extends HttpServlet {
             out.println("<br>Successful Run ...</br>");
             out.println("</body>");
             out.println("</html>");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            vertx.close();
         }
     }
     
     private void initializeMetricProperties() {
+        vertx = Vertx.vertx();
         metricsBean = new MetricsApiSessionBean(metricsClass);
         metricsBean2 = new MetricsApiSessionBean(metricsClass);
         
@@ -96,6 +102,7 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.setCacheStore("true");
         metricProperties.setCacheMaxSize(1000);
         metricProperties.setHawkularApmServerPort("8780");
+        metricProperties.setEventBus(vertx.eventBus());
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
     }
 

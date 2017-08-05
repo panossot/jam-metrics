@@ -42,17 +42,15 @@ class HawkularApmAdapter {
 
 //    private final static Tracer tracer = new APMTracer();
     private final static Object hawkularApmLock = new Object();
- //   private final static Vertx vertx = Vertx.vertx();
+    //   private final static Vertx vertx = Vertx.vertx();
     private final static String[] containExclude = new String[]{"getStackTrace", "Intercept", "invoke", "Invoke", "proceed", "hawkularApmAdapter", "hawkularApm"};
     private static CountDownLatch latch;
 
     protected static synchronized void hawkularApmAdapter(Tracer tracer, String hawkularApm, String method, String group, String[] submethods, boolean isEnd) throws IllegalArgumentException, IllegalAccessException, Exception {
-        
-        
+
         if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
             EventBus eb = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group).getEventBus();
-            
-            
+
             String threadName = Thread.currentThread().getName();
 
             final MetricInternalParameters internalParams = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(group);
@@ -74,32 +72,43 @@ class HawkularApmAdapter {
                         //        System.out.println(group + "." + method);
                         //        System.out.println("hello : " + message.body().getString("parentspan"));
                         Span spanObject = null;
-                        if (message.body().getInteger("index") > 0) {
-                            spanObject = hm.getFromSpanStore(message.body().getString("parentspan"));
-                           SpanContext parentSpan = spanObject.context();
-                           Span childSpan = tracer.buildSpan(group + "." + method)
+                        //    if (message.body().getInteger("index") > 0) {
+                        spanObject = hm.getFromSpanStore(message.body().getString("parentspan"));
+
+                        Span childSpan = null;
+                        if (spanObject != null) {
+                            SpanContext parentSpan = spanObject.context();
+                            childSpan = tracer.buildSpan(group + "." + method)
                                     .asChildOf(parentSpan)
                                     .withTag("service", method)
                                     .withTag("transaction", method)
                                     .start();
-
-                            //            System.out.println("method.getName2() " + method);
-                            hm.addInSpanStore(method, childSpan);
-                        } else if (message.body().getInteger("index") == 0) {
-                            spanObject = hm.getRootSpan();
-                            SpanContext parentSpan = spanObject.context();
-                            Span childSpan = tracer.buildSpan(group + "." + method)
-                                    //    .addReference(threadName, parentSpan)
+                        } else {
+                            childSpan = tracer.buildSpan(group + "." + method)
                                     .withTag("thread", threadName)
                                     .withTag("http.url", method)
-                                    .asChildOf(parentSpan)
                                     .withTag("service", method)
                                     .withTag("transaction", method)
                                     .start();
-
-                            //            System.out.println("method " + method);
-                            hm.addInSpanStore(method, childSpan);
                         }
+
+                        //            System.out.println("method.getName2() " + method);
+                        hm.addInSpanStore(method, childSpan);
+                        /*    } else if (message.body().getInteger("index") == 0) {
+                         //    spanObject = hm.getRootSpan();
+                         //    SpanContext parentSpan = spanObject.context();
+                         Span childSpan = tracer.buildSpan(group + "." + method)
+                         //    .addReference(threadName, parentSpan)
+                         .withTag("thread", threadName)
+                         .withTag("http.url", method)
+                         //        .asChildOf(parentSpan)
+                         .withTag("service", method)
+                         .withTag("transaction", method)
+                         .start();
+
+                         //            System.out.println("method " + method);
+                         hm.addInSpanStore(method, childSpan);
+                         }*/
 
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -108,7 +117,7 @@ class HawkularApmAdapter {
                         //        System.out.println("latch2 " + latch.getCount() + " " + hm.getThreadName());
                     }
                 });
-                
+
             }
 
             synchronized (hawkularApmLock) {
@@ -177,15 +186,14 @@ class HawkularApmAdapter {
                     } else if (hApmManagers.getMethodQueuesToDo().get(hApmManagers.getMethodQueuesToDo().size() - 1).isEmpty()) {
                         hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).add(new ChildParentMethod(null, method, parentMethodName));
 
-                        if (hm.getRootSpan() == null) {
-                            Span sObject = tracer.buildSpan(group + " - thread : " + threadName)
-                                    //        .addReference(group + ".main", internalParams.getConnector().context())
-                                    .withTag("http.url", threadName)
-                                    .start();
-                            hm.setRootSpan(sObject);
-                            hm.getRootSpan().finish();
-                        }
-
+                        /*    if (hm.getRootSpan() == null) {
+                         Span sObject = tracer.buildSpan(group + " - thread : " + threadName)
+                         //        .addReference(group + ".main", internalParams.getConnector().context())
+                         .withTag("http.url", threadName)
+                         .start();
+                         hm.setRootSpan(sObject);
+                         hm.getRootSpan().finish();
+                         }*/
                         for (int i = 0; i < hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).size(); i++) {
                             //        System.out.println("child : " + hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(i).getChildMethod() + ", parent : " + hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(i).getParentMethod());
                             String parentMethod = hApmManagers.getMethodQueuesDone().get(hApmManagers.getMethodQueuesDone().size() - 1).get(i).getParentMethod();
@@ -202,7 +210,7 @@ class HawkularApmAdapter {
                             }
                             if (childMethod != null) {
                                 eb.send(threadName + "." + group + "." + childMethod, spanObject);
-                            //                System.out.println("****** " + group + "." + childMethod);
+                                //                System.out.println("****** " + group + "." + childMethod);
                                 //                System.out.println("latch4 " + latch.getCount() + " " + threadName);
                                 latch.await();
                             }

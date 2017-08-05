@@ -16,7 +16,6 @@
 package org.jam.metrics.applicationmetricsjavaseapitest;
 
 import org.jam.metrics.applicationmetricsapi.ApplicationJavaSeHawkularApm;
-import org.jam.metrics.applicationmetricsapi.HawkularApm;
 
 /**
  *

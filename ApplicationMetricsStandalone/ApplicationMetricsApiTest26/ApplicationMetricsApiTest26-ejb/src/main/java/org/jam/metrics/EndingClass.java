@@ -16,7 +16,7 @@
 package org.jam.metrics;
 
 import javax.inject.Inject;
-import org.jam.metrics.applicationmetricsapi.HawkularApm;
+import org.jam.metrics.applicationmetricsapi.ApplicationJavaSeHawkularApm;
 
 /**
  *
@@ -27,9 +27,9 @@ public class EndingClass {
     @Inject
     LastClass lastClass;
     
-    @HawkularApm(childMethods = {"lastClass","lastClass","lastClass"}, groupName = "myTestGroup")
-    public void endClass() {
+    public void endClass() throws Exception {
         System.out.println("End is close ...");
+        ApplicationJavaSeHawkularApm.hawkularApm("endClass", "myTestGroup", new String[]{"lastClass","lastClass","lastClass"}, false);
         for(int i=0; i<3; i++)
             lastClass.lastClass();
     }

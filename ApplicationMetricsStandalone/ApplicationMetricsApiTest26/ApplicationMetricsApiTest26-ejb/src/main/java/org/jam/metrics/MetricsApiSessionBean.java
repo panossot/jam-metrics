@@ -17,7 +17,6 @@
 package org.jam.metrics;
 
 import java.util.concurrent.Callable;
-import javax.inject.Inject;
 
 /**
  *

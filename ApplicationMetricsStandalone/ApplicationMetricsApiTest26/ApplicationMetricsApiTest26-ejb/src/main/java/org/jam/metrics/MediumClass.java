@@ -32,7 +32,7 @@ public class MediumClass {
     
     
     @HawkularApm(childMethods = {"endClass","otherClass"}, groupName = "myTestGroup")
-    public void mediumClass() {
+    public void mediumClass() throws Exception {
         System.out.println("Here is the middle ...");
         endClass.endClass();
         otherClass.otherClass();
