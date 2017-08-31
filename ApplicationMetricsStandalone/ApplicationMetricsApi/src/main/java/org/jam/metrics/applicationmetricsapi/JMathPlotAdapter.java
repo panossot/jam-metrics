@@ -32,11 +32,16 @@ import org.jam.metrics.applicationmetricsproperties.MetricProperties;
  */
 public class JMathPlotAdapter {
 
-    protected synchronized static void jMathPlotAdapter(String group, Object target, String fieldName, int refreshRate, MetricProperties properties, String plotName, String plotNameHandler, String colorName, String typePlot) throws IllegalArgumentException, IllegalAccessException {
+    protected synchronized static void jMathPlotAdapter(String group, Object target, String fieldName, int refreshRate, MetricProperties properties, final String... moreArgs) throws IllegalArgumentException, IllegalAccessException {
         if (properties.getMetricPlot() != null && Boolean.parseBoolean(properties.getMetricPlot())) {
+            
             new Thread() {
                 public void run() {
                     try {
+                        String plotName = moreArgs[0];
+                        String plotNameHandler = moreArgs[1];
+                        String colorName = moreArgs[2]; 
+                        String typePlot = moreArgs[3];
                         MetricPlot.plot(fieldName, target, properties, group, refreshRate, plotName, plotNameHandler, colorName, typePlot);
                     } catch (Exception ex) {
                         ex.printStackTrace();

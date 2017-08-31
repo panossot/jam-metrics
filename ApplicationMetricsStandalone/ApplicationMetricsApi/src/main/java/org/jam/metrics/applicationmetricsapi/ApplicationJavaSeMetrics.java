@@ -45,8 +45,8 @@ public class ApplicationJavaSeMetrics {
         MonitoringHawkularAdapter.monitoringHawkularAdapter(hawkularMonitoring, instance, value, metricName, metricGroup, hawkularTenant, properties);
 
         MonitoringHawkularApmAdapter.monitoringHawkularApmAdapter(hawkularApm, instance, value, metricName, metricGroup, hawkularTenant, properties, moreArgs);
-        
-        JMathPlotAdapter.jMathPlotAdapter(metricGroup, instance, metricName, refreshRate, properties, moreArgs[0], moreArgs[1], moreArgs[2], moreArgs[3]);
+ 
+        JMathPlotAdapter.jMathPlotAdapter(metricGroup, instance, metricName, refreshRate, properties, moreArgs);
 
     }
 
