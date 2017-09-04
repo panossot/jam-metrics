@@ -32,6 +32,18 @@ Please, check the example in JavaSeApplicationMetrics/ApplicationMetricsJavaSeAp
 
 <br/>
 
+## JAM Presentation
+[JAM Presentation](http://redhat.slides.com/panossot/jboss-automated-metrics-6?token=d93QLP5k)
+
+<br/>
+
+## JAM Possible Next Steps
+- Addition of Biometric (DNA sequence) information (numerical encoding and plots using JMathPlot adapter)
+- Integration of gaeger (another tracing system)
+- Send the metrics to the JBoss Console
+
+<br/>
+
 ## License 
 JAM-Application-Metrics are released under Apache License, Version 2.0 as described in the LICENSE document
 
