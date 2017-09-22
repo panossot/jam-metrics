@@ -10,3 +10,5 @@ jboss.xml
 target
 /AutomatedMetricsStandalone/JBossAutomatedMetricsProperties/target2/
 /ApplicationMetricsStandalone/ApplicationMetricsApiTest15/ApplicationMetricsApiTest15-web/target2/
+/JavaSeApplicationMetrics/ApplicationMetricsJavaSeApiTest13/hs_ref_GRCh38.p7_chr1.fa
+/JavaSeApplicationMetrics/ApplicationMetricsJavaSeApiTest13/hs_alt_CHM1_1.1_chr1.fa
