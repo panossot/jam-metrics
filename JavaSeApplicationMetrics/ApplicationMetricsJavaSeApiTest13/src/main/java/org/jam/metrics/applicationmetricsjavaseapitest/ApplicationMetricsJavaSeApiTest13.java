@@ -18,6 +18,7 @@ package org.jam.metrics.applicationmetricsjavaseapitest;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,17 +40,22 @@ public class ApplicationMetricsJavaSeApiTest13 {
     private static String groupName = "myTestGroup";
     private static HashMap<String, JFrame> frames = new HashMap<String, JFrame>();
     private static HashMap<String, Plot2DPanel> plots = new HashMap<String, Plot2DPanel>();
+    private static int limit = 5000;
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         try {
             int x = 0;
             int y = 0;
             char firstAmin = ' ';
             char currentAmin = ' ';
             ArrayList<double[]> DNAencoding = new ArrayList<>();
+            ArrayList<double[]> A_ = new ArrayList<>();
+            ArrayList<double[]> C_ = new ArrayList<>();
+            ArrayList<double[]> T_ = new ArrayList<>();
+            ArrayList<double[]> G_ = new ArrayList<>();
             Map<Character,int[]> A = new HashMap<>();
             A.put('A', new int[]{-1,1});
             A.put('T', new int[]{-1,-1});
@@ -95,43 +101,82 @@ public class ApplicationMetricsJavaSeApiTest13 {
             
             int k=0;
             for (char c : chars) {
-                if (firstAmin==' ') {
-                    firstAmin = c;
-                    x = 0;
-                    y = 0;
-                    DNAencoding.add(new double[]{x,y});
-                    currentAmin = c;
-                }else {
-                    int[] mappedValue = new int[]{0,0};
-                    if (currentAmin=='A')
-                        mappedValue = A.get(c);
-                    else if(currentAmin=='C')
-                        mappedValue = C.get(c);
-                    else if(currentAmin=='T')
-                        mappedValue = T.get(c);
-                    else if(currentAmin=='G')
-                        mappedValue = G.get(c);
-                            
-                    
-                    x += mappedValue[0];
-                    y += mappedValue[1];;
-                    
-                    DNAencoding.add(new double[]{x,y});        
-                    currentAmin = c;
+                if (k<=limit) {
+                    if (firstAmin==' ') {
+                        firstAmin = c;
+                        x = 0;
+                        y = 0;
+                        DNAencoding.add(new double[]{x,y});
+                        currentAmin = c;
+
+                        if (currentAmin=='A')
+                            A_.add(new double[]{0,0});
+                        else if(currentAmin=='C')
+                            C_.add(new double[]{0,0});
+                        else if(currentAmin=='T')
+                            T_.add(new double[]{0,0});
+                        else if(currentAmin=='G')
+                            G_.add(new double[]{0,0});
+
+                    }else {
+                        int[] mappedValue = new int[]{0,0};
+                        if (currentAmin=='A')
+                            mappedValue = A.get(c);
+                        else if(currentAmin=='C')
+                            mappedValue = C.get(c);
+                        else if(currentAmin=='T')
+                            mappedValue = T.get(c);
+                        else if(currentAmin=='G')
+                            mappedValue = G.get(c);
+
+
+                        x += mappedValue[0];
+                        y += mappedValue[1];
+
+                        DNAencoding.add(new double[]{x,y});        
+                        currentAmin = c;
+
+                        if (currentAmin=='A')
+                            A_.add(new double[]{x,y});
+                        else if(currentAmin=='C')
+                            C_.add(new double[]{x,y});
+                        else if(currentAmin=='T')
+                            T_.add(new double[]{x,y});
+                        else if(currentAmin=='G')
+                            G_.add(new double[]{x,y});
+                    }
                     k++;
                 }
-                
             }
             
-            double[][] data = new double[5001][2];
-            data = new ArrayList<double[]>(DNAencoding.subList(0, 5001)).toArray(data);
+            double[][] data = new double[DNAencoding.size()][2];
+            data = new ArrayList<double[]>(DNAencoding).toArray(data);
             
             
-            JMathPlotAdapter.jMathPlotAdapter(data, "myTestGroup", properties, "plot1", "data", "red", "stair", false);
+            JMathPlotAdapter.jMathPlotAdapter(data, "myTestGroup", properties, "plot1", "data", "red", "line", false);
             
-       //     System.out.println("Last row : " + data[DNAencoding.size()-1][0] + " " + data[DNAencoding.size()-1][1]);
+            double[][] A2Array = new double[A_.size()][2];
+            A2Array = new ArrayList<double[]>(A_).toArray(A2Array);
+            double[][] T2Array = new double[T_.size()][2];
+            T2Array = new ArrayList<double[]>(T_).toArray(T2Array);
+            double[][] C2Array = new double[C_.size()][2];
+            C2Array = new ArrayList<double[]>(C_).toArray(C2Array);
+            double[][] G2Array = new double[G_.size()][2];
+            G2Array = new ArrayList<double[]>(G_).toArray(G2Array);
+
+            JMathPlotAdapter.jMathPlotAdapter(A2Array, "myTestGroup", properties, "plot1", "A", "magenta", "scatter", false);
+            JMathPlotAdapter.jMathPlotAdapter(C2Array, "myTestGroup", properties, "plot1", "C", "blue", "scatter", false);
+            JMathPlotAdapter.jMathPlotAdapter(T2Array, "myTestGroup", properties, "plot1", "T", "green", "scatter", false);
+            JMathPlotAdapter.jMathPlotAdapter(G2Array, "myTestGroup", properties, "plot1", "G", "yellow", "scatter", false);
             
-        } catch (Exception e) {
+            JMathPlotAdapter.jMathPlotAdapter(A2Array, "myTestGroup", properties, "plot2", "A", "magenta", "scatter", false);
+            JMathPlotAdapter.jMathPlotAdapter(C2Array, "myTestGroup", properties, "plot3", "C", "blue", "scatter", false);
+            JMathPlotAdapter.jMathPlotAdapter(T2Array, "myTestGroup", properties, "plot4", "T", "green", "scatter", false);
+            JMathPlotAdapter.jMathPlotAdapter(G2Array, "myTestGroup", properties, "plot5", "G", "yellow", "scatter", false);
+            
+            System.out.println("Last row : " + data[DNAencoding.size()-1][0] + " " + data[DNAencoding.size()-1][1]);
+            
+        }catch (Exception e) {
             e.printStackTrace();
         } 
     }
@@ -145,6 +190,7 @@ public class ApplicationMetricsJavaSeApiTest13 {
         metricProperties.addColor("red", Color.RED);
         metricProperties.addColor("blue", Color.BLUE);
         metricProperties.addColor("green", Color.GREEN);
+        metricProperties.addColor("magenta", Color.MAGENTA);
         metricProperties.addColor("yellow", Color.YELLOW);
         metricProperties.setPlotRefreshRate(1);
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
@@ -193,7 +239,107 @@ public class ApplicationMetricsJavaSeApiTest13 {
                 metricPlots.put("plot1", plot);
                 frames.put("plot1", frame);
             }
+            
+            create = true;
+            if (properties != null && properties.getPlots().containsKey("plot2") && properties.getFrames().get("plot2") != null) {
+                create = false;
+            }
 
+            if (create) {
+                Plot2DPanel plot = new Plot2DPanel("SOUTH");
+
+                JFrame frame = new JFrame("Plot 2");
+                frame.setSize(600, 600);
+                frame.setContentPane(plot);
+                frame.setVisible(true);
+                frame.setResizable(true);
+                frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                frame.addWindowListener(new java.awt.event.WindowAdapter() {
+                    public void windowClosed(java.awt.event.WindowEvent evt) {
+                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).getFrames().remove("plot2");
+                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).getPlots().remove("plot2");
+                    }
+                });
+
+                metricPlots.put("plot2", plot);
+                frames.put("plot2", frame);
+            }
+
+            create = true;
+            if (properties != null && properties.getPlots().containsKey("plot3") && properties.getFrames().get("plot3") != null) {
+                create = false;
+            }
+
+            if (create) {
+                Plot2DPanel plot = new Plot2DPanel("SOUTH");
+
+                JFrame frame = new JFrame("Plot 3");
+                frame.setSize(600, 600);
+                frame.setContentPane(plot);
+                frame.setVisible(true);
+                frame.setResizable(true);
+                frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                frame.addWindowListener(new java.awt.event.WindowAdapter() {
+                    public void windowClosed(java.awt.event.WindowEvent evt) {
+                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).getFrames().remove("plot3");
+                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).getPlots().remove("plot3");
+                    }
+                });
+
+                metricPlots.put("plot3", plot);
+                frames.put("plot3", frame);
+            }
+            
+            create = true;
+            if (properties != null && properties.getPlots().containsKey("plot4") && properties.getFrames().get("plot4") != null) {
+                create = false;
+            }
+
+            if (create) {
+                Plot2DPanel plot = new Plot2DPanel("SOUTH");
+
+                JFrame frame = new JFrame("Plot 4");
+                frame.setSize(600, 600);
+                frame.setContentPane(plot);
+                frame.setVisible(true);
+                frame.setResizable(true);
+                frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                frame.addWindowListener(new java.awt.event.WindowAdapter() {
+                    public void windowClosed(java.awt.event.WindowEvent evt) {
+                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).getFrames().remove("plot4");
+                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).getPlots().remove("plot4");
+                    }
+                });
+
+                metricPlots.put("plot4", plot);
+                frames.put("plot4", frame);
+            }
+            
+            create = true;
+            if (properties != null && properties.getPlots().containsKey("plot5") && properties.getFrames().get("plot5") != null) {
+                create = false;
+            }
+
+            if (create) {
+                Plot2DPanel plot = new Plot2DPanel("SOUTH");
+
+                JFrame frame = new JFrame("Plot 5");
+                frame.setSize(600, 600);
+                frame.setContentPane(plot);
+                frame.setVisible(true);
+                frame.setResizable(true);
+                frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                frame.addWindowListener(new java.awt.event.WindowAdapter() {
+                    public void windowClosed(java.awt.event.WindowEvent evt) {
+                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).getFrames().remove("plot5");
+                        DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(groupName).getPlots().remove("plot5");
+                    }
+                });
+
+                metricPlots.put("plot5", plot);
+                frames.put("plot5", frame);
+            }
+            
             plots = metricPlots;
         }
     }
