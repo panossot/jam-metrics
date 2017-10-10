@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
 import javax.swing.JFrame;
@@ -47,38 +48,30 @@ public class ApplicationMetricsJavaSeApiTest13 {
      */
     public static void main(String[] args) throws FileNotFoundException {
         try {
-            int x = 0;
-            int y = 0;
-            char firstAmin = ' ';
-            char currentAmin = ' ';
-            ArrayList<double[]> DNAencoding = new ArrayList<>();
-            ArrayList<double[]> A_ = new ArrayList<>();
-            ArrayList<double[]> C_ = new ArrayList<>();
-            ArrayList<double[]> T_ = new ArrayList<>();
-            ArrayList<double[]> G_ = new ArrayList<>();
-            Map<Character,int[]> A = new HashMap<>();
+            
+            HashMap<Character,int[]> A = new HashMap<>();
             A.put('A', new int[]{-1,1});
             A.put('T', new int[]{-1,-1});
             A.put('G', new int[]{1,1});
             A.put('C', new int[]{1,-1});
-            Map<Character,int[]> T = new HashMap<>();
+            HashMap<Character,int[]> T = new HashMap<>();
             T.put('T', new int[]{-1,1});
             T.put('G', new int[]{-1,-1});
             T.put('C', new int[]{1,1});
             T.put('A', new int[]{1,-1});
-            Map<Character,int[]> G = new HashMap<>();
+            HashMap<Character,int[]> G = new HashMap<>();
             G.put('G', new int[]{-1,1});
             G.put('C', new int[]{-1,-1});
             G.put('A', new int[]{1,1});
             G.put('T', new int[]{1,-1});
-            Map<Character,int[]> C = new HashMap<>();
+            HashMap<Character,int[]> C = new HashMap<>();
             C.put('C', new int[]{-1,1});
             C.put('A', new int[]{-1,-1});
             C.put('T', new int[]{1,1});
             C.put('G', new int[]{1,-1});
             
             initializeMetricProperties();
-            MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty("myTestGroup");
+            
 
             Scanner inFile1 = new Scanner(new File("./hs_ref_GRCh38.p7_chr1.fa/data"));
 
@@ -99,7 +92,79 @@ public class ApplicationMetricsJavaSeApiTest13 {
             System.out.println("CHR1 seq length: " + CH1.length());
             char[] chars = CH1.toCharArray();
             
-            int k=0;
+            int k = 0;
+            for (int iA=0; iA<4; iA++) {
+                if (iA!=0) {
+                    rotateMap(A);
+                }
+                for (int iT=0; iT<4; iT++) {
+                    if (iT!=0) {
+                        rotateMap(T);
+                    }
+                    for (int iG=0; iG<4; iG++) {
+                        if (iG!=0) {
+                            rotateMap(G);
+                        }
+                        for (int iC=0; iC<4; iC++) {
+                            if (iC!=0) {
+                                rotateMap(C);
+                            }
+                            k++;
+                            displayDNA(chars,A,T,G,C,k);
+                        }
+                    }
+                }
+            }
+            
+        }catch (Exception e) {
+            e.printStackTrace();
+        } 
+    }
+    
+        
+    private static HashMap<Character,int[]> rotateMap(HashMap<Character,int[]> mapArray) {
+        
+        Iterator<Character> iter = mapArray.keySet().iterator();
+        Character firstChar = null;
+        int[] firstValue = null;
+        Character thisChar = null;
+        Character prevChar = null;
+        int[] prevValue = null;
+        
+        if (iter.hasNext()) {
+            firstChar = iter.next();
+            firstValue = mapArray.get(firstChar);
+            prevChar = firstChar;
+            prevValue = mapArray.get(thisChar);
+        }
+        
+        while (iter.hasNext()) {
+            thisChar = iter.next();
+            mapArray.put(prevChar, mapArray.get(thisChar));
+            prevChar = thisChar;
+        }
+        
+        if (mapArray.size()>0) {
+            mapArray.put(prevChar,firstValue);
+        }
+        
+        return mapArray;
+    }
+    
+    private static void displayDNA(char[] chars, Map<Character,int[]> A, Map<Character,int[]> T, Map<Character,int[]> G,Map<Character,int[]> C, int num) throws IllegalArgumentException, IllegalAccessException{
+        int x = 0;
+            int y = 0;
+            char firstAmin = ' ';
+            char currentAmin = ' ';
+            ArrayList<double[]> DNAencoding = new ArrayList<>();
+            ArrayList<double[]> A_ = new ArrayList<>();
+            ArrayList<double[]> C_ = new ArrayList<>();
+            ArrayList<double[]> T_ = new ArrayList<>();
+            ArrayList<double[]> G_ = new ArrayList<>();
+            
+            MetricProperties properties = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty("myTestGroup");
+            
+        int k=0;
             for (char c : chars) {
                 if (k<=limit) {
                     if (firstAmin==' ') {
@@ -153,7 +218,7 @@ public class ApplicationMetricsJavaSeApiTest13 {
             data = new ArrayList<double[]>(DNAencoding).toArray(data);
             
             
-            JMathPlotAdapter.jMathPlotAdapter(data, "myTestGroup", properties, "plot1", "data", "red", "line", false);
+            JMathPlotAdapter.jMathPlotAdapter(data, "myTestGroup", properties, "plot1", "data_" + num, "red", "line", false);
             
             double[][] A2Array = new double[A_.size()][2];
             A2Array = new ArrayList<double[]>(A_).toArray(A2Array);
@@ -164,21 +229,12 @@ public class ApplicationMetricsJavaSeApiTest13 {
             double[][] G2Array = new double[G_.size()][2];
             G2Array = new ArrayList<double[]>(G_).toArray(G2Array);
 
-            JMathPlotAdapter.jMathPlotAdapter(A2Array, "myTestGroup", properties, "plot1", "A", "magenta", "scatter", false);
-            JMathPlotAdapter.jMathPlotAdapter(C2Array, "myTestGroup", properties, "plot1", "C", "blue", "scatter", false);
-            JMathPlotAdapter.jMathPlotAdapter(T2Array, "myTestGroup", properties, "plot1", "T", "green", "scatter", false);
-            JMathPlotAdapter.jMathPlotAdapter(G2Array, "myTestGroup", properties, "plot1", "G", "yellow", "scatter", false);
-            
-            JMathPlotAdapter.jMathPlotAdapter(A2Array, "myTestGroup", properties, "plot2", "A", "magenta", "scatter", false);
-            JMathPlotAdapter.jMathPlotAdapter(C2Array, "myTestGroup", properties, "plot3", "C", "blue", "scatter", false);
-            JMathPlotAdapter.jMathPlotAdapter(T2Array, "myTestGroup", properties, "plot4", "T", "green", "scatter", false);
-            JMathPlotAdapter.jMathPlotAdapter(G2Array, "myTestGroup", properties, "plot5", "G", "yellow", "scatter", false);
+            JMathPlotAdapter.jMathPlotAdapter(A2Array, "myTestGroup", properties, "plot2", "A_" + num, "magenta", "scatter", false);
+            JMathPlotAdapter.jMathPlotAdapter(C2Array, "myTestGroup", properties, "plot3", "C_" + num, "blue", "scatter", false);
+            JMathPlotAdapter.jMathPlotAdapter(T2Array, "myTestGroup", properties, "plot4", "T_" + num, "green", "scatter", false);
+            JMathPlotAdapter.jMathPlotAdapter(G2Array, "myTestGroup", properties, "plot5", "G_" + num, "yellow", "scatter", false);
             
             System.out.println("Last row : " + data[DNAencoding.size()-1][0] + " " + data[DNAencoding.size()-1][1]);
-            
-        }catch (Exception e) {
-            e.printStackTrace();
-        } 
     }
     
     private static void initializeMetricProperties() {
