@@ -38,7 +38,7 @@ Please, check the example in JavaSeApplicationMetrics/ApplicationMetricsJavaSeAp
 <br/>
 
 ## JAM Possible Next Steps
-- Addition of Biometric (DNA sequence) information (numerical encoding and plots using JMathPlot adapter)
+- Memory management of the group metrics
 - Integration of gaeger (another tracing system)
 - Send the metrics to the JBoss Console
 
