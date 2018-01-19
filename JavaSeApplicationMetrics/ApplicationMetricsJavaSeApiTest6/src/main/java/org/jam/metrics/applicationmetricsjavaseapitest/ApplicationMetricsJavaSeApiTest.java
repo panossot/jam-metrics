@@ -70,7 +70,7 @@ public class ApplicationMetricsJavaSeApiTest {
         metricProperties.setCacheStore("true");
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
-        metricProperties.setDatabaseStore("true");
+        metricProperties.setDatabaseStore("false");
         metricProperties.setUpdateRateOfDbQuery("StoreDBMetric", 3);
         CodeParamsApi.addUserName("Niki");
         try {

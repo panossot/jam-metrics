@@ -57,7 +57,7 @@ public class ApplicationMetricsJavaSeApiTest12 {
     
     private static void initializeMetricProperties() {
         MetricProperties metricProperties = new MetricProperties();
-        metricProperties.setHawkularApm("true");
+        metricProperties.setHawkularApm("false");
         metricProperties.setHawkularApmTenant("my-tenant");
         metricProperties.setHawkularApmServerPort("8680");
         metricProperties.setEventBus(vertx.eventBus());
