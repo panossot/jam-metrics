@@ -97,30 +97,37 @@ public class MetricProperties {
         this.eb = eb;
     }
 
+    @Deprecated
     public String getHawkularMetricsApm() {
         return hawkularMetricsApm;
     }
 
+    @Deprecated
     public void setHawkularMetricsApm(String hawkularMetricsApm) {
         this.hawkularMetricsApm = hawkularMetricsApm;
     } 
 
+    @Deprecated
     public int getHawkularApmVisibleTraces() {
         return hawkularApmVisibleTraces;
     }
 
+    @Deprecated
     public void setHawkularApmVisibleTraces(int hawkularApmVisibleTraces) {
         this.hawkularApmVisibleTraces = hawkularApmVisibleTraces;
     }
 
+    @Deprecated
     public HashMap<String, Trace> getHawkularApmTraces() {
         return hawkularApmTraces;
     }
 
+    @Deprecated
     public void setHawkularApmTraces(HashMap<String, Trace> hawkularApmTraces) {
         this.hawkularApmTraces = hawkularApmTraces;
     }
     
+    @Deprecated
     public void addHawkularApmTraces(String traceName, Trace trace) {
         this.hawkularApmTraces.put(traceName, trace);
     }

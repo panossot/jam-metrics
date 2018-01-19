@@ -72,7 +72,7 @@
                                 </systemProperty>
                                 <systemProperty>
                                     <key>HAWKULAR_APM_URI</key>
-                                    <value>http://localhost:8780</value>
+                                    <value>http://localhost:8680</value>
                                 </systemProperty>
                             </systemProperties>
                         </configuration>  

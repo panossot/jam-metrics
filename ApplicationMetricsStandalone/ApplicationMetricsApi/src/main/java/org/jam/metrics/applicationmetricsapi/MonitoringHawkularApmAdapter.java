@@ -34,6 +34,7 @@ import org.jam.metrics.applicationmetricsproperties.MetricProperties;
  *
  * @author panos
  */
+@Deprecated //Replaced with HawkularApmAdapter
 class MonitoringHawkularApmAdapter {
 
     private final static Object hawkularApmLock = new Object();
@@ -44,7 +45,8 @@ class MonitoringHawkularApmAdapter {
         if (hawkularApm != null && Boolean.parseBoolean(hawkularApm)) {
             MetricInternalParameters internalParameters = DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentInternalParameters(metricGroup);
             Trace trace = new Trace();
-            trace.setTraceId(metricName + String.valueOf(id++));
+            trace.setTraceId(metricName + String.valueOf(id));
+            trace.setFragmentId(metricName + String.valueOf(id++));
             trace.setTransaction(metricName);
             trace.setTimestamp(System.currentTimeMillis());
 

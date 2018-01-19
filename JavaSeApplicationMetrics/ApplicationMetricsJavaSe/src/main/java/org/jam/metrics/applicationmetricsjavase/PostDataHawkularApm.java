@@ -27,6 +27,7 @@ import org.hawkular.apm.api.model.trace.Trace;
  *
  * @author panos
  */
+@Deprecated // MonitoringHawkularApmAdapter is replaced with HawkularApmAdapter
 @Path("/hawkular/apm/")
 public interface PostDataHawkularApm {
 

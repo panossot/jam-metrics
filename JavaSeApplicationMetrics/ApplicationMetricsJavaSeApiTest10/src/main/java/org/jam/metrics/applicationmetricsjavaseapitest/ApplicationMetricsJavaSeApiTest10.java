@@ -26,6 +26,7 @@ import org.jam.metrics.applicationmetricsproperties.MetricProperties;
  *
  * @author Panagiotis Sotiropoulos
  */
+@Deprecated
 public class ApplicationMetricsJavaSeApiTest10 {
 
     private static String groupName = "myTestGroup";
@@ -58,8 +59,8 @@ public class ApplicationMetricsJavaSeApiTest10 {
     private static void initializeMetricProperties() {
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setHawkularMetricsApm("true");
-        metricProperties.setHawkularApmRefreshRate(5);
-        metricProperties.setHawkularApmVisibleTraces(5);
+        metricProperties.setHawkularApmRefreshRate(20);
+        metricProperties.setHawkularApmVisibleTraces(20);
         metricProperties.setHawkularApmTenant("my-tenant");
         metricProperties.setCacheStore("true");
         metricProperties.setCacheMaxSize(1000);

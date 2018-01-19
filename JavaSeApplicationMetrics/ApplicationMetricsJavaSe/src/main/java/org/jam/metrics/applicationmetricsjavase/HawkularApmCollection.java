@@ -26,6 +26,7 @@ import java.util.HashMap;
  *
  * @author Panagiotis Sotiropoulos
  */
+@Deprecated // MonitoringHawkularApmAdapter is replaced with HawkularApmAdapter
 public class HawkularApmCollection {
 
     private static final HawkularApmCollection hawkularapmc = new HawkularApmCollection();

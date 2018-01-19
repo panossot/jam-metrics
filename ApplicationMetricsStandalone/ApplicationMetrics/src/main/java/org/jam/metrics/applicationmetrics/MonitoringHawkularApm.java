@@ -36,6 +36,7 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
  *
  * @author Panagiotis Sotiropoulos
  */
+@Deprecated // MonitoringHawkularApmAdapter is replaced with HawkularApmAdapter
 public class MonitoringHawkularApm {
 
     private final String APPLICATION_JSON;

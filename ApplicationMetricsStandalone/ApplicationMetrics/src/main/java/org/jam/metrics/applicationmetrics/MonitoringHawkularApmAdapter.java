@@ -32,6 +32,7 @@ import org.jam.metrics.applicationmetricslibrary.MetricInternalParameters;
  *
  * @author panos
  */
+@Deprecated // MonitoringHawkularApmAdapter is replaced with HawkularApmAdapter
 class MonitoringHawkularApmAdapter {
 
     private final static Object hawkularApmLock = new Object();

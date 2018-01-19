@@ -40,6 +40,7 @@ import org.jam.metrics.applicationmetricslibrary.MetricInternalParameters;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.Plot3DPanel;
+import org.math.plot.plots.LinePlot;
 
 /**
  *
