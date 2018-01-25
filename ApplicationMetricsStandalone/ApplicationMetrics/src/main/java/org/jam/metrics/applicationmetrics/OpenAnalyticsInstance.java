@@ -55,7 +55,9 @@ public class OpenAnalyticsInstance {
         try {
             String serverId = "";
             if (idRecord) {
-                serverId = System.getProperty(".id");
+                serverId = System.getProperty("server.id");
+                if (serverId == null)
+                    serverId = "";
                 query = query.replace("[1]", serverId);
             } else
                 query = query.replace("[1]", "");
@@ -117,9 +119,12 @@ public class OpenAnalyticsInstance {
         String serverLocation = null;
         
         try {
-            ResultSet rs = locationStmt.executeQuery(query);
+            ResultSet rs = locationStmt.executeQuery(query + " WHERE SERVER_INSTANCE_NAME='" + serverId + "';");
             rs.next();
-            serverLocation = rs.getString(2);
+            if (rs != null)
+                serverLocation = rs.getString(2);
+            else
+                serverLocation = "Not defined";
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

@@ -76,7 +76,7 @@ public class PrintMetrics extends HttpServlet {
         metricProperties.setOpenAnalytics("true");
         CodeParamsApi.addUserName("Niki");
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "panos");
+            Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "");
             Statement stmt = connection.createStatement();
             createDbTable(stmt);
             HashMap<String, Statement> dbStmt = new HashMap<String, Statement>();
