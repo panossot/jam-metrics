@@ -52,7 +52,19 @@ public class ApplicationMetricsJavaSeApiTest {
             
             if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
                 System.out.println(MetricsCacheApi.printMetricsCache(groupName));
-
+            
+            if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
+                System.out.println("Count GroupObjects In MetricCache : " +  MetricsCacheApi.countGroupObjectsInMetricCache(groupName));
+            
+            if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
+                MetricsCacheApi.deleteGroupInMetricsCache(groupName);
+            
+            if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
+                System.out.println("Count GroupObjects In MetricCache : " +  MetricsCacheApi.countGroupObjectsInMetricCache(groupName));
+            else
+                System.out.println("Group " + groupName + " does not exist.");
+            
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

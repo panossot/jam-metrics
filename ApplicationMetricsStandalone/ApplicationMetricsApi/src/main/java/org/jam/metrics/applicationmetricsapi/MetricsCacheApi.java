@@ -79,11 +79,56 @@ public class MetricsCacheApi {
         return output;
     }
     
+    public static synchronized String printMetricCacheKeys(String deployment) {
+        String output = "";
+        Map<String, ArrayList<Object>> cache;
+        Set<String> metricNames;
+        cache = getMetricsCache(deployment);
+        metricNames = cache.keySet();
+
+        Iterator<String> iob = metricNames.iterator();
+        while (iob.hasNext()) {
+            output += "<br>Metric Cache Key : " + iob.next() + "</br>\n";
+        }
+        
+        return output;
+    }
+    
     public static synchronized ArrayList<Object> getMetricsCacheValuesByKey(String deployment, String key) {
         ArrayList<Object> cacheValues;
         cacheValues = getMetricsCache(deployment).get(key);
         
         return cacheValues;
+    }
+    
+    public static synchronized int countMetricsCacheValuesByKey(String deployment, String key) {
+        ArrayList<Object> cacheValues;
+        cacheValues = getMetricsCache(deployment).get(key);
+        
+        return (cacheValues!=null?cacheValues.size():0);
+    }
+    
+    public static synchronized int countGroupObjectsInMetricCache(String deployment) {
+        int count = 0;
+        Map<String, ArrayList<Object>> cache;
+        Set<String> metricNames;
+        Collection<ArrayList<Object>> metricValues;
+        cache = getMetricsCache(deployment);
+        metricNames = cache.keySet();
+        metricValues = cache.values();
+
+        Iterator<String> iob = metricNames.iterator();
+        Iterator<ArrayList<Object>> iobv = metricValues.iterator();
+        while (iob.hasNext()) {
+            iob.next();
+            if (iobv.hasNext()) {
+                ArrayList<Object> cacheValues = iobv.next();
+                int num = (cacheValues!=null?cacheValues.size():0);
+                count+=num;
+            }
+        }
+        
+        return count;
     }
     
     // Dummy comparison for test cases.
@@ -103,6 +148,11 @@ public class MetricsCacheApi {
         }
         
         return isEqual;
+    }
+    
+    public static synchronized void deleteGroupInMetricsCache(String group)
+    {
+        MetricsCacheCollection.getMetricsCacheCollection().removeMetricsCacheInstance(group);
     }
     
     public static synchronized void cleanMetricsCache(String group)
