@@ -27,6 +27,8 @@ public class MetricsClass {
     private static volatile int count = 0;
     
     private static volatile int count2 = 0;
+    
+    private static volatile int count3 = 0;
 
     public synchronized int getCount() {
         return count;
@@ -44,6 +46,15 @@ public class MetricsClass {
     @Metric(fieldName = {"count2"}, groupName = "myTestGroup")
     public synchronized void setCount2(int count2) {
         this.count2 = count2;
+    }
+    
+    public synchronized int getCount3() {
+        return count3;
+    }
+    
+    @Metric(fieldName = {"count3"}, groupName = "myTestGroup2")
+    public synchronized void setCount3(int count3) {
+        this.count3 = count3;
     }
     
 }

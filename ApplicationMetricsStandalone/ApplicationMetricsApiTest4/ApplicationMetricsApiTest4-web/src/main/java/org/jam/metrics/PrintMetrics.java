@@ -54,6 +54,7 @@ public class PrintMetrics extends HttpServlet {
     MetricsClass metricsClass;
     
     private String groupName = "myTestGroup";
+    private String groupName2 = "myTestGroup2";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -86,6 +87,32 @@ public class PrintMetrics extends HttpServlet {
             if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
                 out.println(MetricsCacheApi.printMetricsCache(groupName));
             
+            if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName2)!=null)
+                out.println(MetricsCacheApi.printMetricsCache(groupName2));
+            
+            if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
+                out.println("<br/>Count GroupObjects In MetricCache of group " + groupName + " : " +  MetricsCacheApi.countGroupObjectsInMetricCache(groupName));
+            
+            
+            if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName2)!=null)
+                out.println("<br/>Count GroupObjects In MetricCache of group " + groupName2 + " : " +  MetricsCacheApi.countGroupObjectsInMetricCache(groupName2));
+            
+            
+            if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null) {
+                MetricsCacheApi.deleteGroupInMetricsCache(groupName);
+                out.println("<br/>Deleting group " + groupName);
+            }
+            
+            if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName)!=null)
+                out.println("<br/>Count GroupObjects In MetricCache of group " + groupName + " : " +  MetricsCacheApi.countGroupObjectsInMetricCache(groupName));
+            else
+                out.println("<br/>Group " + groupName + " does not exist.");
+            
+            if (MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(groupName2)!=null)
+                out.println("<br/>Count GroupObjects In MetricCache of group " + groupName2 + " : " +  MetricsCacheApi.countGroupObjectsInMetricCache(groupName2));
+            else
+                out.println("<br/>Group " + groupName2 + " does not exist.");
+            
             out.println("<br>Successful Run ...</br>");
             out.println("</body>");
             out.println("</html>");
@@ -105,6 +132,7 @@ public class PrintMetrics extends HttpServlet {
        // metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
+        MetricsPropertiesApi.storeProperties(groupName2, metricProperties);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

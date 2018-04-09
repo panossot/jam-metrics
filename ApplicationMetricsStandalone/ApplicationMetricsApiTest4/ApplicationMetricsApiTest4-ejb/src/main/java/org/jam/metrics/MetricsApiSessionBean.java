@@ -24,6 +24,7 @@ public class MetricsApiSessionBean {
 
     private final static Object metricLock = new Object();
     private final static Object metric2Lock = new Object();
+    private final static Object metric3Lock = new Object();
     
     MetricsClass metricsClass;
 
@@ -39,6 +40,9 @@ public class MetricsApiSessionBean {
             }
             synchronized(metric2Lock) {
                 metricsClass.setCount2(metricsClass.getCount2()+2);
+            }
+            synchronized(metric3Lock) {
+                metricsClass.setCount3(metricsClass.getCount3()+3);
             }
         }
     }
