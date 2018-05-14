@@ -15,27 +15,45 @@
  * limitations under the License.
  */
 
-/*
+ /*
  *  ΙΔΕΑ : Everything is a potential metric .
  */
-
 package org.jam.metrics.applicationmetricsapi;
 
 import org.jam.metrics.applicationmetricslibrary.DeploymentMetricProperties;
 import org.jam.metrics.applicationmetricslibrary.MetricInternalParameters;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
+import com.sun.net.httpserver.HttpServer;
+import java.net.URI;
+import javax.ws.rs.core.UriBuilder;
+import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
+import org.glassfish.jersey.server.ResourceConfig;
 
 /**
  *
  * @author Panagiotis Sotiropoulos
  */
 public class MetricsPropertiesApi {
-    public static void storeProperties(String group, MetricProperties metricsProperties){
+
+    static HttpServer server = null;
+    
+    public static void RestApi(String host, int port) {
+        URI baseUri = UriBuilder.fromUri(host).port(port).build();
+        ResourceConfig config = new ResourceConfig(RestJam.class);
+        server = JdkHttpServerFactory.createHttpServer(baseUri, config);
+    }
+    
+    public static void stopServer(){
+        server.stop(1);
+        server = null;
+    }
+
+    public static void storeProperties(String group, MetricProperties metricsProperties) {
         DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentProperties(group, metricsProperties);
         DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentInternalParameters(group, new MetricInternalParameters());
     }
 
-    public static synchronized void clearProperties(){
+    public static synchronized void clearProperties() {
         DeploymentMetricProperties.getDeploymentMetricProperties().clearDeploymentProperties();
     }
 }

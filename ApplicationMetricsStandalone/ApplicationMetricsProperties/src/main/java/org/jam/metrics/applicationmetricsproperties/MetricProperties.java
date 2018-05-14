@@ -75,6 +75,8 @@ public class MetricProperties {
     private String hawkularApmServerUsername = "hawkularapmadmin";
     private String hawkularApmServerPassword = "hawkularapmadmin";
     private String hawkularApmTenant = "my-tenant";
+    private String RestServerUrl = "http://localhost/";
+    private int RestServerPort = 10399;
     private EventBus eb = null;
 
     public MetricProperties() {
@@ -87,6 +89,22 @@ public class MetricProperties {
         colors = new HashMap<>();
         frames = new HashMap<>();
         hawkularApmTraces = new HashMap<>();
+    }
+
+    public String getRestServerUrl() {
+        return RestServerUrl;
+    }
+
+    public void setRestServerUrl(String RestServerUrl) {
+        this.RestServerUrl = RestServerUrl;
+    }
+
+    public int getRestServerPort() {
+        return RestServerPort;
+    }
+
+    public void setRestServerPort(int RestServerPort) {
+        this.RestServerPort = RestServerPort;
     }
 
     public EventBus getEventBus() {

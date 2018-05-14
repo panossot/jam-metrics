@@ -17,9 +17,16 @@
 package org.jam.metrics.applicationmetricsjavaseapitest;
 
 import java.util.HashMap;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.jam.metrics.applicationmetricsapi.MetricsCacheApi;
 import org.jam.metrics.applicationmetricsapi.MetricsPropertiesApi;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -39,8 +46,22 @@ public class ApplicationMetricsJavaSeApiTest {
             mTC.countMethod();
             mTC.countMethod();
             System.out.println(MetricsCacheApi.printMetricsCache(groupName));
+            Client client = ClientBuilder.newClient();
+            WebTarget target = client.target("http://localhost:10399").path("/MetricsCache/MetricList/myTestGroup");
+            Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            Response response = invocationBuilder.get();
+            if(response.getStatus()!=200){
+                fail("Rest Api call failed...");
+            }else{
+                String rs = response.readEntity(String.class);
+                if (rs==null)
+                    fail("Rest Api call failed...");
+                System.out.println(rs);
+            }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+             MetricsPropertiesApi.stopServer();
         }
     }
 
@@ -54,5 +75,6 @@ public class ApplicationMetricsJavaSeApiTest {
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);
         MetricsPropertiesApi.storeProperties(groupName, metricProperties);
+        MetricsPropertiesApi.RestApi("http://localhost/", 10399);
     }
 }
