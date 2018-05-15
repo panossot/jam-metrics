@@ -98,6 +98,12 @@
             <artifactId>jersey-container-jdk-http</artifactId>
             <version>2.26-b03</version>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>2.27</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>

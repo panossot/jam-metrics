@@ -16,7 +16,13 @@
  */
 package org.jam.metrics.applicationmetricsjavaseapitest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
@@ -25,8 +31,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.jam.metrics.applicationmetricsapi.MetricsCacheApi;
 import org.jam.metrics.applicationmetricsapi.MetricsPropertiesApi;
+import org.jam.metrics.applicationmetricslibrary.MetricObject;
+import org.jam.metrics.applicationmetricslibrary.MetricsCache;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -47,7 +56,7 @@ public class ApplicationMetricsJavaSeApiTest {
             mTC.countMethod();
             System.out.println(MetricsCacheApi.printMetricsCache(groupName));
             Client client = ClientBuilder.newClient();
-            WebTarget target = client.target("http://localhost:10399").path("/MetricsCache/MetricList/myTestGroup");
+            WebTarget target = client.target("http://localhost:10399").path("/MetricsCache/MetricList/myTestGroup/print");
             Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             Response response = invocationBuilder.get();
             if(response.getStatus()!=200){
@@ -57,6 +66,30 @@ public class ApplicationMetricsJavaSeApiTest {
                 if (rs==null)
                     fail("Rest Api call failed...");
                 System.out.println(rs);
+            }
+            
+            target = client.target("http://localhost:10399").path("/MetricsCache/MetricList/myTestGroup");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if(response.getStatus()!=200){
+                fail("Rest Api call failed...");
+            }else{
+                String rs = response.readEntity(String.class);
+                MetricsCache mc = new ObjectMapper().readValue(rs, MetricsCache.class);
+                
+                HashSet<MetricObject> metricsCache = mc.getMetricCache();
+                
+                assertTrue("There should be two metrics inside the cache",metricsCache.size()==2);
+        
+        for (MetricObject mObject : metricsCache) {
+            Iterator<Object> iob = Collections.synchronizedList(new ArrayList<Object>(mObject.getMetric())).iterator();
+            ArrayList<Object> metricValues = new ArrayList<>();
+            while (iob.hasNext()) {
+                metricValues.add(iob.next().toString());
+            }
+            assertTrue("There should be two metrics values for each metric inside the cache",metricValues.size()==2);
+            System.out.println(mObject.getName() + "," + metricValues);
+        }
             }
         } catch (Exception e) {
             e.printStackTrace();

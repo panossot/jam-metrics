@@ -15,6 +15,8 @@
  */
 package org.jam.metrics.applicationmetricsapi;
 
+import java.util.ArrayList;
+import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -22,6 +24,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.jam.metrics.applicationmetricslibrary.MetricsCache;
+import org.jam.metrics.applicationmetricslibrary.MetricsCacheCollection;
 
 /**
  *
@@ -31,10 +35,20 @@ import org.glassfish.jersey.server.ResourceConfig;
 public class RestJam extends ResourceConfig {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/MetricList/{metricGroup}")
+    @Path("/MetricList/{metricGroup}/print")
     public Response printMetricList(@PathParam("metricGroup") String metricGroup) {
 
         String response = MetricsCacheApi.printMetricsCache(metricGroup);
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricList/{metricGroup}")
+    public Response metricList(@PathParam("metricGroup") String metricGroup) {
+
+        MetricsCache response = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(metricGroup);
 
         return Response.status(200).entity(response).build();
     }
