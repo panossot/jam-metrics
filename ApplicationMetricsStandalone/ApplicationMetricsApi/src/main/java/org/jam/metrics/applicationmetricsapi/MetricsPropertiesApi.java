@@ -52,6 +52,10 @@ public class MetricsPropertiesApi {
         DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentProperties(group, metricsProperties);
         DeploymentMetricProperties.getDeploymentMetricProperties().addDeploymentInternalParameters(group, new MetricInternalParameters());
     }
+    
+    public static MetricProperties getProperties(String group) {
+        return (DeploymentMetricProperties.getDeploymentMetricProperties().getDeploymentMetricProperty(group));
+    }
 
     public static synchronized void clearProperties() {
         DeploymentMetricProperties.getDeploymentMetricProperties().clearDeploymentProperties();

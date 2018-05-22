@@ -15,11 +15,10 @@
  */
 package org.jam.metrics.applicationmetricsapi;
 
-import java.util.ArrayList;
-import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -31,7 +30,7 @@ import org.jam.metrics.applicationmetricslibrary.MetricsCacheCollection;
  *
  * @author panos
  */
-@Path("/MetricsCache")
+@Path("/Metrics")
 public class RestJam extends ResourceConfig {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -51,5 +50,28 @@ public class RestJam extends ResourceConfig {
         MetricsCache response = MetricsCacheCollection.getMetricsCacheCollection().getMetricsCacheInstance(metricGroup);
 
         return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/cacheEnabled")
+    public Response metricGetCacheStore(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getCacheStore();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/cacheEnabled")
+    public Response metricSetCacheStore(@PathParam("metricGroup") String metricGroup, @QueryParam("enableCacheStore") String enableCacheStore) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setCacheStore(enableCacheStore);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getCacheStore().compareTo(enableCacheStore)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
     }
 }
