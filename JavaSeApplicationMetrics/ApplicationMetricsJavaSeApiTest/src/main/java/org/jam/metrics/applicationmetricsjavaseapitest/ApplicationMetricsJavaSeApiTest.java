@@ -130,6 +130,57 @@ public class ApplicationMetricsJavaSeApiTest {
                     System.out.println(mObject.getName() + "," + metricValues);
                 }
             }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/get/myTestGroup/rhqMonitoring");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String rs = response.readEntity(String.class);
+                if (rs == null) {
+                    fail("Rest Api call failed...");
+                }
+                assertTrue("RHQ monitoring should be disabled... ", rs.compareTo("false")==0);
+                System.out.println(rs);
+            }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/set/myTestGroup/rhqMonitoring").queryParam("rhqMonitoringEnabled", "true");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String rhqMonitoring = MetricsPropertiesApi.getProperties(groupName).getRhqMonitoring();
+                assertTrue("RHQ monitoring should be enabled... ", rhqMonitoring.compareTo("true")==0);
+                System.out.println(rhqMonitoring);
+            }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/get/myTestGroup/hawkularMonitoring");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String rs = response.readEntity(String.class);
+                if (rs == null) {
+                    fail("Rest Api call failed...");
+                }
+                assertTrue("Hawkular monitoring should be disabled... ", rs.compareTo("false")==0);
+                System.out.println(rs);
+            }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/set/myTestGroup/hawkularMonitoring").queryParam("hawkularMonitoringEnabled", "true");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String hawkularMonitoring = MetricsPropertiesApi.getProperties(groupName).getHawkularMonitoring();
+                assertTrue("Hawkular monitoring should be enabled... ", hawkularMonitoring.compareTo("true")==0);
+                System.out.println(hawkularMonitoring);
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -143,6 +194,7 @@ public class ApplicationMetricsJavaSeApiTest {
         rhqScheduleIds.put("count2", "11392");
         MetricProperties metricProperties = new MetricProperties();
         metricProperties.setRhqMonitoring("false");
+        metricProperties.setHawkularMonitoring("false");
         metricProperties.setCacheStore("true");
         metricProperties.setRhqServerUrl("lz-panos-jon33.bc.jonqe.lab.eng.bos.redhat.com");
         metricProperties.setRhqScheduleIds(rhqScheduleIds);

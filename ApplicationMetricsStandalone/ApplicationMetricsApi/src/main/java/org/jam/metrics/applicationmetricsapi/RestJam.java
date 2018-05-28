@@ -74,4 +74,51 @@ public class RestJam extends ResourceConfig {
         else
             return Response.status(501).build();
     }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/rhqMonitoring")
+    public Response metricGetRhqMonitoring(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getRhqMonitoring();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/rhqMonitoring")
+    public Response metricSetRhqMonitoring(@PathParam("metricGroup") String metricGroup, @QueryParam("rhqMonitoringEnabled") String rhqMonitoringEnabled) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setRhqMonitoring(rhqMonitoringEnabled);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getRhqMonitoring().compareTo(rhqMonitoringEnabled)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/hawkularMonitoring")
+    public Response metricGetHawkularMonitoring(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getHawkularMonitoring();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/hawkularMonitoring")
+    public Response metricSetHawkularMonitoring(@PathParam("metricGroup") String metricGroup, @QueryParam("hawkularMonitoringEnabled") String hawkularMonitoringEnabled) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setHawkularMonitoring(hawkularMonitoringEnabled);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getHawkularMonitoring().compareTo(hawkularMonitoringEnabled)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
 }
