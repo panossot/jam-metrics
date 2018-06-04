@@ -121,4 +121,50 @@ public class RestJam extends ResourceConfig {
             return Response.status(501).build();
     }
     
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/databaseStore")
+    public Response metricGetDatabaseStore(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getDatabaseStore();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/databaseStore")
+    public Response metricSetDatabaseStore(@PathParam("metricGroup") String metricGroup, @QueryParam("databaseStoreEnabled") String databaseStoreEnabled) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setDatabaseStore(databaseStoreEnabled);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getDatabaseStore().compareTo(databaseStoreEnabled)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/hawkularApm")
+    public Response metricGetHawkularApm(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getHawkularApm();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/hawkularApm")
+    public Response metricSetHawkularApm(@PathParam("metricGroup") String metricGroup, @QueryParam("hawkularApmEnabled") String hawkularApmEnabled) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setHawkularApm(hawkularApmEnabled);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getHawkularApm().compareTo(hawkularApmEnabled)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
 }

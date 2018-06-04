@@ -142,7 +142,7 @@ public class ApplicationMetricsJavaSeApiTest {
                     fail("Rest Api call failed...");
                 }
                 assertTrue("RHQ monitoring should be disabled... ", rs.compareTo("false")==0);
-                System.out.println(rs);
+                System.out.println("rhqMonitoring : " + rs);
             }
             
             target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/set/myTestGroup/rhqMonitoring").queryParam("rhqMonitoringEnabled", "true");
@@ -153,7 +153,32 @@ public class ApplicationMetricsJavaSeApiTest {
             } else {
                 String rhqMonitoring = MetricsPropertiesApi.getProperties(groupName).getRhqMonitoring();
                 assertTrue("RHQ monitoring should be enabled... ", rhqMonitoring.compareTo("true")==0);
-                System.out.println(rhqMonitoring);
+                System.out.println("rhqMonitoring : " + rhqMonitoring);
+            }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/get/myTestGroup/databaseStore");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String rs = response.readEntity(String.class);
+                if (rs == null) {
+                    fail("Rest Api call failed...");
+                }
+                assertTrue("DatabaseStore should be disabled... ", rs.compareTo("false")==0);
+                System.out.println("databaseStore : " + rs);
+            }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/set/myTestGroup/databaseStore").queryParam("databaseStoreEnabled", "true");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String databaseStore = MetricsPropertiesApi.getProperties(groupName).getDatabaseStore();
+                assertTrue("DatabaseStore should be enabled... ", databaseStore.compareTo("true")==0);
+                System.out.println("databaseStore : " + databaseStore);
             }
             
             target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/get/myTestGroup/hawkularMonitoring");
@@ -167,7 +192,7 @@ public class ApplicationMetricsJavaSeApiTest {
                     fail("Rest Api call failed...");
                 }
                 assertTrue("Hawkular monitoring should be disabled... ", rs.compareTo("false")==0);
-                System.out.println(rs);
+                System.out.println("hawkularMonitoring : " + rs);
             }
             
             target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/set/myTestGroup/hawkularMonitoring").queryParam("hawkularMonitoringEnabled", "true");
@@ -178,7 +203,32 @@ public class ApplicationMetricsJavaSeApiTest {
             } else {
                 String hawkularMonitoring = MetricsPropertiesApi.getProperties(groupName).getHawkularMonitoring();
                 assertTrue("Hawkular monitoring should be enabled... ", hawkularMonitoring.compareTo("true")==0);
-                System.out.println(hawkularMonitoring);
+                System.out.println("hawkularMonitoring : " + hawkularMonitoring);
+            }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/get/myTestGroup/hawkularApm");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String rs = response.readEntity(String.class);
+                if (rs == null) {
+                    fail("Rest Api call failed...");
+                }
+                assertTrue("Hawkular Apm should be disabled... ", rs.compareTo("false")==0);
+                System.out.println("hawkularApm : " + rs);
+            }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/set/myTestGroup/hawkularApm").queryParam("hawkularApmEnabled", "true");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String hawkularApm = MetricsPropertiesApi.getProperties(groupName).getHawkularApm();
+                assertTrue("Hawkular Apm should be enabled... ", hawkularApm.compareTo("true")==0);
+                System.out.println("hawkularApm : " + hawkularApm);
             }
             
         } catch (Exception e) {
