@@ -167,4 +167,50 @@ public class RestJam extends ResourceConfig {
             return Response.status(501).build();
     }
     
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/metricPlot")
+    public Response metricGetMetricPlot(@PathParam("metricGroup") String metricPlot) {
+
+        String response = MetricsPropertiesApi.getProperties(metricPlot).getMetricPlot();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/metricPlot")
+    public Response metricSetMetricPlot(@PathParam("metricGroup") String metricGroup, @QueryParam("metricPlotEnabled") String metricPlotEnabled) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setMetricPlot(metricPlotEnabled);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getDatabaseStore().compareTo(metricPlotEnabled)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/OpenAnalytics")
+    public Response metricGetOpenAnalytics(@PathParam("metricGroup") String OpenAnalytics) {
+
+        String response = MetricsPropertiesApi.getProperties(OpenAnalytics).getOpenAnalytics();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/OpenAnalytics")
+    public Response metricSetOpenAnalytics(@PathParam("metricGroup") String metricGroup, @QueryParam("OpenAnalyticsEnabled") String OpenAnalyticsEnabled) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setOpenAnalytics(OpenAnalyticsEnabled);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getDatabaseStore().compareTo(OpenAnalyticsEnabled)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
 }

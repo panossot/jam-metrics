@@ -231,6 +231,56 @@ public class ApplicationMetricsJavaSeApiTest {
                 System.out.println("hawkularApm : " + hawkularApm);
             }
             
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/get/myTestGroup/metricPlot");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String rs = response.readEntity(String.class);
+                if (rs == null) {
+                    fail("Rest Api call failed...");
+                }
+                assertTrue("MetricPlot should be disabled... ", rs.compareTo("false")==0);
+                System.out.println("metricPlot : " + rs);
+            }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/set/myTestGroup/metricPlot").queryParam("metricPlotEnabled", "true");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String metricPlot = MetricsPropertiesApi.getProperties(groupName).getMetricPlot();
+                assertTrue("MetricPlot should be enabled... ", metricPlot.compareTo("true")==0);
+                System.out.println("metricPlot : " + metricPlot);
+            }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/get/myTestGroup/OpenAnalytics");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String rs = response.readEntity(String.class);
+                if (rs == null) {
+                    fail("Rest Api call failed...");
+                }
+                assertTrue("OpenAnalytics should be disabled... ", rs.compareTo("false")==0);
+                System.out.println("OpenAnalytics : " + rs);
+            }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/set/myTestGroup/OpenAnalytics").queryParam("OpenAnalyticsEnabled", "true");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String OpenAnalytics = MetricsPropertiesApi.getProperties(groupName).getOpenAnalytics();
+                assertTrue("OpenAnalytics should be enabled... ", OpenAnalytics.compareTo("true")==0);
+                System.out.println("OpenAnalytics : " + OpenAnalytics);
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
