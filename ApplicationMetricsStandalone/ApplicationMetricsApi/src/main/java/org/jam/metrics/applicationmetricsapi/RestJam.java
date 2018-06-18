@@ -193,9 +193,9 @@ public class RestJam extends ResourceConfig {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/MetricProperties/get/{metricGroup}/OpenAnalytics")
-    public Response metricGetOpenAnalytics(@PathParam("metricGroup") String OpenAnalytics) {
+    public Response metricGetOpenAnalytics(@PathParam("metricGroup") String metricGroup) {
 
-        String response = MetricsPropertiesApi.getProperties(OpenAnalytics).getOpenAnalytics();
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getOpenAnalytics();
 
         return Response.status(200).entity(response).build();
     }
@@ -207,7 +207,53 @@ public class RestJam extends ResourceConfig {
 
         MetricsPropertiesApi.getProperties(metricGroup).setOpenAnalytics(OpenAnalyticsEnabled);
 
-        if(MetricsPropertiesApi.getProperties(metricGroup).getDatabaseStore().compareTo(OpenAnalyticsEnabled)==0)
+        if(MetricsPropertiesApi.getProperties(metricGroup).getOpenAnalytics().compareTo(OpenAnalyticsEnabled)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/filterMetrics")
+    public Response metricGetFilterMetrics(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getFilterMetrics();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/filterMetrics")
+    public Response metricSetFilterMetrics(@PathParam("metricGroup") String metricGroup, @QueryParam("filterMetricsEnabled") String filterMetricsEnabled) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setFilterMetrics(filterMetricsEnabled);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getFilterMetrics().compareTo(filterMetricsEnabled)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/cacheMaxSize")
+    public Response metricGetCacheMaxSize(@PathParam("metricGroup") String metricGroup) {
+
+        int response = MetricsPropertiesApi.getProperties(metricGroup).getCacheMaxSize();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/cacheMaxSize")
+    public Response metricSetCacheMaxSize(@PathParam("metricGroup") String metricGroup, @QueryParam("cacheMaxSize") int cacheMaxSize) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setCacheMaxSize(cacheMaxSize);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getCacheMaxSize()==cacheMaxSize)
             return Response.status(200).build();
         else
             return Response.status(501).build();

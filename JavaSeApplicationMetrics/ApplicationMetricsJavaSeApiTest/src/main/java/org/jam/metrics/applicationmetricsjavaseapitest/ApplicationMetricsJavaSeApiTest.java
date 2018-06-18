@@ -281,6 +281,53 @@ public class ApplicationMetricsJavaSeApiTest {
                 System.out.println("OpenAnalytics : " + OpenAnalytics);
             }
             
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/get/myTestGroup/filterMetrics");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String rs = response.readEntity(String.class);
+                if (rs == null) {
+                    fail("Rest Api call failed...");
+                }
+                assertTrue("FilterMetrics should be disabled... ", rs.compareTo("false")==0);
+                System.out.println("filterMetrics : " + rs);
+            }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/set/myTestGroup/filterMetrics").queryParam("filterMetricsEnabled", "true");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String filterMetrics = MetricsPropertiesApi.getProperties(groupName).getFilterMetrics();
+                assertTrue("FilterMetrics should be enabled... ", filterMetrics.compareTo("true")==0);
+                System.out.println("FilterMetrics : " + filterMetrics);
+            }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/get/myTestGroup/cacheMaxSize");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                int rs = response.readEntity(Integer.class);
+                assertTrue("CacheMaxSize should not be changed... ", rs==Integer.MAX_VALUE);
+                System.out.println("cacheMaxSize : " + rs);
+            }
+            
+            target = client.target("http://localhost:10399").path("/Metrics/MetricProperties/set/myTestGroup/cacheMaxSize").queryParam("cacheMaxSize", 1000);
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            if (response.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                int cacheMaxSize = MetricsPropertiesApi.getProperties(groupName).getCacheMaxSize();
+                assertTrue("cacheMaxSize should be changed... ", cacheMaxSize==1000);
+                System.out.println("cacheMaxSize : " + cacheMaxSize);
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
