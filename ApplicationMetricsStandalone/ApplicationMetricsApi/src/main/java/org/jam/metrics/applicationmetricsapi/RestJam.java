@@ -259,4 +259,417 @@ public class RestJam extends ResourceConfig {
             return Response.status(501).build();
     }
     
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/plotRefreshRate")
+    public Response metricGetPlotRefreshRate(@PathParam("metricGroup") String metricGroup) {
+
+        int response = MetricsPropertiesApi.getProperties(metricGroup).getPlotRefreshRate();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/plotRefreshRate")
+    public Response metricSetPlotRefreshRate(@PathParam("metricGroup") String metricGroup, @QueryParam("plotRefreshRate") int plotRefreshRate) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setPlotRefreshRate(plotRefreshRate);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getPlotRefreshRate()==plotRefreshRate)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/rhqMonitoringRefreshRate")
+    public Response metricGetRhqMonitoringRefreshRate(@PathParam("metricGroup") String metricGroup) {
+
+        int response = MetricsPropertiesApi.getProperties(metricGroup).getRhqMonitoringRefreshRate();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/rhqMonitoringRefreshRate")
+    public Response metricSetRhqMonitoringRefreshRate(@PathParam("metricGroup") String metricGroup, @QueryParam("rhqMonitoringRefreshRate") int rhqMonitoringRefreshRate) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setRhqMonitoringRefreshRate(rhqMonitoringRefreshRate);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getRhqMonitoringRefreshRate()==rhqMonitoringRefreshRate)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/rhqServerUrl")
+    public Response metricGetRhqServerUrl(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getRhqServerUrl();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/rhqServerUrl")
+    public Response metricSetRhqServerUrl(@PathParam("metricGroup") String metricGroup, @QueryParam("rhqServerUrl") String rhqServerUrl) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setRhqServerUrl(rhqServerUrl);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getRhqServerUrl().compareTo(rhqServerUrl)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/rhqServerPort")
+    public Response metricGetRhqServerPort(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getRhqServerPort();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/rhqServerPort")
+    public Response metricSetRhqServerPort(@PathParam("metricGroup") String metricGroup, @QueryParam("rhqServerPort") String rhqServerPort) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setRhqServerPort(rhqServerPort);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getRhqServerPort().compareTo(rhqServerPort)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/rhqServerUsername")
+    public Response metricGetRhqServerUsername(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getRhqServerUsername();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/rhqServerUsername")
+    public Response metricSetRhqServerUsername(@PathParam("metricGroup") String metricGroup, @QueryParam("rhqServerUsername") String rhqServerUsername) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setRhqServerUsername(rhqServerUsername);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getRhqServerUsername().compareTo(rhqServerUsername)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/rhqServerPassword")
+    public Response metricGetRhqServerPassword(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getRhqServerPassword();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/rhqServerPassword")
+    public Response metricSetRhqServerPassword(@PathParam("metricGroup") String metricGroup, @QueryParam("rhqServerPassword") String rhqServerPassword) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setRhqServerPassword(rhqServerPassword);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getRhqServerPassword().compareTo(rhqServerPassword)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/rhqScheduleId")
+    public Response metricGetRhqScheduleId(@PathParam("metricGroup") String metricGroup, @QueryParam("rhqScheduleIdName") String rhqScheduleIdName) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getRhqScheduleId(rhqScheduleIdName);
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/rhqScheduleId")
+    public Response metricSetRhqScheduleId(@PathParam("metricGroup") String metricGroup, @QueryParam("rhqScheduleIdName") String rhqScheduleIdName, @QueryParam("rhqScheduleId") String rhqScheduleId) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).addRhqScheduleId(rhqScheduleIdName, rhqScheduleId);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getRhqScheduleId(rhqScheduleIdName).compareTo(rhqScheduleId)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/hawkularMonitoringRefreshRate")
+    public Response metricGetHawkularMonitoringRefreshRate(@PathParam("metricGroup") String metricGroup) {
+
+        int response = MetricsPropertiesApi.getProperties(metricGroup).getHawkularMonitoringRefreshRate();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/hawkularMonitoringRefreshRate")
+    public Response metricSetHawkularMonitoringRefreshRate(@PathParam("metricGroup") String metricGroup, @QueryParam("hawkularMonitoringRefreshRate") int hawkularMonitoringRefreshRate) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setHawkularMonitoringRefreshRate(hawkularMonitoringRefreshRate);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getHawkularMonitoringRefreshRate()==hawkularMonitoringRefreshRate)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/hawkularServerUrl")
+    public Response metricGetHawkularServerUrl(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getHawkularServerUrl();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/hawkularServerUrl")
+    public Response metricSetHawkularServerUrl(@PathParam("metricGroup") String metricGroup, @QueryParam("hawkularServerUrl") String hawkularServerUrl) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setHawkularServerUrl(hawkularServerUrl);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getHawkularServerUrl().compareTo(hawkularServerUrl)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/hawkularServerPort")
+    public Response metricGetHawkularServerPort(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getHawkularServerPort();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/hawkularServerPort")
+    public Response metricSetHawkularServerPort(@PathParam("metricGroup") String metricGroup, @QueryParam("hawkularServerPort") String hawkularServerPort) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setHawkularServerPort(hawkularServerPort);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getHawkularServerPort().compareTo(hawkularServerPort)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/hawkularServerUsername")
+    public Response metricGetHawkularServerUsername(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getHawkularServerUsername();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/hawkularServerUsername")
+    public Response metricSetHawkularServerUsername(@PathParam("metricGroup") String metricGroup, @QueryParam("hawkularServerUsername") String hawkularServerUsername) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setHawkularServerUsername(hawkularServerUsername);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getHawkularServerUsername().compareTo(hawkularServerUsername)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/hawkularServerPassword")
+    public Response metricGetHawkularServerPassword(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getHawkularServerPassword();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/hawkularServerPassword")
+    public Response metricSetHawkularServerPassword(@PathParam("metricGroup") String metricGroup, @QueryParam("hawkularServerPassword") String hawkularServerPassword) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setHawkularServerPassword(hawkularServerPassword);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getHawkularServerPassword().compareTo(hawkularServerPassword)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/hawkularTenant")
+    public Response metricGetHawkularTenant(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getHawkularTenant();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/hawkularTenant")
+    public Response metricSetHawkularTenant(@PathParam("metricGroup") String metricGroup, @QueryParam("hawkularTenant") String hawkularTenant) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setHawkularTenant(hawkularTenant);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getHawkularTenant().compareTo(hawkularTenant)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/hawkularApmServerUrl")
+    public Response metricGetHawkularApmServerUrl(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getHawkularApmServerUrl();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/hawkularApmServerUrl")
+    public Response metricSetHawkularApmServerUrl(@PathParam("metricGroup") String metricGroup, @QueryParam("hawkularApmServerUrl") String hawkularApmServerUrl) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setHawkularApmServerUrl(hawkularApmServerUrl);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getHawkularApmServerUrl().compareTo(hawkularApmServerUrl)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/hawkularApmServerPort")
+    public Response metricGetHawkularApmServerPort(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getHawkularApmServerPort();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/hawkularApmServerPort")
+    public Response metricSetHawkularApmServerPort(@PathParam("metricGroup") String metricGroup, @QueryParam("hawkularApmServerPort") String hawkularApmServerPort) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setHawkularApmServerPort(hawkularApmServerPort);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getHawkularApmServerPort().compareTo(hawkularApmServerPort)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/hawkularApmServerUsername")
+    public Response metricGetHawkularApmServerUsername(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getHawkularApmServerUsername();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/hawkularApmServerUsername")
+    public Response metricSetHawkularApmServerUsername(@PathParam("metricGroup") String metricGroup, @QueryParam("hawkularApmServerUsername") String hawkularApmServerUsername) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setHawkularApmServerUsername(hawkularApmServerUsername);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getHawkularApmServerUsername().compareTo(hawkularApmServerUsername)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/hawkularApmServerPassword")
+    public Response metricGetHawkularApmServerPassword(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getHawkularApmServerPassword();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/hawkularApmServerPassword")
+    public Response metricSetHawkularApmServerPassword(@PathParam("metricGroup") String metricGroup, @QueryParam("hawkularApmServerPassword") String hawkularApmServerPassword) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setHawkularApmServerPassword(hawkularApmServerPassword);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getHawkularApmServerPassword().compareTo(hawkularApmServerPassword)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/get/{metricGroup}/hawkularApmTenant")
+    public Response metricGetHawkularApmTenant(@PathParam("metricGroup") String metricGroup) {
+
+        String response = MetricsPropertiesApi.getProperties(metricGroup).getHawkularApmTenant();
+
+        return Response.status(200).entity(response).build();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/MetricProperties/set/{metricGroup}/hawkularApmTenant")
+    public Response metricSetHawkularApmTenant(@PathParam("metricGroup") String metricGroup, @QueryParam("hawkularApmTenant") String hawkularApmTenant) {
+
+        MetricsPropertiesApi.getProperties(metricGroup).setHawkularApmTenant(hawkularApmTenant);
+
+        if(MetricsPropertiesApi.getProperties(metricGroup).getHawkularApmTenant().compareTo(hawkularApmTenant)==0)
+            return Response.status(200).build();
+        else
+            return Response.status(501).build();
+    }
 }
