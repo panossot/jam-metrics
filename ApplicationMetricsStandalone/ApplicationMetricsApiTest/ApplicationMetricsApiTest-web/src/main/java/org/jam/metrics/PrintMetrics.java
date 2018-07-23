@@ -24,9 +24,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.jam.metrics.applicationmetricsapi.MetricsCacheApi;
 import org.jam.metrics.applicationmetricsapi.MetricsPropertiesApi;
 import org.jam.metrics.applicationmetricsproperties.MetricProperties;
+import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
+
 
 /**
  *
@@ -63,6 +72,33 @@ public class PrintMetrics extends HttpServlet {
             metricsApiSessionBean.countMethod();
             out.println(MetricsCacheApi.printMetricsCache(groupName));
             out.println("<br>Successful Run ...</br>");
+            
+            Client client = ClientBuilder.newClient();
+            WebTarget target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/databaseStore");
+            Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            Response responseJaxrs = invocationBuilder.get();
+            if (responseJaxrs.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String rs = responseJaxrs.readEntity(String.class);
+                if (rs == null) {
+                    fail("Rest Api call failed...");
+                }
+                assertTrue("DatabaseStore should be disabled... ", rs.compareTo("false")==0);
+                out.println("databaseStore : " + rs);
+            }
+            
+            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/databaseStore").queryParam("databaseStoreEnabled", "true");
+            invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            responseJaxrs = invocationBuilder.get();
+            if (responseJaxrs.getStatus() != 200) {
+                fail("Rest Api call failed...");
+            } else {
+                String databaseStore = MetricsPropertiesApi.getProperties(groupName).getDatabaseStore();
+                assertTrue("DatabaseStore should be enabled... ", databaseStore.compareTo("true")==0);
+                out.println("databaseStore : " + databaseStore);
+            }
+            
             out.println("</body>");
             out.println("</html>");
         }

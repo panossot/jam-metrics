@@ -22,7 +22,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.jam.metrics.applicationmetricslibrary.MetricsCache;
 import org.jam.metrics.applicationmetricslibrary.MetricsCacheCollection;
 
@@ -31,7 +30,7 @@ import org.jam.metrics.applicationmetricslibrary.MetricsCacheCollection;
  * @author panos
  */
 @Path("/Metrics")
-public class RestJam extends ResourceConfig {
+public class RestJam {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/MetricList/{metricGroup}/print")
