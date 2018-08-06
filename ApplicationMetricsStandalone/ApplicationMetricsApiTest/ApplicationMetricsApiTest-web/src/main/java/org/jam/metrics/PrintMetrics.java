@@ -63,6 +63,8 @@ public class PrintMetrics extends HttpServlet {
     private MetricsApiSessionBean metricsApiSessionBean;
     
     private String groupName = "myTestGroup";
+    private String AppName = "/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT";
+    private String ServerAddress = "http://localhost:8080";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, InterruptedException {
@@ -82,7 +84,7 @@ public class PrintMetrics extends HttpServlet {
             out.println("<br>Successful Run ...</br>");
             
             Client client = ClientBuilder.newClient();
-            WebTarget target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricList/myTestGroup/print");
+            WebTarget target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricList/myTestGroup/print");
             Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             Response responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -96,7 +98,7 @@ public class PrintMetrics extends HttpServlet {
             }
 
             metricsApiSessionBean.countMethod();
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricList/myTestGroup");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricList/myTestGroup");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -115,7 +117,7 @@ public class PrintMetrics extends HttpServlet {
                 }
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/cacheEnabled");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/cacheEnabled");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -130,7 +132,7 @@ public class PrintMetrics extends HttpServlet {
             }
             
             metricsApiSessionBean.countMethod();
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/cacheEnabled").queryParam("enableCacheStore", "false");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/cacheEnabled").queryParam("enableCacheStore", "false");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -147,7 +149,7 @@ public class PrintMetrics extends HttpServlet {
                 }
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/rhqMonitoring");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/rhqMonitoring");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -161,7 +163,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>rhqMonitoring : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/rhqMonitoring").queryParam("rhqMonitoringEnabled", "true");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/rhqMonitoring").queryParam("rhqMonitoringEnabled", "true");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -172,7 +174,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>rhqMonitoring : " + rhqMonitoring);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/databaseStore");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/databaseStore");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -186,7 +188,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>databaseStore : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/databaseStore").queryParam("databaseStoreEnabled", "true");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/databaseStore").queryParam("databaseStoreEnabled", "true");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -197,7 +199,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>databaseStore : " + databaseStore);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/hawkularMonitoring");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/hawkularMonitoring");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -211,7 +213,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularMonitoring : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/hawkularMonitoring").queryParam("hawkularMonitoringEnabled", "true");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/hawkularMonitoring").queryParam("hawkularMonitoringEnabled", "true");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -222,7 +224,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularMonitoring : " + hawkularMonitoring);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/hawkularApm");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/hawkularApm");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -236,7 +238,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularApm : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/hawkularApm").queryParam("hawkularApmEnabled", "true");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/hawkularApm").queryParam("hawkularApmEnabled", "true");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -247,7 +249,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularApm : " + hawkularApm);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/metricPlot");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/metricPlot");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -261,7 +263,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>metricPlot : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/metricPlot").queryParam("metricPlotEnabled", "true");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/metricPlot").queryParam("metricPlotEnabled", "true");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -272,7 +274,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>metricPlot : " + metricPlot);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/OpenAnalytics");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/OpenAnalytics");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -286,7 +288,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>OpenAnalytics : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/OpenAnalytics").queryParam("OpenAnalyticsEnabled", "true");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/OpenAnalytics").queryParam("OpenAnalyticsEnabled", "true");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -297,7 +299,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>OpenAnalytics : " + OpenAnalytics);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/filterMetrics");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/filterMetrics");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -311,7 +313,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>filterMetrics : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/filterMetrics").queryParam("filterMetricsEnabled", "true");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/filterMetrics").queryParam("filterMetricsEnabled", "true");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -322,7 +324,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>FilterMetrics : " + filterMetrics);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/cacheMaxSize");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/cacheMaxSize");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -333,7 +335,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>cacheMaxSize : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/cacheMaxSize").queryParam("cacheMaxSize", 1000);
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/cacheMaxSize").queryParam("cacheMaxSize", 1000);
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -344,7 +346,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>cacheMaxSize : " + cacheMaxSize);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/plotRefreshRate");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/plotRefreshRate");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -355,7 +357,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>plotRefreshRate : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/plotRefreshRate").queryParam("plotRefreshRate", 5);
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/plotRefreshRate").queryParam("plotRefreshRate", 5);
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -366,7 +368,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>plotRefreshRate : " + plotRefreshRate);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/rhqMonitoringRefreshRate");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/rhqMonitoringRefreshRate");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -377,7 +379,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>rhqMonitoringRefreshRate : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/rhqMonitoringRefreshRate").queryParam("rhqMonitoringRefreshRate", 5);
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/rhqMonitoringRefreshRate").queryParam("rhqMonitoringRefreshRate", 5);
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -388,7 +390,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>rhqMonitoringRefreshRate : " + rhqMonitoringRefreshRate);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/rhqServerUrl");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/rhqServerUrl");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -399,7 +401,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>rhqServerUrl : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/rhqServerUrl").queryParam("rhqServerUrl", "localhost2");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/rhqServerUrl").queryParam("rhqServerUrl", "localhost2");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -410,7 +412,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>rhqServerUrl : " + rhqServerUrl);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/rhqServerPort");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/rhqServerPort");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -421,7 +423,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>rhqServerPort : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/rhqServerPort").queryParam("rhqServerPort", "7081");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/rhqServerPort").queryParam("rhqServerPort", "7081");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -432,7 +434,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>rhqServerPort : " + rhqServerPort);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/rhqServerUsername");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/rhqServerUsername");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -443,7 +445,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>rhqServerUsername : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/rhqServerUsername").queryParam("rhqServerUsername", "rhqadmin2");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/rhqServerUsername").queryParam("rhqServerUsername", "rhqadmin2");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -454,7 +456,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>rhqServerUsername : " + rhqServerUsername);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/rhqServerPassword");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/rhqServerPassword");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -465,7 +467,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>rhqServerPassword : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/rhqServerPassword").queryParam("rhqServerPassword", "rhqadmin2");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/rhqServerPassword").queryParam("rhqServerPassword", "rhqadmin2");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -476,7 +478,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>rhqServerPassword : " + rhqServerPassword);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/hawkularMonitoringRefreshRate");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/hawkularMonitoringRefreshRate");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -487,7 +489,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularMonitoringRefreshRate : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/hawkularMonitoringRefreshRate").queryParam("hawkularMonitoringRefreshRate", 5);
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/hawkularMonitoringRefreshRate").queryParam("hawkularMonitoringRefreshRate", 5);
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -498,7 +500,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularMonitoringRefreshRate : " + hawkularMonitoringRefreshRate);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/hawkularServerUrl");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/hawkularServerUrl");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -509,7 +511,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularServerUrl : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/hawkularServerUrl").queryParam("hawkularServerUrl", "localhost2");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/hawkularServerUrl").queryParam("hawkularServerUrl", "localhost2");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -520,7 +522,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularServerUrl : " + hawkularServerUrl);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/hawkularServerPort");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/hawkularServerPort");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -531,7 +533,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularServerPort : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/hawkularServerPort").queryParam("hawkularServerPort", "8081");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/hawkularServerPort").queryParam("hawkularServerPort", "8081");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -542,7 +544,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularServerPort : " + hawkularServerPort);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/hawkularServerUsername");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/hawkularServerUsername");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -553,7 +555,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularServerUsername : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/hawkularServerUsername").queryParam("hawkularServerUsername", "hawkularadmin2");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/hawkularServerUsername").queryParam("hawkularServerUsername", "hawkularadmin2");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -564,7 +566,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularServerUsername : " + hawkularServerUsername);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/hawkularServerPassword");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/hawkularServerPassword");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -575,7 +577,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularServerPassword : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/hawkularServerPassword").queryParam("hawkularServerPassword", "hawkularadmin2");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/hawkularServerPassword").queryParam("hawkularServerPassword", "hawkularadmin2");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -586,7 +588,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularServerPassword : " + hawkularServerPassword);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/hawkularTenant");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/hawkularTenant");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -597,7 +599,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularTenant : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/hawkularTenant").queryParam("hawkularTenant", "hawkular2");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/hawkularTenant").queryParam("hawkularTenant", "hawkular2");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -608,7 +610,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularTenant : " + hawkularTenant);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/hawkularApmServerUrl");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/hawkularApmServerUrl");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -619,7 +621,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularApmServerUrl : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/hawkularApmServerUrl").queryParam("hawkularApmServerUrl", "localhost2");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/hawkularApmServerUrl").queryParam("hawkularApmServerUrl", "localhost2");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -630,7 +632,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularApmServerUrl : " + hawkularApmServerUrl);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/hawkularApmServerPort");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/hawkularApmServerPort");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -641,7 +643,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularApmServerPort : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/hawkularApmServerPort").queryParam("hawkularApmServerPort", "8081");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/hawkularApmServerPort").queryParam("hawkularApmServerPort", "8081");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -652,7 +654,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularApmServerPort : " + hawkularApmServerPort);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/hawkularApmServerUsername");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/hawkularApmServerUsername");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -663,7 +665,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularApmServerUsername : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/hawkularApmServerUsername").queryParam("hawkularApmServerUsername", "hawkularapmadmin2");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/hawkularApmServerUsername").queryParam("hawkularApmServerUsername", "hawkularapmadmin2");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -674,7 +676,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularApmServerUsername : " + hawkularApmServerUsername);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/hawkularApmServerPassword");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/hawkularApmServerPassword");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -685,7 +687,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularApmServerPassword : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/hawkularApmServerPassword").queryParam("hawkularApmServerPassword", "hawkularapmadmin2");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/hawkularApmServerPassword").queryParam("hawkularApmServerPassword", "hawkularapmadmin2");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -696,7 +698,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularApmServerPassword : " + hawkularApmServerPassword);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/hawkularApmTenant");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/hawkularApmTenant");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -707,7 +709,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularApmTenant : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/hawkularApmTenant").queryParam("hawkularApmTenant", "my-tenant2");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/hawkularApmTenant").queryParam("hawkularApmTenant", "my-tenant2");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -718,7 +720,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>hawkularApmTenant : " + hawkularApmTenant);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/get/myTestGroup/rhqScheduleId").queryParam("rhqScheduleIdName", "count");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/get/myTestGroup/rhqScheduleId").queryParam("rhqScheduleIdName", "count");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
@@ -729,7 +731,7 @@ public class PrintMetrics extends HttpServlet {
                 out.println("<br/>rhqScheduleId : " + rs);
             }
             
-            target = client.target("http://localhost:8080").path("/ApplicationMetricsApiTest-web-1.0.5.Final-SNAPSHOT/rest/Metrics/MetricProperties/set/myTestGroup/rhqScheduleId").queryParam("rhqScheduleIdName", "count").queryParam("rhqScheduleId", "11392");
+            target = client.target(ServerAddress).path(AppName+"/rest/Metrics/MetricProperties/set/myTestGroup/rhqScheduleId").queryParam("rhqScheduleIdName", "count").queryParam("rhqScheduleId", "11392");
             invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             responseJaxrs = invocationBuilder.get();
             if (responseJaxrs.getStatus() != 200) {
