@@ -38,6 +38,7 @@
     <modules>
         <module>ApplicationMetricsApi</module>
         <module>ApplicationMetrics</module>
+        <module>ApplicationMetricsApiTest0</module>
         <module>ApplicationMetricsApiTest</module>
         <module>ApplicationMetricsApiTest2</module>
         <module>ApplicationMetricsApiTest3</module>
