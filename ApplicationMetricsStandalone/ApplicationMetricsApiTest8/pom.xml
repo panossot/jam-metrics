@@ -5,12 +5,12 @@
   <parent>
       <groupId>org.jam.metrics</groupId>
       <artifactId>jam-metrics-standalone</artifactId>
-      <version>1.0.5.Final-SNAPSHOT</version>
+      <version>1.0.4.Final.GA</version>
   </parent>
 
   <groupId>org.jam.metrics</groupId>
   <artifactId>ApplicationMetricsApiTest8</artifactId>
-  <version>1.0.5.Final-SNAPSHOT</version>
+  <version>1.0.4.Final.GA</version>
   <packaging>pom</packaging>
 
   <name>ApplicationMetricsApiTest8 --Standalone--</name>

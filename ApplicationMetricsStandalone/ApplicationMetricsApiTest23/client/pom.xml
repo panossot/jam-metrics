@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.jam.metrics</groupId>
         <artifactId>ApplicationMetricsApiTest23</artifactId>
-        <version>1.0.5.Final-SNAPSHOT</version>
+        <version>1.0.4.Final.GA</version>
     </parent>
     <artifactId>jboss-ejb-remote-client</artifactId>
     <packaging>jar</packaging>

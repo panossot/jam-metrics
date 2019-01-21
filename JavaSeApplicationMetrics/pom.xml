@@ -7,7 +7,7 @@
     <groupId>org.jam.metrics</groupId>
     <artifactId>jam-metrics-javase-standalone</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.5.Final-SNAPSHOT</version>
+    <version>1.0.4.Final.GA</version>
 
     <name> Application Metrics Java SE</name>
     

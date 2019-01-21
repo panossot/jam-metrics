@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.jam.metrics</groupId>
         <artifactId>ApplicationMetricsApiTest24</artifactId>
-        <version>1.0.5.Final-SNAPSHOT</version>
+        <version>1.0.4.Final.GA</version>
     </parent>
     <artifactId>jboss-ejb-remote-applet-server-side</artifactId>
     <packaging>ejb</packaging>

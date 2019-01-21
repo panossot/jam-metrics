@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.jam.metrics</groupId>
         <artifactId>jam-metrics-javase-standalone</artifactId>
-        <version>1.0.5.Final-SNAPSHOT</version>
+        <version>1.0.4.Final.GA</version>
     </parent>
 
     <groupId>org.jam.metrics</groupId>
     <artifactId>ApplicationMetricsJavaSeApiTest10</artifactId>
-    <version>1.0.5.Final-SNAPSHOT</version>
+    <version>1.0.4.Final.GA</version>
     <packaging>jar</packaging>
     
     <name>ApplicationMetricsJavaSeApiTest10</name>

@@ -4,12 +4,12 @@
     <parent>
     <artifactId>ApplicationMetricsApiTest9</artifactId>
     <groupId>org.jam.metrics</groupId>
-    <version>1.0.5.Final-SNAPSHOT</version>
+    <version>1.0.4.Final.GA</version>
   </parent>
 
     <groupId>org.jam.metrics</groupId>
     <artifactId>ApplicationMetricsApiTest9-web</artifactId>
-    <version>1.0.5.Final-SNAPSHOT</version>
+    <version>1.0.4.Final.GA</version>
     <packaging>war</packaging>
 
     <name>ApplicationMetricsApiTest9-web</name>
