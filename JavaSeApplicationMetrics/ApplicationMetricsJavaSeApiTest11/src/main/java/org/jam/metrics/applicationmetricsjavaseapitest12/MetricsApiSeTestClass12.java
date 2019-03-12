@@ -1,5 +1,5 @@
 /*
- * Copyleft 2015 Red Hat, Inc. and/or its affiliates
+ * Copyleft 2015 
  * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

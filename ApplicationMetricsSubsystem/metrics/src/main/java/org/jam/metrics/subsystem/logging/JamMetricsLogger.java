@@ -1,5 +1,5 @@
 /*
- * Copyleft 2015 Red Hat, Inc. and/or its affiliates
+ * Copyleft 2015 
  * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,7 @@ import org.jboss.logging.annotations.Message;
 import org.jboss.logging.annotations.MessageLogger;
 
 /**
- * @author Panagiotis Sotiropoulos (c) 2015 Red Hat Inc.
+ * @author Panagiotis Sotiropoulos (c) 2015 
  */
 @MessageLogger(projectCode = "WFLYMETRICS", length = 3)
 public interface JamMetricsLogger extends BasicLogger {

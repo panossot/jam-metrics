@@ -1,5 +1,5 @@
 /*
- * Copyleft 2015 Red Hat, Inc. and/or its affiliates
+ * Copyleft 2015 
  * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,7 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.as.web.common.ServletContextAttribute;
 
 /**
- * @author <a href="mailto:psotirop@redhat.com">Panagiotis Sotiropoulos</a> (c) 2015 Red Hat Inc.
+ * @author <a href="mailto:panossot@gmail.com">Panagiotis Sotiropoulos</a> (c) 2015 
  */
 
 /**

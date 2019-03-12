@@ -1,5 +1,5 @@
 /*
- * Copyleft 2015 Red Hat, Inc. and/or its affiliates
+ * Copyleft 2015 
  * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -122,7 +122,7 @@ public class PrintMetrics extends HttpServlet {
 
                 stmt.executeUpdate(sql);
                 
-                sql = "INSERT INTO MyMETRICS.openAnalyticsLocationData(SERVER_INSTANCE_NAME,SERVER_INSTANCELOCATION) VALUES('testing-instance','CZ, Brno, Red Hat Office, TPB, 2nd Floor, South');";
+                sql = "INSERT INTO MyMETRICS.openAnalyticsLocationData(SERVER_INSTANCE_NAME,SERVER_INSTANCELOCATION) VALUES('testing-instance','2nd Floor, South');";
                 stmt.executeUpdate(sql);
             }
         } catch (Exception e) {
